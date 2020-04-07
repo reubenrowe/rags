@@ -1,0 +1,129 @@
+body
+{
+	background-color: #F8F8F8;
+}
+
+.small
+{
+	font-size: x-small;
+}
+
+.large
+{
+	font-size: xx-large;
+}
+
+.left
+{
+	float: left;
+}
+
+.italic
+{
+	font-style: italic;
+}
+
+.bold
+{
+	font-weight: bold;
+}
+
+.underlined
+{
+	text-decoration: underline;
+}
+
+.smallcaps
+{
+	font-variant: small-caps;
+}
+
+.bibref
+{
+	font-size: xx-small;
+	text-decoration: none;
+}
+
+.algorithm, .code
+{
+	padding: 10px;
+	border: dashed 1px grey;
+	background-color: #DDDDDD;
+}
+
+pre.inline
+{
+	display: inline;
+}
+
+.note
+{
+	font-size: small;
+	color: blue;
+}
+
+.indent
+{
+	padding-left: 30px;
+}
+
+.large_indent { padding-left: 100px; }
+
+.tab_1 { padding-left: 30px; }
+.tab_2 { padding-left: 60px; }
+.tab_3 { padding-left: 90px; }
+.tab_4 { padding-left: 120px; }
+.tab_5 { padding-left: 150px; }
+.tab_6 { padding-left: 180px; }
+
+div.number_column
+{
+	width: 30px;
+	float: left;
+	font-size: xx-small;
+	line-height: 20px;
+}
+
+.fixedWidthFont
+{
+	font-family: Courier New;
+}
+
+p.rag_definition span.binding_answer
+{
+	position: relative;
+	display: block;
+	width: 20px;
+	float: left;
+}
+
+p.rag_definition span.rule
+{
+	padding-left: 30px;
+}
+
+p.rag_definition span.first
+{
+	position: relative;
+	left: -20px;
+}
+
+p.derivation span.derives
+{
+	position: relative;
+	display: block;
+	width: 20px;
+	float: left;
+}
+
+p.derivation span.configuration
+{
+	position: relative;
+	left: -20px;
+	padding-left: 30px;
+}
+
+li.spaced
+{
+	padding-bottom: 15px;
+}

@@ -1,0 +1,733 @@
+<html>
+
+	<head>
+
+		<title>Tools for recursive adaptive grammars</title>
+
+		<link type="text/css" rel="stylesheet" href="./css/style.css"></link>
+
+	</head>
+	
+	<body>
+	
+		<h1>Tools For Recursive Adaptive Grammars</h1>
+
+		<p>
+			This page details the purpose, aims and current status of my suite of tools for investigating Recursive Adaptive Grammars (or RAGs).
+			Visit the <a href="https://sourceforge.net/projects/ragtools" title="sourceforge project summary page">sourceforge summary page</a>
+			for this project. The project <a href="roadmap.html">roadmap</a> gives details of what has been completed so far, and the near-term
+			goals and deliverables.
+		</p>
+
+		<h2>Contents</h2>
+		<ol>
+			<li><a href="#Abstract">Abstract</a></li>
+			<li><a href="#Aims">Project Aims</a></li>
+			<li>
+				<a href="#Intro">Introduction</a>
+				<ol style="list-style-type:lower-roman;">
+					<li><a href="#RAGStructure">Structure of RAGs</a></li>
+					<li><a href="#RAGExample">A RAG Example</a></li>
+				</ol>
+			</li>
+			<li><a href="#Algorithm">The RAG Parsing Algorithm</a></li>
+			<li><a href="#RelatedWork">Related Work &amp; Resources</a></li>
+			<li><a href="#Bibliography">Bibliography</a></li>
+		</ol>
+
+		<hr />
+
+		<a id="Abstract" />
+		<h2>1. Abstract</h2>
+
+		<p class="italic">
+			Currently, most programming languages are described using context-free grammars (CFGs). However, the CFG formalism is not
+			powerful enough to express many features that are desirable in a useful and practical language. Therefore, the compilation
+			process must necessarily include extensions to this formalism, and comprises several stages of analysis (lexical, syntactic,
+			semantic) before the translation to object code can be carried out.
+		</p>
+		<p class="italic">
+			The recursive adaptive grammar (RAG) formalism <sup><a class="bibref" href="#ref_01">[1]</a></sup> is one which intuitively
+			extends the familiar concept of context-free grammars to naturally incorporate context-sensitivity and make them Turing-powerful.
+			Context-dependent language features can easily be expressed using RAGs; this work presents an algorithm for parsing languages
+			described by [a subset of] recursive adaptive grammars, showing how this naturally combines syntactic and semantic analysis.
+			Furthermore, built into the RAG formalism is the identity of the domains of syntatic, metasyntactic and sematic values and the
+			association of semantic values with nodes of the parse tree; it is demonstrated how this provides a mechanism for translation.
+			Finally, the one-step computational mechanism of RAGs allows all these stages to be combined into a single process.
+		</p>
+
+		<hr />
+
+		<a id="Aims" />
+		<h2>2. Project Aims</h2>
+
+		<p>
+			The broad aims of this project are to develop a method of parsing that is based on RAGs, and to investigate the capabilities
+			and usefulness of RAGs in defining and implementing programming languages. Some more concrete and (hopefully) achievable goals
+			are listed below:
+		</p>
+
+		<ul>
+			<li class="spaced">
+				Devise and implement a general RAG parsing algorithm which, given a RAG definition and an input string, will parse that input
+				based on the given RAG, returning the semantic value(s) synthesized. The algorithm will be able to parse non-circular,
+				left-to-right RAGs that are not left recursive.
+			</li>
+
+			<li class="spaced">
+				Demonstrate that RAGs provide a powerful and all-encomapssing framework for language analysis by implementing a suite of
+				proof-of-concept RAGs to perform common semantic analyses (Shutt&rsquo;s Thesis already gives one such proof-of-concept
+				RAG: one which enforces the declaration of variables. Other such analyses that may be attempted are type checking and object
+				binding).
+			</li>
+
+			<li class="spaced">
+				Demonstrate that RAGs provide an efficient framework for carrying out compilation by:
+				<ul>
+					<li>Defining a suitable toy programming language (likely to be a subset of Java or C#).</li>
+					<li>Devising a RAG that is capable of parsing and analysing this toy programming language.</li>
+					<li>
+						Building the RAG so that the semantic value which is synthesized for any given input is a translation of that input
+						into some intermediate/target form (possibly Java byte code, or CIL).
+					</li>
+				</ul>
+			</li>
+
+			<li class="spaced">
+				Investigate the integration of multiple languages using RAGs. The idea behind this is to allow programs to be built up of
+				code fragments written in potentially very different languages (i.e. object-oriented vs. functional vs. XML/declarative type
+				languages). Although very similar to current frameworks (e.g. Microsoft's .NET), the aim here is to investigate how RAGs
+				can facilitate this task, and hopefully demonstrate that the all-in-one parsing/analysis/translation action of RAGs allows a
+				tighter and more natural coupling between different languages.
+			</li>
+
+			<li class="spaced">
+				The holy grail of this project is to use the RAG formalism to implement extensible languages. Since the RAG formalism is
+				based upon adaptability (i.e. the ability to self-modify, in this case it is the ability of the grammar to modify its own
+				productions), it is reasonable to assume that they would naturally lend themselves to implementing programming languages
+				which can modify themselves. Work on extensible programming is experiencing something of a renewal in recent years.
+			</li>
+		</ul>
+
+		<hr />
+
+		<a id="Intro" />
+		<h2>3. Introduction</h2>
+
+		<p>
+			Recursive adaptive grammars (RAGs), like context-free grammars (CFGs), are a formalism that allow you to specify languages.
+			Unlike CFGs though, they are capable of describing context-dependent features, i.e. constraints on a section of a program
+			which depend upon what is present (or not) in another part of the program. Such features are essential for any programming
+			language which is to be of use in real-world situations.
+		</p>
+		<p>
+			As an example, consider the constraint (present in many modern programming languages) that a variable must be declared before
+			it is assigned a value. A code snippet using java illustrates this:
+		</p>
+		<pre class="code"><code>public void foo()
+{
+	int x;
+	x = 5;
+	System.out.println(x);
+}</code></pre>
+		<p>The above code is valid java; the code below is not, because the variable x is not declared:</p>
+		<pre class="code"><code>public void foo()
+{
+	x = 5;
+	System.out.println(x);
+}</code></pre>
+		<p>
+			This declaration/assignment feature is context-dependent because the validity of the assignment statement <code>x = 5;</code>
+			depends upon the presence of a declaration statement <code>int x;</code> occuring before it at some point in the program.
+		</p>
+
+		<a id="RAGStructure" />
+		<h3>3.i Structure of RAGs</h3>
+
+		<p class="note">
+			The following gives a short summary of the key features of RAGs appropriate to understanding the scope and depth of this project.
+			For a complete description and formal treatment, please see John Shutt&rsquo;s Master&rsquo;s 
+			Thesis<sup><a class="bibref" href="#ref_01">[1]</a></sup>.
+		</p>
+
+		<p>
+			RAGs contain certain elements that are analogous to those of context-free grammars, and the similarity in structure can easily be
+			seen. However, there are fundamental, and essential, differences. The combined syntactic, meta-syntactic and semantic domains of
+			recursive adaptive grammar, G, are represented by elements called <span class="italic">Answers</span> whose domain is denoted 
+			A<sub class="small">G</sub>. These are analogous to the symbols of a CFG. Like the symbols of a context-free grammar,
+			answers may be <span class="italic">terminal</span>, or <span class="italic">non-terminal</span>. The domain of terminal answers,
+			T<sub class="small">G</sub>, is a subset of A<sub class="small">G</sub>. In string RAGs (the subset of RAGs around which this
+			project is built), T<sub class="small">G</sub> is simply the domain of strings over a given alphabet, plus the empty string,
+			&lambda;. Unlike in CFGs, however, any answer may represent either syntax, or play a meta-syntactic role (in CFGs only terminals
+			may represent syntax, and only non-terminals play meta-syntactic roles). Another fundamental difference between RAG answers and the
+			symbols of context-free grammars is that, whereas CFG symbols are simply that, RAG answers are constructed from
+			<span class="italic">operators</span> which can take arguments (formally, A<sub class="small">G</sub> is a one-sorted algebra),
+			and therein lies their power. Essentially, this allows them to act as functions which map answers representing syntax onto answers
+			that represent semantic values. Operators of zero arity are called constant, and those with an arity greater than or equal to one
+			are called non-constant operators.
+		</p>
+
+		<p>
+			The second component of RAGs are <span class="italic">rules</span>. Again, these are equivalent to CFG rules in that they 
+			facilitate the derivation process: that of transforming, or mapping, a metasyntatic value into a syntactic one (parsing is the
+			inverse of this process).
+		</p>
+
+		<p>
+			An unbound rule is a construction of the form:
+		</p>
+
+		<a id="rule_form" />
+		<p class="indent">
+			&lang;v<sub class="small">0</sub>,e<sub class="small">0</sub>&rang; &rarr; t<sub class="small">0</sub> &lang;e<sub class="small">1</sub>,v<sub class="small">1</sub>&rang; t<sub class="small">1</sub> &hellip; &lang;e<sub class="small">n-1</sub>,v<sub class="small">n-1</sub>&rang; t<sub class="small">n-1</sub> &lang;e<sub class="small">n</sub>,v<sub class="small">n</sub>&rang; t<sub class="small">n</sub><span class="indent">n &ge; 0</span>
+		</p>
+
+		<p>
+			The v<sub class="small">k</sub> are distinct variables, which can take on answers as values. The t<sub class="small">k</sub> are
+			answers (usually, but not necessarily terminal). The e<sub class="small">k</sub> are polynomials in the variables 
+			v<sub class="small">0</sub>,&hellip;v<sub class="small">n</sub>, i.e. expressions denoting answers that may contain variables.
+			The left hand component of each of the ordered pairs, &lang;v<sub class="small">0</sub>,e<sub class="small">0</sub>&rang; and all
+			&lang;e<sub class="small">n</sub>,v<sub class="small">n</sub>&rang;, plays a meta-syntactic role, and the right hand component
+			represents the semantic value that is attached to that meta-syntactic element. Both the left and right sides of the rule can be
+			called <span class="italic">Configurations</span>, and belong to a domain called the configuration algebra
+			C<sub class="small">G</sub>.
+		</p>
+
+		<p>
+			In the formal machinery of RAGs, the domain of [unbound] rules is related to the domain of answers by means of a rule function.
+			In practice, this means that each rule form is associated with a particular answer. In the notation laid down by 
+			Shutt<sup><a class="bibref" href="#ref_01">[1]</a></sup> this association is written as in the following example:
+		</p>
+
+		<p class="indent rag_definition">
+			<span class="binding_answer">S:</span>
+			<span class="first rule">&lang;v<sub class="small">0</sub>,&lambda;&rang; &rarr; &lambda;</span><br />
+			<span class="rule">&lang;v<sub class="small">0</sub>,&lambda;&rang; &rarr; a &lang;v<sub class="small">0</sub>,v<sub class="small">1</sub>&rang; b</span>
+			<span class="bold large_indent small">fig. 1</span>
+		</p>
+
+		<p class="bold">
+			Figure 1. defines a completely self-contained RAG, G, where T<sub class="small">G</sub> = {a, b}*, the set of non-terminal
+			operators is {S}, and the start symbol is S. This grammar generates the language 
+			L&nbsp;=&nbsp;{a<sup class="small">n</sup>b<sup class="small">n</sup>,&nbsp;n&nbsp;&ge;&nbsp;0} and the semantic value associated
+			with each terminal string is &lambda;: G is said to predicate L.
+		</p>
+
+		<p>
+			When rule forms are associated with an answer in this manner, the first variable of each rule, v<sub class="small">0</sub>, is
+			bound to the associated answer (in this case S) creating partially bound rules:
+		</p>
+
+		<p class="indent">
+			(1)<span class="indent">&lang;S,&lambda;&rang; &rarr; &lambda;</span><br />
+			(2)<span class="indent">&lang;S,&lambda;&rang; &rarr; a &lang;S,v<sub class="small">1</sub>&rang; b</span>
+		<p>
+
+		<p>
+			A fully bound rule is one in which all the variables have been replaced by, or bound to answers. Technically, variables can be
+			bound to any answer in A<sub class="small">G</sub> whatsoever, however only certain bindings will lead to the derivation of a
+			terminal string. For example, in rule (2) above, we could bind the variable v<sub class="small">1</sub> to the answer S, creating
+			the bound rule:
+		</p>
+
+		<p class="indent">
+			&lang;S,&lambda;&rang; &rarr; a &lang;S,S&rang; b
+		</p>
+
+		<p>
+			However, if this rule were to be used in a derivation, it would constitue a dead end since the pair &lang;S,S&rang; cannot appear
+			on the left hand side of any rule. In this example, the only useful binding for v<sub class="small">1</sub> is &lambda;, yielding
+			the bound rule:
+		</p>
+
+		<p class="indent">
+			&lang;S,&lambda;&rang; &rarr; a &lang;S,&lambda;&rang; b
+		</p>
+
+		<p>
+			The domain of bound rules of a grammar G, is denoted &beta;(G). By convention, rule associations are not specified for terminals
+			and so any symbols appearing in a RAG definition which do not have a rule set specified are terminal operators. In reality, every
+			RAG contains the implicit rule form, quantified over all terminals:
+		</p>
+
+		<p class="indent">
+			&forall; t &isin; T<sub class="small">G</sub>
+			<span class="indent">t:</span>
+			<span class="indent">&lang;v<sub class="small">0</sub>,&lambda;&rang; &rarr; t</span>
+		</p>
+
+		<p>
+			A third, and key, ingredient of the RAG formalism which has no equivalent in CFGs is the <span class="italic">Query</span>
+			operator, written as &lsquo;a : b&rsquo;. This is a binary operator which denotes the semantic value
+			associated by meta-syntactic value <span class="italic">a</span> with syntactic value <span class="italic">b</span>. What this
+			means is that, if there is some derivation which transforms a pair &lang;a, v<sub class="small">0</sub>&rang; into the terminal
+			string b, then a : b denotes the semantic value, v<sub class="small">0</sub>, that is synthesized during that derivation. It is
+			this operator that endows RAGs with their &lsquo;recursive&rsquo; nature since, on encoutering a query term, the
+			<a href="#Algorithm">parsing algorithm</a> will recursively call itself to evaluate the term.
+		</p>
+
+		<p>
+			The derivation relation is the final piece of the RAG model. It is herein that the actual computational power of a recursive
+			adaptive grammar lies. It is similar in nature to the derivation relation of CFGs, which acts on strings of CFG symbols to 
+			transform one into another according to the production rules of the grammar. However, the derivation relation of RAGs is
+			extended to handle the newly introduced Query operator.
+		</p>
+
+		<p>
+			The derivation step relation &rArr; is a binary relation on <span class="italic">Configurations</span> (i.e. expressions made
+			up of pairs, queries and answers) that specifies which of these configurations may follow on from which others in a derivation. 
+			For the purposes of this summary, the derivation step relation can be thought of as being constructed from three parts. The first
+			is based upon the rules of the RAG to which it is being applied, and stipulates that if there is a [bound] rule that transforms
+			a pair into some configuration c, then under the derivation step relation that pair evaluates to c. More concisely:
+		</p>
+
+		<p class="indent">
+			If (&lang;a<sub class="small">1</sub>,a<sub class="small">2</sub>&rang; &rarr; c) &isin; &beta;(G), then 
+			(&lang;a<sub class="small">1</sub>,a<sub class="small">2</sub>&rang;, c) &isin; &rArr; or
+			&lang;a<sub class="small">1</sub>,a<sub class="small">2</sub>&rang; &rArr; c.
+		</p>
+
+		<p>
+			The second part deals with queries, and simply formalises the nature of the query operator that was described above: If, under
+			the grammar G, the meta-syntactic element of a query can generate the answer that is the syntactic element of that query, then
+			under the derivation step relation that query will evaluate to the semantic value synthesized. More concisely:
+		</p>
+
+		<p class="indent">
+			If &lang;a<sub class="small">1</sub>,a<sub class="small">3</sub>&rang; &rArr; ... &rArr; a<sub class="small">2</sub>, then
+			(a<sub class="small">1</sub> : a<sub class="small">2</sub>) &rArr; a<sub class="small">3</sub>.
+		</p>
+
+		<p>
+			This definition of the derivation relation clearly illustrates the recursive nature that the query operator confers upon the
+			process of expression evaluation in RAGs: the behaviour of the derivation process as applied to queries is defined in terms of 
+			itself!
+		</p>
+
+		<p>
+			The third part of the derivation relation construction is a formality that allows it to be applied to elements of a configuration
+			individually. Remember that the domains to which the elements of RAG expressions belong are one-sorted algebras, constructed from
+			operators. The final axiom that the derivation relation must satisfy stipulates that the derivation step relation can act on each
+			argument of an operator individually:
+		</p>
+
+		<p class="indent">
+			Suppose &sigma; is an operator of arity n &ge; 1, c<sub class="small">1</sub>, ... ,c<sub class="small">n</sub> are configurations
+			and c<sub class="small">k</sub> &rArr; c&prime; for some 1 &le; k &le; n. Let c&prime;<sub class="small">j</sub> = c&prime; if 
+			j = k, and c<sub class="small">j</sub> otherwise. Then &sigma;(c<sub class="small">1</sub>, ... ,c<sub class="small">n</sub>)
+			&rArr; &sigma;(c&prime;<sub class="small">1</sub>, ... ,c&prime;<sub class="small">n</sub>)
+		</p>
+
+		<p>
+			By far the most common operator that the above construction will be applied to is the [binary] concatenation operator,&sdot;. By 
+			way of example, consider the RAG <a href="#rule_form">rule form</a> that was defined above. The right hand side of the rule was 
+			said to be a configuration, but it is one comprised of the concatenation of other configurations (alternate answers and pairs). The 
+			above axiom means that in such a configuration, the derivation can proceed one pair or query at a time.
+		</p>
+
+		<a id="RAGExample" />
+		<h3>3.ii A RAG Example</h3>
+
+		<p>
+			Consider the following RAG, where Z is any alphabet, and the starting symbol is S:
+		</p>
+
+		<p class="indent rag_definition">
+			<span class="binding_answer">S:</span>
+			<span class="first rule">
+				&lang;v<sub class="small">0</sub>,v<sub class="small">3</sub>&rang; &rarr; 
+				&lang;W,v<sub class="small">1</sub>&rang;
+				&lang;v<sub class="small">1</sub>,v<sub class="small">2</sub>&rang;
+				&lang;v<sub class="small">1</sub>,v<sub class="small">3</sub>&rang;
+			</span><br />
+			<br />
+			<span class="binding_answer">W:</span>
+			<span class="first rule">&lang;v<sub class="small">0</sub>,&lambda;&rang; &rarr; &lambda;</span><br />
+			<span class="rule">
+				&lang;v<sub class="small">0</sub>,v<sub class="small">1</sub>v<sub class="small">2</sub>&rang; &rarr;
+				&lang;C,v<sub class="small">1</sub>&rang;
+				&lang;v<sub class="small">0</sub>,v<sub class="small">1</sub>&rang;
+			</span><br />
+			<br />
+			<span class="binding_answer">C:</span>
+			<span class="first rule">&forall;z &isin; Z &lang;v<sub class="small">0</sub>,z&rang; &rarr; z</span>
+		</p>
+
+		<p>
+			Nonterminal constant C generates any single letter in the alphabet, Z, and associates it with a semantic value which is the letter
+			generated. Building on this, nonterminal constant W generates any string w &isin; Z*, and associates with a semantic value that is
+			the string generated. Finally, at the top level, nonterminal constant S uses W to generate an arbitrary string in Z* (this is the
+			first pair on the right-hand side of the rule form belonging to S). The generated string is then bound to 
+			v<sub class="small">1</sub>. This binding allows the second and third pairs of the rule form belonging to S to duplicate the string.
+			These pairs also assign the semantic value &lambda; to these duplicated strings (thanks to the implicit rule form for terminals
+			mentioned above). The remaining variables v<sub class="small">2</sub> and v<sub class="small">2</sub> are therefore bound to
+			&lambda;. The overall effect is that this RAG generates the language {www | w &isin; Z*}.
+		</p>
+
+		<p>
+			For simplicity&rsquo;s sake, let us use Z = {a,b,c}. Then, a possible derivation sequence might proceed as follows:
+		</p>
+
+		<p class="indent">
+			&lang;S, &lambda;&rang;<br />
+			&rArr; &lang;W, abc&rang;&lang;abc, &lambda;&rang;&lang;abc, &lambda;&rang;<br />
+			&rArr; &lang;C, a&rang;&lang;W, bc&rang;&lang;abc, &lambda;&rang;&lang;abc, &lambda;&rang;<br />
+			&rArr; &lang;C, a&rang;&lang;C, b&rang;&lang;W, c&rang;&lang;abc, &lambda;&rang;&lang;abc, &lambda;&rang;<br />
+			&rArr; &lang;C, a&rang;&lang;C, b&rang;&lang;C, c&rang;&lang;W, &lambda;&rang;&lang;abc, &lambda;&rang;&lang;abc, &lambda;&rang;<br />
+			&rArr; a&lang;C, b&rang;&lang;C, c&rang;&lang;W, &lambda;&rang;&lang;abc, &lambda;&rang;&lang;abc, &lambda;&rang;<br />
+			&rArr; ab&lang;C, c&rang;&lang;W, &lambda;&rang;&lang;abc, &lambda;&rang;&lang;abc, &lambda;&rang;<br />
+			&rArr; abc&lang;W, &lambda;&rang;&lang;abc, &lambda;&rang;&lang;abc, &lambda;&rang;<br />
+			&rArr; abc&lambda;&lang;abc, &lambda;&rang;&lang;abc, &lambda;&rang;<br />
+			&rArr; abcabc&lang;abc, &lambda;&rang;<br />
+			&rArr; abcabcabc
+		</p>
+
+		<p>
+			This string, and indeed the entire language L = {www | w &isin; Z*}, cannot be generated by any context-free grammar: immediately,
+			RAGs have proved themselves a more powerful formalism than CFGs, while at the same time retaining the same intuitive and 
+			conceptually simple structure. In this case, the result has been facilitated by the RAG's ability to take a semantic value
+			synthesized by one section of the derivation and use it as meta-syntax to drive the derivation in a different section. This example
+			has been taken from Shutt&rsquo;s Thesis<sup><a class="bibref" href="#ref_01">[1]</a></sup>, but the second rule for the 
+			non-terminal W has been rearranged so that the grammar is not <span class="italic">left-recursive</span>, as the parsing algorithm
+			cannot handle such RAGs.
+		</p>
+
+		<p>
+			Note that this example is a rather simple one, and one that does not demonstrate the use of the query operator at all. Such an
+			example is too extensive for this summary. To see an example of the query operator in use, please refer to the 
+			Thesis<sup><a class="bibref" href="#ref_01">[1]</a></sup> &#0167;4.3.
+		</p>
+
+		<hr />
+
+		<a id="Algorithm" />
+		<h2>4. The RAG Parsing Algorithm</h2>
+
+		<p>
+			This section outlines the algorithm that has been devised to perform RAG-based parsing. This algorithm is the original work of the
+			author and, to the best of the author&rsquo;s knowledge, is a novel piece of work which has not been previously described in the
+			literature.
+		</p>
+
+		<p>
+			The heart of the RAG parsing algorithm is a pruning breadth-first search of the tree of possible derivations for a given grammar.
+			The algorithm maintains a working set of configurations which match the input currently consumed. This set is initially populated
+			with the start symbol of the particular grammar which is begin using to parse the input. At each iteration, the algorithm uses the
+			grammar to generate possible derivations from the configurations in the working set, until each configuration begins with a
+			terminal. The terminal at the head of each candidate configuration is compared with the next terminal in the input, and any
+			configurations which don't match are discarded. Ones which do survive to the next iteration. At the end of each iteration, the head
+			terminal of each surviving configuration is consumed, along with the current input token.
+		</p>
+
+		<p>
+			An important aspect of the parsing algorithm is the way in which it handles variables, and the binding of these variables to
+			answers. In the <a href="#RAGExample">example derivation</a>, each step of the derivation used fully bound rules from the outset;
+			in effect, the resulting terminal string had been &lsquo;chosen&rsquo; in the first derivation step, when we chose to bind the
+			variable v<sub class="small">1</sub> to the answer <span class="italic">abc</span>. The parsing algorithm, however, defers binding
+			variables until the last possible moment. This is accomplished by a <span class="italic">forking</span> process, which creates a
+			new candidate configuration wherever a variable may be bound to more than one answer. To use the RAG example above, if the parsing
+			algorithm were to encounter the pair &lang;W, v<sub class="small">1</sub>&rang;, it would first look up which rule forms can be
+			applied. It would find that there are two possibilities, and so fork this configuration into two new ones. In one, the variable
+			is bound to &lambda;, and in the other it is bound to the polynomial v<sub class="small">1</sub>v<sub class="small">2</sub>, the
+			variables of which will be bound to answers at some later point in the parsing process. Note that the variable 
+			v<sub class="small">1</sub> in the original pair, and the variable v<sub class="small">1</sub> in the new polynomial do not denote
+			the same variable, they are distinct. The variables have been written as they appear in the rule forms in order that the reader can
+			easily follow the derivation process; in the parsing algorithm however, when a derivation step is applied, new variables are
+			created.
+		</p>
+
+		<p>
+			The algorithm is presented below. There are also a few definitions that will be useful:
+		</p>
+
+		<ol>
+			<li>
+				A <span class="italic">Sentential Form</span>, S, is a configuration, c, and an associated <span class="italic">result</span>,
+				r, which is a polynomial in the variables of c and is the semantic value synthesized by the configuration as it recognises the
+				input string. A sentential form is written [c, r].
+			</li>
+			<li>
+				A sentential form is said to be <span class="italic">empty</span> when its configuration contains no terms.
+			</li>
+			<li>
+				The result of a sentential form is written <span class="smallcaps">result</span>(S).
+			</li>
+			<li>
+				The configuration of a sentential form is called the <span class="italic">derivative</span>, and is written
+				<span class="smallcaps">derivative</span>(S).
+			</li>
+			<li>
+				The <span class="italic">head</span> of a sentential form is the left-most term in its configuration. It is written 
+				<span class="smallcaps">head</span>(S).
+			</li>
+		</ol>
+
+		<div class="algorithm">
+			<span class="underlined">Parse</span><sub class="small">G</sub> (a : input)<br />
+			<br />
+			<div class="number_column">1.</div><span class="smallcaps">candidates</span> = {[&lang;a,v&rang;, v]}<br /><br />
+			<div class="number_column">&nbsp;</div><span class="bold">loop</span><br />
+			<div class="number_column">2.</div><span class="tab_1">Remove empty sentential forms from <span class="smallcaps">candidates</span></span><br />
+			<div class="number_column">&nbsp;</div><span class="tab_1"><span class="bold">while</span> (&exist;e . e &isin; <span class="smallcaps">head-set(candidates)</span> &and; e &notin; A<sub class="small">G</sub>)</span><br />
+			<div class="number_column">3.</div><span class="tab_2 smallcaps">fork<sub class="small">G</sub>(candidates)</span><br />
+			<div class="number_column">4.</div><span class="tab_2">&lambda;-<span class="smallcaps">advance(candidates)</span></span><br />
+			<div class="number_column">&nbsp;</div><span class="tab_1"><span class="bold">loop</span></span><br />
+			<div class="number_column">5.</div><span class="tab_1">Discard non-matching sentential forms from <span class="smallcaps">candidates</span></span><br />
+			<div class="number_column">6.</div><span class="tab_1 smallcaps">advance(candidates)</span><br />
+			<div class="number_column">7.</div><span class="tab_1">Consume token from input</span><br />
+			<div class="number_column">&nbsp;</div><span class="bold">while</span> (<span class="smallcaps">length</span>(input) &gt; 0 &amp; <span class="smallcaps">candidates</span> &ne; &empty;)<br /><br />
+			<div class="number_column">&nbsp;</div><span class="bold">while</span> (&exist;e . e &isin; <span class="smallcaps">head-set(candidates)</span> &and; e &notin; A<sub class="small">G</sub>)<br />
+			<div class="number_column">8.</div><span class="tab_1 smallcaps">fork<sub class="small">G</sub>(candidates)</span><br />
+			<div class="number_column">9.</div><span class="tab_1">&lambda;-<span class="smallcaps">advance(candidates)</span></span><br />
+			<div class="number_column">&nbsp;</div><span class="bold">loop</span><br /><br />
+			<div class="number_column">10.</div>Remove non-empty sentential forms from <span class="smallcaps">candidates</span><br />
+			<div class="number_column">11.</div><span class="bold">return</span> <span class="smallcaps">result-set(candidates)</span>
+		</div>
+
+		<p>
+			The algorithm works as follows:<br />
+			<br />
+			Firstly, <span class="small">(1)</span> initialises the candidate set of sentential forms that can potentially generate the input.
+			The starting point is a pair consisting of the meta-syntax of the input query, and a new variable, v, which is also the result of
+			the sentential form.<br />
+			<br />
+			Next, in steps <span class="small">(2)</span> - <span class="small">(7)</span>, the algorithm enters its main processing loop,
+			which is repeated until the input is consumed or until there are no candidate sentential forms left. At the start of each 
+			iteration, empty sentential forms are removed from the candidate set, as they cannot match the remaning input. Next, in steps
+			<span class="small">(3)</span> and <span class="small">(4)</span>, an inner loop processes the candidate set until an answer is
+			generated at the head of each sentential form. In <span class="small">(3)</span>, the <span class="smallcaps">fork</span> procedure
+			examines each sentential form in the candidate set, applying the appropriate rules of the grammar to the head element of each form.
+			If more than one rule can be applied to the head element of any sentential form, then that form is copied (or 
+			<span class="italic">cloned</span>) the appropriated number of times, and each of the applicable rule forms applied to a separate
+			one. The application of a rule form involves replacing the pair element in question with the configuration of the matching rule 
+			form and binding the variable of the pair being transformed to the result expression of that rule form. It is also during the 
+			<span class="smallcaps">fork</span> procedure that the parsing algorithm calls itself recursively: if it encounters a query at the
+			head of any given sentential form, it will parse the query, and apply the results to the sentential form in the same way that rule
+			forms are applied. After each round of rule applications, any &lambda; terminals that have been generated at the head of a
+			sentential form are removed, since in the terminal algebra we have the identities &lambda; &sdot; t = t and t &sdot; &lambda; = t.
+			In other words, we can effectively ignore any &lambda;'s when matching input.
+		</p>
+
+		<p>
+			When no more rules can be applied to any of the sentential forms in the candidate set, the algorithm is in a position to compare
+			the candidates with the input string. Any sentential forms whose head element does not match the next token of the input is
+			discarded in <span class="small">(5)</span>. This leaves in the candidate set only sentential forms that continue to match the
+			input. Step <span class="small">(6)</span> <span class="italic">advances</span> the sentential forms in the candidate set by
+			removing the head element of each form, and <span class="small">(7)</span> removes the left-most token from the input string, since
+			it has now been processed.
+		</p>
+
+		<p>
+			When all the input has been consumed (or the candidate set is empty), the algorithm exits the main processing loop. At this point,
+			the algorithm processes the candidate set one more time to remove trailing &lambda;'s from any of the surviving sentential forms.
+			Finally, step <span class="small">(10)</span> discards any sentential forms from the candidate set that are not empty. This is
+			because they cannot match the input, as they <span class="bold">must</span> generate further ouput. The algorithm then returns a
+			set containing the results of each surviving sentential form. Any variables in the results are guaranteed to be bound to an answer 
+			at this point, since each iteration of the processing loop ensures that an answer is generated before it moves onto the next. Note 
+			that it is entirely possible for the candidate set, and therefore the result set to be empty. Indeed, this may be an intended
+			function of elements of the grammar (see the example outlined in Shutt&rsquo;s 
+			thesis<sup><a class="bibref" href="#ref_01">[1]</a></sup> &#0167;4.3).
+		</p>
+
+		<p>
+			The various helper functions used by the parse algorithm are defined below:
+		</p>
+
+		<p>
+			The <span class="smallcaps">head-set</span> function constructs a set containing all the head elements of the sentential forms in 
+			the set which is passed as its argument.
+		</p>
+
+		<div class="algorithm" style="line-height:18px;">
+			<span class="smallcaps">head-set(candidates)</span> &equiv; <span class="large" style="vertical-align:text-bottom;">&cup;</span><span class="smallcaps">head</span>(c) . c &isin; <span class="smallcaps">candidates</span>
+		</div>
+
+		<p>
+			Similarly, the <span class="smallcaps">result-set</span> function constructs a set containing all the results of the sentential
+			forms in the set which is passed as its argument.
+		</p>
+
+		<div class="algorithm" style="line-height:18px;">
+			<span class="smallcaps">result-set(candidates)</span> &equiv; <span class="large" style="vertical-align:text-bottom;">&cup;</span><span class="smallcaps">result</span>(c) . c &isin; <span class="smallcaps">candidates</span>
+		</div>
+
+		<p>
+			The <span class="smallcaps">advance</span>() function simply removes the head of each of the sentential forms in the set which is
+			passed as its argument. The &lambda;-<span class="smallcaps">advance</span>() function is a little more specialised in that it
+			will remove the head element of each sentential form if that element is the terminal &lambda;; if it is not, the sentential form
+			is left alone.
+		</p>
+
+		<div class="algorithm">
+			<span class="underlined smallcaps">advance</span> (<span class="smallcaps">candidates</span>)<br />
+			<br />
+			<span class="tab_1"><span class="bold">for each</span> (s<sub class="small">i</sub> &isin; <span class="smallcaps">candidates</span>)</span><br />
+			<span class="tab_2">Remove <span class="smallcaps">head</span>(s<sub class="small">i</sub>)</span><br />
+			<span class="tab_1"><span class="bold">end for</span></span><br />
+			<br />
+			<span class="underlined">&lambda;-<span class="smallcaps">advance</span></span> (<span class="smallcaps">candidates</span>)<br />
+			<br />
+			<span class="tab_1"><span class="bold">for each</span> (s<sub class="small">i</sub> &isin; <span class="smallcaps">candidates</span>)</span><br />
+			<span class="tab_2"><span class="bold">if</span> (<span class="smallcaps">head</span>(s<sub class="small">i</sub>) &equiv; &lambda;) <span class="bold">then</span> Remove <span class="smallcaps">head</span>(s<sub class="small">i</sub>)</span><br />
+			<span class="tab_1"><span class="bold">end for</span></span><br />
+		</div>
+
+		<p>
+			The set of <span class="italic">partially bound</span> rule forms belonging to a grammar G for a given 
+			answer a is denoted by <span class="smallcaps">partial</span>-&beta;<sub class="small">G</sub>(a). A partially bound rule is a rule 
+			form in which the initial variable v<sub class="small">0</sub> has been bound to the rule&rsquo;s associated answer (see 
+			&#0167;<a href="#RAGStructure">3.i</a>).
+		</p>
+
+		<p>
+			If p is a pair &lang;e, v&rang;, where e is a polynomial expression and v is a variable, then 
+			<span class="smallcaps">expr</span>(p) = e and <span class="smallcaps">val</span>(p) = v.
+		</p>
+
+		<p>
+			A <span class="italic">rule</span> is essentially a sentential form, but one that is associated with with a particular answer.
+			If r is a rule of the form &lang;v<sub class="small">0</sub>,e<sub class="small">0</sub>&rang; &rarr; t<sub class="small">0</sub> 
+			&lang;e<sub class="small">1</sub>,v<sub class="small">1</sub>&rang; t<sub class="small">1</sub> &hellip; 
+			&lang;e<sub class="small">n-1</sub>,v<sub class="small">n-1</sub>&rang; t<sub class="small">n-1</sub> 
+			&lang;e<sub class="small">n</sub>,v<sub class="small">n</sub>&rang; t<sub class="small">n</sub>, then its equivalent is a 
+			sentential form [t<sub class="small">0</sub> &lang;e<sub class="small">1</sub>,v<sub class="small">1</sub>&rang; 
+			t<sub class="small">1</sub> &hellip; &lang;e<sub class="small">n-1</sub>,v<sub class="small">n-1</sub>&rang; 
+			t<sub class="small">n-1</sub> &lang;e<sub class="small">n</sub>,v<sub class="small">n</sub>&rang; t<sub class="small">n</sub>,
+			e<sub class="small">0</sub>] with the variable v<sub class="small">0</sub> bound to the rule&rsquo;s associated answer. The set of
+			variables referenced in a sentential form or rule is denoted by <span class="smallcaps">vars</span>(S). Note also that the variable
+			set of a rule form can contain a special collection of variables which correspond to the arguments of the [non-constant] answer
+			with which it is associated. This argument set is denoted <span class="smallcaps">args</span>(S), and is a proper subset of
+			<span class="smallcaps">vars</span>(S).
+		</p>
+
+		<p>
+			As introduced above, the <span class="smallcaps">fork</span> function applies all matching rules to the sentential forms in the set
+			passed as its argument. The <span class="smallcaps">newvar</span>() function generates a new, previously un-referenced variable.
+			The <span class="smallcaps">clone</span>() function creates a copy of a sentential form, in which the variable set of the original
+			form is mapped onto a set of newly generated variables.
+		</p>
+
+		<div class="algorithm">
+			<span class="underlined smallcaps">fork</span><sub class="small">G</sub> (<span class="smallcaps">candidates</span>)<br />
+			<br />
+			<span class="tab_1"><span class="bold">for each</span> (s<sub class="small">i</sub> &isin; <span class="smallcaps">candidates</span>)</span><br /><br />
+			<span class="tab_2"><span class="bold">if</span> (<span class="smallcaps">head</span>(s<sub class="small">i</sub>) <span class="bold">is a </span> pair)</span> <span class="bold">then</span><br /><br />
+			<span class="tab_3">Remove s<sub class="small">i</sub> from <span class="smallcaps">candidates</span></span><br />
+			<span class="tab_3"><span class="smallcaps">normalise</span>(s<sub class="small">i</sub>)</span><br />
+			<span class="tab_3">p = <span class="smallcaps">head</span>(s<sub class="small">i</sub>)</span><br /><br />
+			<span class="tab_3"><span class="bold">case</span> <span class="smallcaps">expr</span>(p)</span> <span class="bold">of</span><br /><br />
+			<span class="tab_4"><span class="italic">query</span> q:</span><br /><br />
+			<span class="tab_5"><span class="bold">for each</span> (r<sub class="small">i</sub> &isin; <span class="smallcaps">parse</span><sub class="small">G</sub>(q))</span><br /><br />
+			<span class="tab_6">s = <span class="smallcaps">clone</span>(s<sub class="small">i</sub>)</span><br />
+			<span class="tab_6">v = <span class="smallcaps">newvar</span>()</span><br />
+			<span class="tab_6">Bind v to <span class="smallcaps">val</span>(<span class="smallcaps">head</span>(s))</span><br />
+			<span class="tab_6">Replace <span class="smallcaps">head</span>(s) with &lang;r<sub class="small">i</sub>, v&rang;</span><br />
+			<span class="tab_6">Add s to <span class="smallcaps">candidates</span></span><br /><br />
+			<span class="tab_5"><span class="bold">end for</span></span><br /><br />
+			<span class="tab_4"><span class="italic">answer</span> a:</span><br /><br />
+			<span class="tab_5"><span class="bold">for each</span> (r<sub class="small">i</sub> &isin; <span class="smallcaps">partial</span>-&beta;<sub class="small">G</sub>(a))</span><br /><br />
+			<span class="tab_6">s = <span class="smallcaps">clone</span>(s<sub class="small">i</sub>)</span><br />
+			<span class="tab_6">Bind <span class="smallcaps">args</span>(r<sub class="small">i</sub>) to arguments of a</span><br />
+			<span class="tab_6">Add <span class="smallcaps">vars</span>(r<sub class="small">i</sub>) to s</span><br />
+			<span class="tab_6">Bind <span class="smallcaps">result</span>(r<sub class="small">i</sub>) to <span class="smallcaps">val</span>(<span class="smallcaps">head</span>(s))</span><br />
+			<span class="tab_6">Replace <span class="smallcaps">head</span>(s) with <span class="smallcaps">derivative</span>(r<sub class="small">i</sub>)</span><br />
+			<span class="tab_6">Add s to <span class="smallcaps">candidates</span></span><br /><br />
+			<span class="tab_5"><span class="bold">end for</span></span><br /><br />
+			<span class="tab_3"><span class="bold">end case</span></span><br /><br />
+			<span class="tab_2"><span class="bold">end if</span></span><br /><br />
+			<span class="tab_1"><span class="bold">end for</span></span>
+		</div>
+
+		<p>
+			The <span class="smallcaps">normalise</span> function used in the definition above makes sure that the head of the sentential form 
+			currently being forked only contains a single single term as its expression. This is required since all RAG rule forms can only be 
+			associated with a single answer. The exact behaviour of RAGs in regards to the concatenation operator is discussed in &#0167;6.3.2 of
+			Shutt&rsquo;s thesis<sup><a class="bibref" href="#ref_01">[1]</a></sup>, but for practical purposes it amounts to the following rule 
+			form:
+		</p>
+
+		<p class="indent">
+			&forall; a<sub class="small">1</sub>,a<sub class="small">2</sub> &isin; A<sub class="small">G</sub>
+			<span class="indent">a<sub class="small">1</sub>&sdot;a<sub class="small">2</sub>:</span>
+			<span class="indent">&lang;v<sub class="small">0</sub>, v<sub class="small">1</sub>v<sub class="small">2</sub>&rang; &rarr; &lang;a<sub class="small">1</sub>, v<sub class="small">1</sub>&rang; &lang;a<sub class="small">2</sub>, v<sub class="small">2</sub>&rang;</span>
+		</p>
+
+		<p>
+			which is implicit in every RAG.
+		</p>
+
+		<div class="algorithm">
+			<span class="underlined smallcaps">normalise</span> (S)<br />
+			<br />
+			<span class="tab_1">h = <span class="smallcaps">head</span>(S)</span><br /><br />
+			<span class="tab_1"><span class="bold">if</span> (h <span class="bold">is a</span> pair <span class="bold">and</span> <span class="smallcaps">length</span>(<span class="smallcaps">expr</span>(h)) &gt; 1)</span> <span class="bold">then</span></span><br /><br />
+			<span class="tab_2">p = <span class="smallcaps">expr</span>(h)</span><br />
+			<span class="tab_2">head = <span class="smallcaps">head</span>(p)</span><br />
+			<span class="tab_2">tail = <span class="smallcaps">tail</span>(p)</span><br /><br />
+			<span class="tab_2">v<sub class="small">1</sub> = <span class="smallcaps">newvar</span>()</span><br />
+			<span class="tab_2">v<sub class="small">2</sub> = <span class="smallcaps">newvar</span>()</span><br /><br />
+			<span class="tab_2">Replace <span class="smallcaps">head</span>(S) with &lang;head, v<sub class="small">1</sub>&rang;&lang;tail, v<sub class="small">2</sub>&rang;</span><br />
+			<span class="tab_2">Bind <span class="smallcaps">val</span>(h) to v<sub class="small">1</sub>&sdot;v<sub class="small">2</sub></span><br /><br />
+			<span class="tab_1"><span class="bold">end if</span></span>
+		</div>
+
+		<p>
+			Since the input to the algorithm is a query, an input program can be prcocessed by first constructing a query (S : input) from the
+			input string and the start symbol S<sub class="small">G</sub> of a grammar G, and then passing it to the parsing algorithm. This
+			gives us the auxiliary parsing function for G:
+		</p>
+
+		<div class="algorithm">
+			<span class="underlined smallcaps">parse</span><sub class="small">G</sub> (input)<br />
+			<br />
+			<div class="number_column">1.</div><span class="smallcaps">result</span> = Parse<sub class="small">G</sub>(S<sub class="small">G</sub> : input)<br />
+			<div class="number_column">2.</div><span class="bold">if</span> (<span class="smallcaps">result</span> = &empty;) <span class="bold">then fail</span><br />
+			<div class="number_column">3.</div><span class="bold">else return</span> <span class="smallcaps">result</span>
+		</div>
+
+		<p class="bold">
+			<span class="smallcaps">note</span>: since the parsing algorithm searches through the leftmost derivations of its candidate 
+			sentential forms until it generates an answer, it can only carry out parsing on grammars that do not contain 
+			<span class="italic">left-recursion</span> in their rule forms. Left-recursive rule forms would cause the parsing algorithm to loop 
+			indefinitely as it tries to apply the same rule form over and over again. The grammar must also be 
+			<span class="italic">left-to-right</span> in order to ensure that all variables referenced in a given expression have been bound
+			to answers before the expression is used to drive rule applications.
+		</p>
+
+		<hr />
+
+		<a id="RelatedWork" />
+		<h2>5. Related Work &amp; Resources</h2>
+
+		<p>
+			Quinn Tyler Jackson has presented a similarly powerful formalism, called the &#0167;-calculus, along with a language accepting
+			automaton called a PDA-T, which can accept languages generated by this calculus. He has shown that this formalism provides 
+			practical benefits in the areas of context-sensitive and semantic parsing. His 2002 paper, "Some Theoretical and Practical Results
+			in Context-Sensitive and Adaptive Parsing", can be found at the following URL: 
+			<a href="http://www.iscid.org/papers/Jackson_AdaptiveParsing_093002.pdf">http://www.iscid.org/papers/Jackson_AdaptiveParsing_093002.pdf</a>
+		</p>
+
+		<p>
+			Wikipedia page on adaptive grammars - <a href="http://en.wikipedia.org/wiki/Adaptive_grammar">http://en.wikipedia.org/wiki/Adaptive_grammar</a>
+		</p>
+
+		<p>
+			Wikipedia page on extensible programming - <a href="http://en.wikipedia.org/wiki/Extensible_programming_language">http://en.wikipedia.org/wiki/Extensible_programming_language</a>
+		</p>
+
+		<hr />
+
+		<a id="Bibliography" />
+		<h2>Bibliography</h2>
+		<p><a id="ref_01" />[1] Shutt, John N., <span class="italic">Recursive Adaptable Grammars</span>, Master&rsquo;s Thesis, Worcester Polytechnic Institute, 1993. (16 December 2003 emended revision.) Online version: <a href="http://web.cs.wpi.edu/~jshutt/thesis/top.html">http://web.cs.wpi.edu/~jshutt/thesis/top.html</a></p>
+		<p><a id="ref_02" />[2] Alfred V. Aho, Ravi Sethi, and Jeffrey D. Ullman, <span class="italic">Compilers: Principles, Techniques and Tools</span> (ISBN 0-201-10088-6)</p>
+
+		<!-- Sourceforge link and logo -->
+		<div align="right">
+		<span class="left small">&copy; Reuben Rowe, 2007</span>
+		<a title="sourforge website" href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=186535&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" /></a>
+		</div>
+	
+	</body>
+
+</html>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rag>
+	
+	<alphabets>
+		<alphabet name="Z">
+			<char>z</char>
+		</alphabet>
+	</alphabets>
+	
+	<start_symbol id="S"></start_symbol>
+	
+	<ruleset>
+		<trigger id="S" />
+		<rule>
+			<result>
+				<variable index="3" />
+			</result>
+			<configuration>
+				<pair>
+					<answer id="W" />
+				</pair>
+				<pair>
+					<variable index="1" />
+				</pair>
+				<pair>
+					<variable index="1" />
+				</pair>
+			</configuration>
+		</rule>
+	</ruleset>
+	
+	<ruleset>
+		<trigger id="W" />
+		<rule>
+			<result>
+				<lambda />
+			</result>
+			<configuration>
+				<lambda />
+			</configuration>
+		</rule>
+		<rule>
+			<result>
+				<variable index="1" />
+				<variable index="2" />
+			</result>
+			<configuration>
+				<pair>
+					<answer id="C" />
+				</pair>
+				<pair>
+					<variable index="0" />
+				</pair>
+			</configuration>
+		</rule>
+	</ruleset>
+	
+	<ruleset>
+		<trigger id="C" />
+		<rule rangeover="Z">
+			<result>
+				<cursor />
+			</result>
+			<configuration>
+				<cursor />
+			</configuration>
+		</rule>
+	</ruleset>
+	
+</rag>
