@@ -1,27 +1,10 @@
 package rnsr.rag.parser;
 
-import java.util.Set;
-
-import rnsr.rag.grammar.Answer;
-import rnsr.rag.grammar.AnswerIdentifier;
-import rnsr.rag.grammar.CandidateSet;
-import rnsr.rag.grammar.Configuration;
-import rnsr.rag.grammar.ExtendedAnswer;
-import rnsr.rag.grammar.Grammar;
-import rnsr.rag.grammar.Pair;
-import rnsr.rag.grammar.Polynomial;
-import rnsr.rag.grammar.Query;
-import rnsr.rag.grammar.SententialForm;
-import rnsr.rag.grammar.Variable;
-import rnsr.rag.grammar.VariableSet;
-
-import rnsr.rag.grammar.exception.CloneException;
-import rnsr.rag.grammar.exception.InvalidTermException;
-import rnsr.rag.grammar.exception.TermResolutionException;
-import rnsr.rag.grammar.exception.VariableNotBoundException;
-import rnsr.rag.grammar.exception.VariableNotFoundException;
-
+import rnsr.rag.grammar.*;
+import rnsr.rag.grammar.exception.*;
 import rnsr.rag.parser.exception.ParseException;
+
+import java.util.Set;
 
 /**
  * This class implements a general parser for a left-to-right recursive adaptive grammar (RAG)
@@ -157,7 +140,6 @@ public class Parser
 				{
 					throw new ParseException("Problem when trying to fork candidate set", e);
 				}
-				
 				candidate.advance(new Answer(AnswerIdentifier.Lambda()));
 			}
 			
@@ -165,7 +147,8 @@ public class Parser
 			{
 				// consume one token from the input and use it to advance the candidate set,
 				// discarding any non-matching forms
-				candidate.advance(input.removeHeadToken(), true);
+				Answer a = input.removeHeadToken();
+				candidate.advance(a, !a.Identifier().Whitespace());
 			}
 			
 			/* We are not throwing an exception, in case the query not 
@@ -185,7 +168,8 @@ public class Parser
 			*/
 		}
 		while (!input.isEmpty() && !candidate.isEmpty());
-		
+
+
 		// Do a final pass to advance past any trailing lambda derivations
 		while (candidate.CanApplyRules())
 		{
@@ -213,13 +197,14 @@ public class Parser
 			{
 				throw new ParseException("Problem when trying to fork candidate set", e);
 			}
-			
 			candidate.advance(new Answer(AnswerIdentifier.Lambda()));
 		}
 		
 		// discard any non-empty forms that are left - they cannot match the input at this point!
 		candidate.removeNonEmptyForms();
-		
+
+
+
 		// Return result set
 		Set<ExtendedAnswer> resultSet = null;
 		try

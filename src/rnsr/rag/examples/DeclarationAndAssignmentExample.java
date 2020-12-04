@@ -1,22 +1,11 @@
 package rnsr.rag.examples;
 
-import java.util.ArrayList;
-
-import rnsr.rag.grammar.Answer;
-import rnsr.rag.grammar.AnswerIdentifier;
-import rnsr.rag.grammar.Configuration;
-import rnsr.rag.grammar.Grammar;
-import rnsr.rag.grammar.Pair;
-import rnsr.rag.grammar.Polynomial;
-import rnsr.rag.grammar.Query;
-import rnsr.rag.grammar.Rule;
-import rnsr.rag.grammar.RuleSet;
-import rnsr.rag.grammar.Variable;
-import rnsr.rag.grammar.VariableSet;
-
+import rnsr.rag.grammar.*;
 import rnsr.rag.grammar.exception.ArgumentMismatchException;
 import rnsr.rag.grammar.exception.RuleFunctionException;
 import rnsr.rag.grammar.exception.VariableNotFoundException;
+
+import java.util.ArrayList;
 
 /**
  * This test class creates a RAG that generates a language in which variables
@@ -553,7 +542,7 @@ public	class		DeclarationAndAssignmentExample
 		args.add(vars.get(1));	// e
 		
 		c = new Configuration();
-		c.add(new Answer(new AnswerIdentifier("int ")));
+		c.add(new Answer(new AnswerIdentifier("int")));
 		
 		answerArgs = new ArrayList<Polynomial>();
 		answerArgs.add(new Polynomial(new Answer(id_echo)));
@@ -697,7 +686,7 @@ public	class		DeclarationAndAssignmentExample
 		c.add(new Answer(new AnswerIdentifier("}")));
 		
 		g.addRule(id_prog, new Rule(c, varSet, new Polynomial(new Answer(AnswerIdentifier.Lambda())), args));
-		
+
 		return g;
 	}
 	
@@ -709,7 +698,6 @@ public	class		DeclarationAndAssignmentExample
 			System.err.println("Expecting some input to parse!");
 			System.exit(0);
 		}
-		
 		performTest(new DeclarationAndAssignmentExample(), args[0]);
 	}
 	

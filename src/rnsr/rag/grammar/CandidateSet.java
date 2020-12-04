@@ -1,22 +1,14 @@
 package rnsr.rag.grammar;
 
+import rnsr.rag.grammar.exception.*;
+import rnsr.rag.grammar.interfaces.IConfigurationTerm;
+import rnsr.rag.grammar.interfaces.IPolynomialTerm;
+import rnsr.rag.parser.Parser;
+import rnsr.rag.parser.exception.ParseException;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-
-import rnsr.rag.grammar.interfaces.IConfigurationTerm;
-import rnsr.rag.grammar.interfaces.IPolynomialTerm;
-
-import rnsr.rag.grammar.exception.AnswerMismatchException;
-import rnsr.rag.grammar.exception.CloneException;
-import rnsr.rag.grammar.exception.InvalidTermException;
-import rnsr.rag.grammar.exception.TermResolutionException;
-import rnsr.rag.grammar.exception.VariableNotBoundException;
-import rnsr.rag.grammar.exception.VariableNotFoundException;
-
-import rnsr.rag.parser.Parser;
-
-import rnsr.rag.parser.exception.ParseException;
 
 public	class		CandidateSet
 		extends		HashSet<SententialForm>
@@ -143,13 +135,14 @@ public	class		CandidateSet
 					}
 
 					// Parse the query
+					System.out.println("Doing query: " + resolvedQuery);
 					Set<ExtendedAnswer> results = parser.parse(resolvedQuery);
 
 					// For each result in the parse, create a rule and apply it to the current sentential form
 					for (ExtendedAnswer result : results)
 					{
 						// Construct the replacement rule
-						InstantiatedRule r = InstantiatedRule.constructQueryReplacementRule(result);
+						InstantiatedRule r = InstantiatedRule.constructQueryReplacementRule(result, headPair.Right());
 
 						// Apply the rule
 						SententialForm clone = currentForm.cloneObject();
@@ -172,7 +165,6 @@ public	class		CandidateSet
 				}
 			}
 		}
-
 		this.addAll(tempSet);
 	}
 	

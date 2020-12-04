@@ -45,9 +45,8 @@ public	class		InstantiatedRule
 	 * Constructs an instantiated rule from the results of a Query parse which
 	 * can be used to advance the parse of a configuration containing the original query
 	 */
-	public static InstantiatedRule constructQueryReplacementRule(ExtendedAnswer queryResult)
+	public static InstantiatedRule constructQueryReplacementRule(ExtendedAnswer queryResult, Variable v)
 	{
-		Variable v = new Variable();
 
 		Pair p = new Pair(queryResult, v);
 		

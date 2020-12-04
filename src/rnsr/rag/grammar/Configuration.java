@@ -1,13 +1,12 @@
 package rnsr.rag.grammar;
 
-import java.util.ArrayList;
-
-import rnsr.rag.grammar.interfaces.IConfigurationTerm;
-import rnsr.rag.grammar.interfaces.IContextClonable;
-import rnsr.rag.grammar.interfaces.IConsumable;
-
 import rnsr.rag.grammar.exception.AnswerMismatchException;
 import rnsr.rag.grammar.exception.CloneException;
+import rnsr.rag.grammar.interfaces.IConfigurationTerm;
+import rnsr.rag.grammar.interfaces.IConsumable;
+import rnsr.rag.grammar.interfaces.IContextClonable;
+
+import java.util.ArrayList;
 
 /**
  * Represents a configuration in a RAG derivation
@@ -38,6 +37,8 @@ public	class		Configuration
 	 */
 	public void consumeToken(Answer answer) throws AnswerMismatchException
 	{
+
+
 		// If the head term is not an answer, then there is no match
 		if (!(this.get(0) instanceof Answer))
 		{
@@ -52,7 +53,7 @@ public	class		Configuration
 		
 		// Otherwise, we can consume a token
 		Answer head = (Answer) this.remove(0);
-		
+
 		// If the answer is a terminal one, we have to check for a partial match
 		if (head.Identifier().Terminal() && !head.Identifier().equals(AnswerIdentifier.Lambda()))
 		{

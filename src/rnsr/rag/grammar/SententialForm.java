@@ -263,6 +263,7 @@ public	class		SententialForm
 	 */
 	public void consumeToken(Answer answer) throws AnswerMismatchException
 	{
+
 		// Simply call the consumeToken() method on the inner configuration
 		this.m_configuration.consumeToken(answer);
 	}
