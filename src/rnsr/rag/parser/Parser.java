@@ -66,7 +66,7 @@ public class Parser
 		
 		// Parse the query
 		Set<ExtendedAnswer> resultSet = this.parse(initialQuery);
-		
+
 		// If result set is empty, this is an error
 		if (resultSet.size() == 0)
 		{
@@ -83,6 +83,7 @@ public class Parser
 	
 	public Set<ExtendedAnswer> parse(Query q) throws ParseException
 	{
+		System.out.println("Parsing query: " + q);
 		// Set up initial sentential form and initialise candidate set
 		Variable value = new Variable();
 		
@@ -203,8 +204,6 @@ public class Parser
 		// discard any non-empty forms that are left - they cannot match the input at this point!
 		candidate.removeNonEmptyForms();
 
-
-
 		// Return result set
 		Set<ExtendedAnswer> resultSet = null;
 		try
@@ -239,6 +238,19 @@ public class Parser
 		}
 		
 		*/
+
+		for (ExtendedAnswer ea: resultSet) {
+			if (ea.get(0) instanceof Query) {
+				Query query = (Query) ea.get(0);
+				Set<ExtendedAnswer> resolved = parse(query);
+				ea.remove(0);
+				for (ExtendedAnswer ea2: resolved) {
+					ea2.addAll(ea);
+					resultSet.add(ea2);
+				}
+				resultSet.remove(ea);
+			}
+		}
 
 		return resultSet;
 	}

@@ -14,6 +14,7 @@ public	class		ExtendedAnswer
 	 */
 	public Answer removeHeadToken()
 	{
+
 		Answer a = (Answer) this.remove(0);
 		
 		if (a.Identifier().Terminal())

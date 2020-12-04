@@ -1,17 +1,14 @@
 package rnsr.rag.examples;
 
-import java.util.Set;
-
 import rnsr.rag.grammar.ExtendedAnswer;
 import rnsr.rag.grammar.Grammar;
-
 import rnsr.rag.grammar.exception.ArgumentMismatchException;
 import rnsr.rag.grammar.exception.RuleFunctionException;
 import rnsr.rag.grammar.exception.VariableNotFoundException;
-
 import rnsr.rag.parser.Parser;
-
 import rnsr.rag.parser.exception.ParseException;
+
+import java.util.Set;
 
 /**
  * Provides a common main() method
@@ -43,7 +40,6 @@ public abstract class CommandLineInputBase
 		try
 		{
 			Set<ExtendedAnswer> results = p.parse(input);
-			
 			System.out.println("Input parsed OK");
 			
 			int counter = 1;
