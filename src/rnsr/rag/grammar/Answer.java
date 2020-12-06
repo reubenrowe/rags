@@ -1,16 +1,15 @@
 package rnsr.rag.grammar;
 
-import java.util.ArrayList;
-
+import rnsr.rag.grammar.exception.ArgumentMismatchException;
+import rnsr.rag.grammar.exception.CloneException;
+import rnsr.rag.grammar.exception.VariableNotBoundException;
+import rnsr.rag.grammar.exception.VariableNotFoundException;
 import rnsr.rag.grammar.interfaces.IConfigurationTerm;
 import rnsr.rag.grammar.interfaces.IContextClonable;
 import rnsr.rag.grammar.interfaces.IPolynomialTerm;
 import rnsr.rag.grammar.interfaces.IResolvable;
 
-import rnsr.rag.grammar.exception.ArgumentMismatchException;
-import rnsr.rag.grammar.exception.CloneException;
-import rnsr.rag.grammar.exception.VariableNotBoundException;
-import rnsr.rag.grammar.exception.VariableNotFoundException;
+import java.util.ArrayList;
 
 /**
  * Represents an answer (terminal or nonterminal) in a recursive adaptive grammar 
@@ -240,5 +239,5 @@ public	class		Answer
 			return false;
 		}
 	}
-	
+
 }

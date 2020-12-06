@@ -267,5 +267,14 @@ public	class		SententialForm
 		// Simply call the consumeToken() method on the inner configuration
 		this.m_configuration.consumeToken(answer);
 	}
+
+	public String toString() {
+		String s = "[";
+		for (IConfigurationTerm c: m_configuration) {
+			s += c + ", ";
+		}
+		s += "]";
+		return s;
+	}
 	
 }
