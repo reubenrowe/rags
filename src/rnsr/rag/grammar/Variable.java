@@ -1,9 +1,10 @@
 package rnsr.rag.grammar;
 
+import rnsr.rag.grammar.exception.CloneException;
 import rnsr.rag.grammar.interfaces.IContextClonable;
 import rnsr.rag.grammar.interfaces.IPolynomialTerm;
 
-import rnsr.rag.grammar.exception.CloneException;
+import java.util.HashSet;
 
 /**
  * Represents a variable in a RAG polynomial expression
@@ -40,5 +41,9 @@ public	class		Variable
 	{
 		// TODO : Implement a better naming scheme for variables
 		return "v";		
+	}
+
+	public HashSet<Answer> resolveQueries() {
+		return new HashSet<>();
 	}
 }

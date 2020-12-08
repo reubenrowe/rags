@@ -148,17 +148,6 @@ public class Parser
 			{
 				// consume one token from the input and use it to advance the candidate set,
 				// discarding any non-matching forms
-
-				/*
-				if (input.get(0) instanceof Query) {
-					Query query = (Query) input.remove(0);
-					candidate.applyQuery(this, query);
-				} else {
-					Answer a = input.removeHeadToken();
-					candidate.advance(a, !a.Identifier().Whitespace());
-				}
-				*/
-
 				Answer a = input.removeHeadToken();
 				candidate.advance(a, !a.Identifier().Whitespace());
 

@@ -1,12 +1,13 @@
 package rnsr.rag.grammar;
 
+import rnsr.rag.grammar.exception.CloneException;
+import rnsr.rag.grammar.exception.VariableNotBoundException;
+import rnsr.rag.grammar.exception.VariableNotFoundException;
 import rnsr.rag.grammar.interfaces.IContextClonable;
 import rnsr.rag.grammar.interfaces.IPolynomialTerm;
 import rnsr.rag.grammar.interfaces.IResolvable;
 
-import rnsr.rag.grammar.exception.CloneException;
-import rnsr.rag.grammar.exception.VariableNotBoundException;
-import rnsr.rag.grammar.exception.VariableNotFoundException;
+import java.util.HashSet;
 
 /**
  * Represents a query in a recursive adaptive grammar
@@ -86,5 +87,29 @@ public	class		Query
 		
 		return sb.toString();
 	}
-	
+
+	public HashSet<Answer> resolveQueries() {
+
+		HashSet<Answer> toRet = new HashSet<>();
+
+
+//		ArrayList<IPolynomialTerm> termListFull = new ArrayList<>();
+//
+//		ArrayList<ArrayList<IPolynomialTerm>> termListMetaSyntax = new ArrayList<>();
+//		ArrayList<ArrayList<IPolynomialTerm>> termListSyntax = new ArrayList<>();
+//
+//		for (IPolynomialTerm pt: m_metaSyntax)
+//			termListMetaSyntax.add(pt.normaliseSyntax());
+//		for (IPolynomialTerm pt: m_syntax)
+//			termListSyntax.add(pt.normaliseSyntax());
+//
+//		for (ArrayList<IPolynomialTerm> l1: termListMetaSyntax) {
+//			for (ArrayList<IPolynomialTerm> l2: termListSyntax) {
+//
+//			}
+//		}
+
+		return toRet;
+	}
+
 }

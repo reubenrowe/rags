@@ -242,32 +242,4 @@ public	class		CandidateSet
 		return false;
 	}
 
-	public void applyQuery(Parser parser, Query q) {
-
-		/*
-		Set<ExtendedAnswer> results;
-		try {
-			results = parser.parse(q);
-		} catch (ParseException e) {
-			throw new Error(e);
-		}
-
-		CandidateSet cloneSet;
-		CandidateSet tempSet = new CandidateSet();
-		for (ExtendedAnswer result: results) {
-			cloneSet = this.clone();
-			while (result.size() > 0) {
-				Object o = result.remove(0);
-				if (o instanceof Answer) {
-					cloneSet.advance((Answer) o, true);
-				} else if (o instanceof  Query) {
-					cloneSet.applyQuery(parser, (Query) o);
-				}
-			}
-			tempSet.addAll(cloneSet);
-		}
-		this.addAll(tempSet);
-		*/
-	}
-
 }

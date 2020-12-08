@@ -10,6 +10,7 @@ import rnsr.rag.grammar.interfaces.IPolynomialTerm;
 import rnsr.rag.grammar.interfaces.IResolvable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Represents an answer (terminal or nonterminal) in a recursive adaptive grammar 
@@ -202,7 +203,52 @@ public	class		Answer
 		
 		return sb.toString();
 	}
-	
+
+	public HashSet<Answer> resolveQueries() {
+		HashSet<Answer> toRet = new HashSet<>();
+		ArrayList<HashSet<Answer>> argsList = new ArrayList<>();
+		/*
+		ArrayList<ArrayList<Polynomial>> argTermList = new ArrayList<>();
+		if (m_arguments.size() > 0) {
+			for (Polynomial p: m_arguments) {
+				for (IPolynomialTerm pt: p) {
+					argTermList.add(pt.normaliseSyntax());
+				}
+			}
+		}
+		 */
+		return toRet;
+
+	}
+
+	public HashSet<Polynomial> handleSingleArgument(Polynomial arg) {
+		HashSet<Polynomial> toRet = new HashSet<>();
+
+		// Creating and filling list of sets of answers corresponding to every polynomial term in the current argument
+		ArrayList<HashSet<Answer>> listOfAnswerSets = new ArrayList<>();
+		for (IPolynomialTerm pt: arg)
+			listOfAnswerSets.add(pt.resolveQueries());
+
+		// Creating an initial polynomial for every possible answer for the first polynomial term of the current argument
+		for (Answer a: listOfAnswerSets.get(0))
+			toRet.add(new Polynomial(a));
+
+		for (int i = 1; i < listOfAnswerSets.size(); i++) {
+			for (Polynomial p: toRet) {
+				if (p.size() > i) continue;	// Not adding duplicate answer to polynomials
+				for (Answer a: listOfAnswerSets.get(i)) {
+					Polynomial current = (Polynomial) p.clone();
+					current.add(a);
+					toRet.add(current);
+				}
+				toRet.remove(p);
+			}
+		}
+
+		return toRet;
+
+	}
+
 	/**
 	 * Overload method to check for equality of answers
 	 */
