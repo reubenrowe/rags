@@ -1,16 +1,15 @@
 package rnsr.rag.grammar;
 
-import rnsr.rag.grammar.exception.ArgumentMismatchException;
-import rnsr.rag.grammar.exception.CloneException;
-import rnsr.rag.grammar.exception.VariableNotBoundException;
-import rnsr.rag.grammar.exception.VariableNotFoundException;
+import rnsr.rag.grammar.exception.*;
 import rnsr.rag.grammar.interfaces.IConfigurationTerm;
 import rnsr.rag.grammar.interfaces.IContextClonable;
 import rnsr.rag.grammar.interfaces.IPolynomialTerm;
 import rnsr.rag.grammar.interfaces.IResolvable;
+import rnsr.rag.parser.Parser;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents an answer (terminal or nonterminal) in a recursive adaptive grammar 
@@ -204,76 +203,31 @@ public	class		Answer
 		return sb.toString();
 	}
 
-	public HashSet<Answer> resolveQueries() {
-		HashSet<Answer> possibleAnswers = new HashSet<>();
-		if (m_arguments.size() <= 0) {
-			possibleAnswers.add(this);
-			return possibleAnswers;
+	public Set<ExtendedAnswer> resolveQueries(Parser parser) {
+		try {
+			Set<ExtendedAnswer> possibleAnswers = new HashSet<>();
+			if (m_arguments.size() <= 0) {
+				possibleAnswers.add(new Polynomial(this).toExtendedAnswer());
+				return possibleAnswers;
+			}
+			return handleArguments(possibleAnswers, parser);
+		} catch (InvalidTermException e) {
+			throw new Error(e);
 		}
-		return handleArguments(possibleAnswers);
-
 	}
 
-	public HashSet<Answer> handleArguments(HashSet<Answer> possibleAnswers) {
+	public Set<ExtendedAnswer> handleArguments(Set<ExtendedAnswer> possibleAnswers, Parser parser) throws InvalidTermException {
+		Set<ExtendedAnswer> toRet = new HashSet<>();
 
-		// For every argument, a list of possible polynomials for that argument
-		ArrayList<ArrayList<Polynomial>> argsListOfPossibilities = new ArrayList<>();
-		m_arguments.forEach(poly -> argsListOfPossibilities.add(new ArrayList<>(handleSingleArgument(poly))));
-
-		// For every answer, a list of permutations of arguments
-		ArrayList<ArrayList<Polynomial>> argPermutations = new ArrayList<>();
-
-		// Creating an empty list for every permutation of the argument polynomials possible
-		int sum = 1;
-		for (ArrayList<Polynomial> polySet: argsListOfPossibilities) sum *= polySet.size();
-		for (int i = 0; i < sum; i++) argPermutations.add(new ArrayList<>());
-
-		// Filling the list of permutations of polynomials
-		for (int i = 0; i < argsListOfPossibilities.size(); i++) {
-			ArrayList<Polynomial> currentPossibilityPool = argsListOfPossibilities.get(i);
-			for (int j = 0; j < sum; j++) {
-				argPermutations.get(j).add(currentPossibilityPool.get(j % currentPossibilityPool.size()));
-			}
-		}
-
-		// Creating an answer for every permutation, with the same answer identifier
-		for (ArrayList<Polynomial> pList: argPermutations) {
-			try {
-				possibleAnswers.add(new Answer((AnswerIdentifier) m_identifier.clone(), pList));
-			} catch (ArgumentMismatchException e) {
-				throw new Error(e);
-			}
-		}
-
-		return possibleAnswers;
-	}
-
-	public HashSet<Polynomial> handleSingleArgument(Polynomial arg) {
-		HashSet<Polynomial> toRet = new HashSet<>();
-
-		// Creating and filling list of sets of answers corresponding to every polynomial term in the current argument
-		ArrayList<HashSet<Answer>> listOfAnswerSets = new ArrayList<>();
-		for (IPolynomialTerm pt: arg)
-			listOfAnswerSets.add(pt.resolveQueries());
-
-		// Creating an initial polynomial for every possible answer for the first polynomial term of the current argument
-		for (Answer a: listOfAnswerSets.get(0))
-			toRet.add(new Polynomial(a));
-
-		for (int i = 1; i < listOfAnswerSets.size(); i++) {
-			for (Polynomial p: toRet) {
-				if (p.size() > i) continue;	// Not adding duplicate answer to polynomials
-				for (Answer a: listOfAnswerSets.get(i)) {
-					Polynomial current = (Polynomial) p.clone();
-					current.add(a);
-					toRet.add(current);
-				}
-				toRet.remove(p);
-			}
-		}
 
 		return toRet;
+	}
 
+	public Set<ExtendedAnswer> handleSingleArgument(Polynomial arg, Parser parser) throws InvalidTermException {
+		Set<ExtendedAnswer> toRet = new HashSet<>();
+
+
+		return toRet;
 	}
 
 	public Object clone() {

@@ -1,8 +1,9 @@
 package rnsr.rag.grammar.interfaces;
 
-import rnsr.rag.grammar.Answer;
+import rnsr.rag.grammar.ExtendedAnswer;
+import rnsr.rag.parser.Parser;
 
-import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Indicates and object that can be part of a RAG polynomial expression
@@ -15,7 +16,7 @@ public interface IPolynomialTerm
 	 */
 	public String toString();
 
-	public HashSet<Answer> resolveQueries();
+	public Set<ExtendedAnswer> resolveQueries(Parser p);
 
 	public Object clone();
 

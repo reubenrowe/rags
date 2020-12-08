@@ -3,6 +3,7 @@ package rnsr.rag.grammar;
 import rnsr.rag.grammar.exception.CloneException;
 import rnsr.rag.grammar.interfaces.IContextClonable;
 import rnsr.rag.grammar.interfaces.IPolynomialTerm;
+import rnsr.rag.parser.Parser;
 
 import java.util.HashSet;
 
@@ -48,7 +49,7 @@ public	class		Variable
 		return "v";		
 	}
 
-	public HashSet<Answer> resolveQueries() {
+	public HashSet<ExtendedAnswer> resolveQueries(Parser parser) {
 		return new HashSet<>();
 	}
 }
