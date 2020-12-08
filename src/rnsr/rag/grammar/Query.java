@@ -89,27 +89,15 @@ public	class		Query
 	}
 
 	public HashSet<Answer> resolveQueries() {
-
 		HashSet<Answer> toRet = new HashSet<>();
-
-
-//		ArrayList<IPolynomialTerm> termListFull = new ArrayList<>();
-//
-//		ArrayList<ArrayList<IPolynomialTerm>> termListMetaSyntax = new ArrayList<>();
-//		ArrayList<ArrayList<IPolynomialTerm>> termListSyntax = new ArrayList<>();
-//
-//		for (IPolynomialTerm pt: m_metaSyntax)
-//			termListMetaSyntax.add(pt.normaliseSyntax());
-//		for (IPolynomialTerm pt: m_syntax)
-//			termListSyntax.add(pt.normaliseSyntax());
-//
-//		for (ArrayList<IPolynomialTerm> l1: termListMetaSyntax) {
-//			for (ArrayList<IPolynomialTerm> l2: termListSyntax) {
-//
-//			}
-//		}
-
 		return toRet;
+	}
+
+	public Object clone() {
+		Query q = new Query();
+		q.m_metaSyntax = (Polynomial) this.m_metaSyntax.clone();
+		q.m_syntax = (Polynomial) this.m_syntax.clone();
+		return q;
 	}
 
 }

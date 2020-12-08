@@ -70,6 +70,14 @@ public class AnswerIdentifier
 	public boolean Whitespace() {
 		return this.m_identifier.isBlank();
 	}
+
+	public Object clone() {
+		AnswerIdentifier ai = new AnswerIdentifier();
+		ai.m_identifier = this.m_identifier;
+		ai.m_arity = this.m_arity;
+		ai.m_isTerminal = this.m_isTerminal;
+		return ai;
+	}
 	
 	public boolean equals(AnswerIdentifier id)
 	{

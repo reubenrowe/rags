@@ -1,15 +1,14 @@
 package rnsr.rag.grammar;
 
-import java.util.ArrayList;
-
-import rnsr.rag.grammar.interfaces.IContextClonable;
-import rnsr.rag.grammar.interfaces.IPolynomialTerm;
-import rnsr.rag.grammar.interfaces.IResolvable;
-
 import rnsr.rag.grammar.exception.CloneException;
 import rnsr.rag.grammar.exception.InvalidTermException;
 import rnsr.rag.grammar.exception.VariableNotBoundException;
 import rnsr.rag.grammar.exception.VariableNotFoundException;
+import rnsr.rag.grammar.interfaces.IContextClonable;
+import rnsr.rag.grammar.interfaces.IPolynomialTerm;
+import rnsr.rag.grammar.interfaces.IResolvable;
+
+import java.util.ArrayList;
 
 /**
  * Represents a RAG polynomial expression
@@ -203,6 +202,14 @@ public	class		Polynomial
 		}
 		
 		return sb.toString();
+	}
+
+	public Object clone() {
+		Polynomial p = new Polynomial();
+		for (IPolynomialTerm pt: this) {
+			p.add((IPolynomialTerm) pt.clone());
+		}
+		return p;
 	}
 	
 }

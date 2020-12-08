@@ -205,20 +205,47 @@ public	class		Answer
 	}
 
 	public HashSet<Answer> resolveQueries() {
-		HashSet<Answer> toRet = new HashSet<>();
-		ArrayList<HashSet<Answer>> argsList = new ArrayList<>();
-		/*
-		ArrayList<ArrayList<Polynomial>> argTermList = new ArrayList<>();
-		if (m_arguments.size() > 0) {
-			for (Polynomial p: m_arguments) {
-				for (IPolynomialTerm pt: p) {
-					argTermList.add(pt.normaliseSyntax());
-				}
+		HashSet<Answer> possibleAnswers = new HashSet<>();
+		if (m_arguments.size() <= 0) {
+			possibleAnswers.add(this);
+			return possibleAnswers;
+		}
+		return handleArguments(possibleAnswers);
+
+	}
+
+	public HashSet<Answer> handleArguments(HashSet<Answer> possibleAnswers) {
+
+		// For every argument, a list of possible polynomials for that argument
+		ArrayList<ArrayList<Polynomial>> argsListOfPossibilities = new ArrayList<>();
+		m_arguments.forEach(poly -> argsListOfPossibilities.add(new ArrayList<>(handleSingleArgument(poly))));
+
+		// For every answer, a list of permutations of arguments
+		ArrayList<ArrayList<Polynomial>> argPermutations = new ArrayList<>();
+
+		// Creating an empty list for every permutation of the argument polynomials possible
+		int sum = 1;
+		for (ArrayList<Polynomial> polySet: argsListOfPossibilities) sum *= polySet.size();
+		for (int i = 0; i < sum; i++) argPermutations.add(new ArrayList<>());
+
+		// Filling the list of permutations of polynomials
+		for (int i = 0; i < argsListOfPossibilities.size(); i++) {
+			ArrayList<Polynomial> currentPossibilityPool = argsListOfPossibilities.get(i);
+			for (int j = 0; j < sum; j++) {
+				argPermutations.get(j).add(currentPossibilityPool.get(j % currentPossibilityPool.size()));
 			}
 		}
-		 */
-		return toRet;
 
+		// Creating an answer for every permutation, with the same answer identifier
+		for (ArrayList<Polynomial> pList: argPermutations) {
+			try {
+				possibleAnswers.add(new Answer((AnswerIdentifier) m_identifier.clone(), pList));
+			} catch (ArgumentMismatchException e) {
+				throw new Error(e);
+			}
+		}
+
+		return possibleAnswers;
 	}
 
 	public HashSet<Polynomial> handleSingleArgument(Polynomial arg) {
@@ -247,6 +274,14 @@ public	class		Answer
 
 		return toRet;
 
+	}
+
+	public Object clone() {
+		Answer a = new Answer();
+		a.m_identifier = (AnswerIdentifier) this.m_identifier.clone();
+		for (Polynomial p: m_arguments)
+			a.m_arguments.add((Polynomial) p.clone());
+		return a;
 	}
 
 	/**

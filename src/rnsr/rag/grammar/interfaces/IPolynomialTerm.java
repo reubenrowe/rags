@@ -17,4 +17,6 @@ public interface IPolynomialTerm
 
 	public HashSet<Answer> resolveQueries();
 
+	public Object clone();
+
 }
