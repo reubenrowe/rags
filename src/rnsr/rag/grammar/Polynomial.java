@@ -203,13 +203,5 @@ public	class		Polynomial
 		
 		return sb.toString();
 	}
-
-	public Object clone() {
-		Polynomial p = new Polynomial();
-		for (IPolynomialTerm pt: this) {
-			p.add((IPolynomialTerm) pt.clone());
-		}
-		return p;
-	}
 	
 }

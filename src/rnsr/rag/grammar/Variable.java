@@ -29,11 +29,7 @@ public	class		Variable
 		}
 	}
 
-	public Object clone() {
-		Variable v = new Variable();
-		return v;
-	}
-
+	
 	/**
 	 * Overload method to check the equality of variables. NB. This method just calls the
 	 * superclass (Object) method as variables are only equal if they reference the same object

@@ -268,14 +268,6 @@ public	class		Answer
 		return new HashSet<>(perms);
 	}
 
-	public Object clone() {
-		Answer a = new Answer();
-		a.m_identifier = (AnswerIdentifier) this.m_identifier.clone();
-		for (Polynomial p: m_arguments)
-			a.m_arguments.add((Polynomial) p.clone());
-		return a;
-	}
-
 	/**
 	 * Overload method to check for equality of answers
 	 */

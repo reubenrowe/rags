@@ -18,6 +18,4 @@ public interface IPolynomialTerm
 
 	public Set<ExtendedAnswer> resolveQueries(Parser p);
 
-	public Object clone();
-
 }

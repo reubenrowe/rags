@@ -141,11 +141,4 @@ public	class		Query
 		return new HashSet<>(perms);
 	}
 
-	public Object clone() {
-		Query q = new Query();
-		q.m_metaSyntax = (Polynomial) this.m_metaSyntax.clone();
-		q.m_syntax = (Polynomial) this.m_syntax.clone();
-		return q;
-	}
-
 }
