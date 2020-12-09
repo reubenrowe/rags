@@ -98,8 +98,8 @@ public	class		Query
 		for (IPolynomialTerm p: m_metaSyntax) metaSyntaxPolyAnswers.add(p.resolveQueries(parser));
 		for (IPolynomialTerm p: m_syntax) syntaxPolyAnswers.add(p.resolveQueries(parser));
 
-		ArrayList<ExtendedAnswer> possiblePolynomialsMetaSyntax = permutations(metaSyntaxPolyAnswers);
-		ArrayList<ExtendedAnswer> possiblePolynomialsSyntax = permutations(syntaxPolyAnswers);
+		Set<ExtendedAnswer> possiblePolynomialsMetaSyntax = extendedAnswerPermutations(metaSyntaxPolyAnswers);
+		Set<ExtendedAnswer> possiblePolynomialsSyntax = extendedAnswerPermutations(syntaxPolyAnswers);
 
 		// Get all of the extended answer sets for all possible queries
 		Set<ExtendedAnswer> queriesReturnSet = new HashSet<>();
@@ -116,7 +116,7 @@ public	class		Query
 		return queriesReturnSet;
 	}
 
-	public ArrayList<ExtendedAnswer> permutations(ArrayList<Set<ExtendedAnswer>> polyAnswers) {
+	public Set<ExtendedAnswer> extendedAnswerPermutations(ArrayList<Set<ExtendedAnswer>> polyAnswers) {
 		ArrayList<ExtendedAnswer> perms = new ArrayList<>();
 
 		// Creating an empty list for every permutation of the Answers possible
@@ -124,7 +124,7 @@ public	class		Query
 		for (Set<ExtendedAnswer> possibleAnswerSet: polyAnswers) sum *= possibleAnswerSet.size();
 		for (int i = 0; i < sum; i++) perms.add(new ExtendedAnswer());
 
-		// Filling the list of permutations of Answer
+		// Filling the list of permutations of Answers
 		for (int i = 0; i < perms.size(); i++) {
 			ArrayList<IPolynomialTerm> currentPossibilityPool = perms.get(i);
 			for (int j = 0; j < sum; j++) {
@@ -132,7 +132,7 @@ public	class		Query
 			}
 		}
 
-		return perms;
+		return new HashSet<>(perms);
 	}
 
 	public Object clone() {

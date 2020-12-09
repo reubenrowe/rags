@@ -1,5 +1,7 @@
 package rnsr.rag.grammar;
 
+import rnsr.rag.grammar.interfaces.IPolynomialTerm;
+
 /**
  * Represents a concatenation (string) of Answers
  */
@@ -7,6 +9,13 @@ public	class		ExtendedAnswer
 		extends		Polynomial
 {
 
+	public ExtendedAnswer() {
+		super();
+	}
+
+	public ExtendedAnswer(IPolynomialTerm pt) {
+		super(pt);
+	}
 	/**
 	 * Removes and returns the leftmost answer in this answer string.
 	 * Nonterminal answers are returned as is. Terminal answers are

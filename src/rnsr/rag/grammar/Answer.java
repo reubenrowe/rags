@@ -211,23 +211,58 @@ public	class		Answer
 				return possibleAnswers;
 			}
 			return handleArguments(possibleAnswers, parser);
-		} catch (InvalidTermException e) {
+		} catch (InvalidTermException | ArgumentMismatchException e) {
 			throw new Error(e);
 		}
 	}
 
-	public Set<ExtendedAnswer> handleArguments(Set<ExtendedAnswer> possibleAnswers, Parser parser) throws InvalidTermException {
-		Set<ExtendedAnswer> toRet = new HashSet<>();
+	public Set<ExtendedAnswer> handleArguments(Set<ExtendedAnswer> possibleAnswerSet, Parser parser) throws ArgumentMismatchException {
+		ArrayList<ArrayList<ExtendedAnswer>> argAnswerSetList = new ArrayList<>();
+		for (Polynomial p: m_arguments) argAnswerSetList.add(handleSingleArg(p, parser));
+		ArrayList<ArrayList<Polynomial>> argAnswerList = new ArrayList<>();
 
+		int sum = 1;
+		for (ArrayList<ExtendedAnswer> answerSet: argAnswerSetList) sum *= answerSet.size();
+		for (int i = 0; i < sum; i++) argAnswerList.add(new ArrayList<>());
 
-		return toRet;
+		for (int i = 0; i < argAnswerSetList.size(); i++) {
+			ArrayList<ExtendedAnswer> currentArgAnswers = argAnswerSetList.get(i);
+			for (int j = 0; j < sum; j++) {
+				argAnswerList.get(j).add(currentArgAnswers.get(j % currentArgAnswers.get(i).size()));
+			}
+		}
+
+		for (ArrayList<Polynomial> argList: argAnswerList) {
+			Answer a = new Answer((AnswerIdentifier) this.m_identifier.clone(), argList);
+			possibleAnswerSet.add(new ExtendedAnswer(a));
+		}
+
+		return possibleAnswerSet;
 	}
 
-	public Set<ExtendedAnswer> handleSingleArgument(Polynomial arg, Parser parser) throws InvalidTermException {
-		Set<ExtendedAnswer> toRet = new HashSet<>();
+	public ArrayList<ExtendedAnswer> handleSingleArg(Polynomial p, Parser parser) {
+		ArrayList<Set<ExtendedAnswer>> termSets = new ArrayList<>();
+		for (IPolynomialTerm ipt: p) termSets.add(ipt.resolveQueries(parser));
+		return extendedAnswerPermutations(termSets);
+	}
 
+	public ArrayList<ExtendedAnswer> extendedAnswerPermutations(ArrayList<Set<ExtendedAnswer>> polyAnswers) {
+		ArrayList<ExtendedAnswer> perms = new ArrayList<>();
 
-		return toRet;
+		// Creating an empty list for every permutation of the Answers possible
+		int sum = 1;
+		for (Set<ExtendedAnswer> possibleAnswerSet: polyAnswers) sum *= possibleAnswerSet.size();
+		for (int i = 0; i < sum; i++) perms.add(new ExtendedAnswer());
+
+		// Filling the list of permutations of Answers
+		for (int i = 0; i < perms.size(); i++) {
+			ArrayList<IPolynomialTerm> currentPossibilityPool = perms.get(i);
+			for (int j = 0; j < sum; j++) {
+				perms.get(j).add(currentPossibilityPool.get(j % currentPossibilityPool.size()));
+			}
+		}
+
+		return perms;
 	}
 
 	public Object clone() {
