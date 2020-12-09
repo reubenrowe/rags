@@ -60,6 +60,12 @@ public	class		ExtendedAnswer
 		}
 	}
 
+	/**
+	 * Converts an extended answer into a set of extended answers by resolving queries contained within the
+	 * polynomial terms of the original extended answer.
+	 * @param parser The Parser object we pass to sub-queries for resolution
+	 * @return The set of extended answers derived from resolving queries within a single extended answer
+	 */
 	public Set<ExtendedAnswer> getEASetFromInnerQueryResolution(Parser parser) {
 		ArrayList<Set<ExtendedAnswer>> subEaSetList = new ArrayList<>();
 		for (IPolynomialTerm pt: this)
@@ -67,6 +73,12 @@ public	class		ExtendedAnswer
 		return ExtendedAnswer.extendedAnswerPermutations(subEaSetList);
 	}
 
+	/**
+	 * Generates, from a list of extended answer sets, a set containing all permutations of single extended answers
+	 * from each set in the input list.
+	 * @param polyAnswers the list of extended answer sets
+	 * @return the set of all permutations of extended answers
+	 */
 	public static Set<ExtendedAnswer> extendedAnswerPermutations(ArrayList<Set<ExtendedAnswer>> polyAnswers) {
 		ArrayList<ExtendedAnswer> permutations = new ArrayList<>();
 
@@ -83,9 +95,8 @@ public	class		ExtendedAnswer
 		// Filling the list of permutations of Answers
 		for (int i = 0; i < eaListList.size(); i++) {
 			ArrayList<ExtendedAnswer> currentPossibilityPool = eaListList.get(i);
-			for (int j = 0; j < sum; j++) {
+			for (int j = 0; j < sum; j++)
 				permutations.get(j).addAll(currentPossibilityPool.get(j % currentPossibilityPool.size()));
-			}
 		}
 
 		return new HashSet<>(permutations);

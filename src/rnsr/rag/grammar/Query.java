@@ -78,7 +78,10 @@ public	class		Query
 	{
 		return ((this.m_metaSyntax.equals(q.Metasyntax())) && (this.m_syntax.equals(q.Syntax())));
 	}
-	
+
+	/**
+	 * Overridden method to return a string representation of this query
+	 */
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder();
@@ -92,6 +95,12 @@ public	class		Query
 		return sb.toString();
 	}
 
+	/**
+	 * Derives a set of extended answers from a query object by resolving all sub-queries and all possible
+	 * permutations of the original query where the operands are both answers
+	 * @param parser The Parser object we pass to sub-queries for resolution
+	 * @return The set of extended answers derived from resolving queries within a single extended answer
+	 */
 	public Set<ExtendedAnswer> resolveQueries(Parser parser) {
 		ArrayList<Set<ExtendedAnswer>> metaSyntaxPolyAnswers = new ArrayList<>();
 		ArrayList<Set<ExtendedAnswer>> syntaxPolyAnswers = new ArrayList<>();

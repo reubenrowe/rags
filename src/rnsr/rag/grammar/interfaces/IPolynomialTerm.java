@@ -16,6 +16,11 @@ public interface IPolynomialTerm
 	 */
 	public String toString();
 
+	/**
+	 * Method used to resolve queries contained within polynomials as polynomial terms
+	 * @param p The Parser object we pass to sub-queries for resolution
+	 * @return The set of extended answers derived from resolving queries within a single extended answer
+	 */
 	public Set<ExtendedAnswer> resolveQueries(Parser p);
 
 }
