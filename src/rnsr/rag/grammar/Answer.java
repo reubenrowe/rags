@@ -206,7 +206,7 @@ public	class		Answer
 	public Set<ExtendedAnswer> resolveQueries(Parser parser) {
 		try {
 			Set<ExtendedAnswer> possibleAnswers = new HashSet<>();
-			if (m_arguments.size() <= 0) {
+			if (m_arguments == null || m_arguments.size() <= 0) {
 				possibleAnswers.add(new Polynomial(this).toExtendedAnswer());
 				return possibleAnswers;
 			}
@@ -243,10 +243,13 @@ public	class		Answer
 	public ArrayList<ExtendedAnswer> handleSingleArg(Polynomial p, Parser parser) {
 		ArrayList<Set<ExtendedAnswer>> termSets = new ArrayList<>();
 		for (IPolynomialTerm ipt: p) termSets.add(ipt.resolveQueries(parser));
-		return extendedAnswerPermutations(termSets);
+		return new ArrayList<>(extendedAnswerPermutations(termSets));
 	}
 
-	public ArrayList<ExtendedAnswer> extendedAnswerPermutations(ArrayList<Set<ExtendedAnswer>> polyAnswers) {
+	private Set<ExtendedAnswer> extendedAnswerPermutations(ArrayList<Set<ExtendedAnswer>> polyAnswers) {
+		ArrayList<ArrayList<ExtendedAnswer>> eaListList = new ArrayList<>();
+		for (Set<ExtendedAnswer> eaSet: polyAnswers) eaListList.add(new ArrayList<>(eaSet));
+
 		ArrayList<ExtendedAnswer> perms = new ArrayList<>();
 
 		// Creating an empty list for every permutation of the Answers possible
@@ -255,14 +258,14 @@ public	class		Answer
 		for (int i = 0; i < sum; i++) perms.add(new ExtendedAnswer());
 
 		// Filling the list of permutations of Answers
-		for (int i = 0; i < perms.size(); i++) {
-			ArrayList<IPolynomialTerm> currentPossibilityPool = perms.get(i);
+		for (int i = 0; i < eaListList.size(); i++) {
+			ArrayList<ExtendedAnswer> currentPossibilityPool = eaListList.get(i);
 			for (int j = 0; j < sum; j++) {
-				perms.get(j).add(currentPossibilityPool.get(j % currentPossibilityPool.size()));
+				perms.get(j).addAll(currentPossibilityPool.get(j % currentPossibilityPool.size()));
 			}
 		}
 
-		return perms;
+		return new HashSet<>(perms);
 	}
 
 	public Object clone() {

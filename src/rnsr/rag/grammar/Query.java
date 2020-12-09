@@ -119,7 +119,10 @@ public	class		Query
 		return queriesReturnSet;
 	}
 
-	public Set<ExtendedAnswer> extendedAnswerPermutations(ArrayList<Set<ExtendedAnswer>> polyAnswers) {
+	private Set<ExtendedAnswer> extendedAnswerPermutations(ArrayList<Set<ExtendedAnswer>> polyAnswers) {
+		ArrayList<ArrayList<ExtendedAnswer>> eaListList = new ArrayList<>();
+		for (Set<ExtendedAnswer> eaSet: polyAnswers) eaListList.add(new ArrayList<>(eaSet));
+
 		ArrayList<ExtendedAnswer> perms = new ArrayList<>();
 
 		// Creating an empty list for every permutation of the Answers possible
@@ -128,10 +131,10 @@ public	class		Query
 		for (int i = 0; i < sum; i++) perms.add(new ExtendedAnswer());
 
 		// Filling the list of permutations of Answers
-		for (int i = 0; i < perms.size(); i++) {
-			ArrayList<IPolynomialTerm> currentPossibilityPool = perms.get(i);
+		for (int i = 0; i < eaListList.size(); i++) {
+			ArrayList<ExtendedAnswer> currentPossibilityPool = eaListList.get(i);
 			for (int j = 0; j < sum; j++) {
-				perms.get(j).add(currentPossibilityPool.get(j % currentPossibilityPool.size()));
+				perms.get(j).addAll(currentPossibilityPool.get(j % currentPossibilityPool.size()));
 			}
 		}
 
