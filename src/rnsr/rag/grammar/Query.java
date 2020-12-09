@@ -98,8 +98,8 @@ public	class		Query
 		for (IPolynomialTerm p: m_metaSyntax) metaSyntaxPolyAnswers.add(p.resolveQueries(parser));
 		for (IPolynomialTerm p: m_syntax) syntaxPolyAnswers.add(p.resolveQueries(parser));
 
-		Set<ExtendedAnswer> possiblePolynomialsMetaSyntax = extendedAnswerPermutations(metaSyntaxPolyAnswers);
-		Set<ExtendedAnswer> possiblePolynomialsSyntax = extendedAnswerPermutations(syntaxPolyAnswers);
+		Set<ExtendedAnswer> possiblePolynomialsMetaSyntax = ExtendedAnswer.extendedAnswerPermutations(metaSyntaxPolyAnswers);
+		Set<ExtendedAnswer> possiblePolynomialsSyntax = ExtendedAnswer.extendedAnswerPermutations(syntaxPolyAnswers);
 
 		// Get all of the extended answer sets for all possible queries
 		Set<ExtendedAnswer> queriesReturnSet = new HashSet<>();
@@ -108,7 +108,7 @@ public	class		Query
 				try {
 					Set<ExtendedAnswer> results = parser.parse(new Query(p1, p2));
 					for (ExtendedAnswer ea: results)
-						queriesReturnSet.addAll(ea.getEASetFromQueryResolve(parser));
+						queriesReturnSet.addAll(ea.getEASetFromInnerQueryResolution(parser));
 					//queriesReturnSet.addAll(parser.parse(new Query(p1, p2)));
 				} catch (ParseException e) {
 					throw new Error(e);
@@ -119,26 +119,5 @@ public	class		Query
 		return queriesReturnSet;
 	}
 
-	private Set<ExtendedAnswer> extendedAnswerPermutations(ArrayList<Set<ExtendedAnswer>> polyAnswers) {
-		ArrayList<ArrayList<ExtendedAnswer>> eaListList = new ArrayList<>();
-		for (Set<ExtendedAnswer> eaSet: polyAnswers) eaListList.add(new ArrayList<>(eaSet));
-
-		ArrayList<ExtendedAnswer> perms = new ArrayList<>();
-
-		// Creating an empty list for every permutation of the Answers possible
-		int sum = 1;
-		for (Set<ExtendedAnswer> possibleAnswerSet: polyAnswers) sum *= possibleAnswerSet.size();
-		for (int i = 0; i < sum; i++) perms.add(new ExtendedAnswer());
-
-		// Filling the list of permutations of Answers
-		for (int i = 0; i < eaListList.size(); i++) {
-			ArrayList<ExtendedAnswer> currentPossibilityPool = eaListList.get(i);
-			for (int j = 0; j < sum; j++) {
-				perms.get(j).addAll(currentPossibilityPool.get(j % currentPossibilityPool.size()));
-			}
-		}
-
-		return new HashSet<>(perms);
-	}
 
 }

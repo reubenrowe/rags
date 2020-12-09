@@ -60,33 +60,35 @@ public	class		ExtendedAnswer
 		}
 	}
 
-	public Set<ExtendedAnswer> getEASetFromQueryResolve(Parser parser) {
+	public Set<ExtendedAnswer> getEASetFromInnerQueryResolution(Parser parser) {
 		ArrayList<Set<ExtendedAnswer>> subEaSetList = new ArrayList<>();
 		for (IPolynomialTerm pt: this)
 			subEaSetList.add(pt.resolveQueries(parser));
-		return extendedAnswerPermutations(subEaSetList);
+		return ExtendedAnswer.extendedAnswerPermutations(subEaSetList);
 	}
 
-	private Set<ExtendedAnswer> extendedAnswerPermutations(ArrayList<Set<ExtendedAnswer>> polyAnswers) {
+	public static Set<ExtendedAnswer> extendedAnswerPermutations(ArrayList<Set<ExtendedAnswer>> polyAnswers) {
+		ArrayList<ExtendedAnswer> permutations = new ArrayList<>();
+
+		// Creating a list of lists of extended answers from a list of sets of extended answers
+		// Need to access the elements of the extended answer set in an ordered way
 		ArrayList<ArrayList<ExtendedAnswer>> eaListList = new ArrayList<>();
 		for (Set<ExtendedAnswer> eaSet: polyAnswers) eaListList.add(new ArrayList<>(eaSet));
-
-		ArrayList<ExtendedAnswer> perms = new ArrayList<>();
 
 		// Creating an empty list for every permutation of the Answers possible
 		int sum = 1;
 		for (Set<ExtendedAnswer> possibleAnswerSet: polyAnswers) sum *= possibleAnswerSet.size();
-		for (int i = 0; i < sum; i++) perms.add(new ExtendedAnswer());
+		for (int i = 0; i < sum; i++) permutations.add(new ExtendedAnswer());
 
 		// Filling the list of permutations of Answers
 		for (int i = 0; i < eaListList.size(); i++) {
 			ArrayList<ExtendedAnswer> currentPossibilityPool = eaListList.get(i);
 			for (int j = 0; j < sum; j++) {
-				perms.get(j).addAll(currentPossibilityPool.get(j % currentPossibilityPool.size()));
+				permutations.get(j).addAll(currentPossibilityPool.get(j % currentPossibilityPool.size()));
 			}
 		}
 
-		return new HashSet<>(perms);
+		return new HashSet<>(permutations);
 	}
 
 

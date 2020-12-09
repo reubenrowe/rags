@@ -243,29 +243,7 @@ public	class		Answer
 	public ArrayList<ExtendedAnswer> handleSingleArg(Polynomial p, Parser parser) {
 		ArrayList<Set<ExtendedAnswer>> termSets = new ArrayList<>();
 		for (IPolynomialTerm ipt: p) termSets.add(ipt.resolveQueries(parser));
-		return new ArrayList<>(extendedAnswerPermutations(termSets));
-	}
-
-	private Set<ExtendedAnswer> extendedAnswerPermutations(ArrayList<Set<ExtendedAnswer>> polyAnswers) {
-		ArrayList<ArrayList<ExtendedAnswer>> eaListList = new ArrayList<>();
-		for (Set<ExtendedAnswer> eaSet: polyAnswers) eaListList.add(new ArrayList<>(eaSet));
-
-		ArrayList<ExtendedAnswer> perms = new ArrayList<>();
-
-		// Creating an empty list for every permutation of the Answers possible
-		int sum = 1;
-		for (Set<ExtendedAnswer> possibleAnswerSet: polyAnswers) sum *= possibleAnswerSet.size();
-		for (int i = 0; i < sum; i++) perms.add(new ExtendedAnswer());
-
-		// Filling the list of permutations of Answers
-		for (int i = 0; i < eaListList.size(); i++) {
-			ArrayList<ExtendedAnswer> currentPossibilityPool = eaListList.get(i);
-			for (int j = 0; j < sum; j++) {
-				perms.get(j).addAll(currentPossibilityPool.get(j % currentPossibilityPool.size()));
-			}
-		}
-
-		return new HashSet<>(perms);
+		return new ArrayList<>(ExtendedAnswer.extendedAnswerPermutations(termSets));
 	}
 
 	/**

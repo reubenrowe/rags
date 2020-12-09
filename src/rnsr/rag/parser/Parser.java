@@ -84,22 +84,21 @@ public class Parser
 	
 	public Set<ExtendedAnswer> parse(Query q) throws ParseException
 	{
-		System.out.println("Parsing query: " + q);
 		// Set up initial sentential form and initialise candidate set
 		Variable value = new Variable();
 		
 		Polynomial result = new Polynomial();
 		result.add(value);
 
-		VariableSet varset = new VariableSet();
-		varset.put(value);
+		VariableSet varSet = new VariableSet();
+		varSet.put(value);
 		
 		Pair startPair = new Pair(q.Metasyntax(), value);
 		
 		Configuration c = new Configuration();
 		c.add(startPair);
 		
-		CandidateSet candidate = new CandidateSet(new SententialForm(c, varset, result));
+		CandidateSet candidate = new CandidateSet(new SententialForm(c, varSet, result));
 		
 		// Get input
 		ExtendedAnswer input = null;
@@ -238,25 +237,11 @@ public class Parser
 			sb.append("The result set is empty!");
 			throw new ParseException(sb.toString());
 		}
-
-		for (ExtendedAnswer ea: resultSet) {
-			if (ea.get(0) instanceof Query) {
-				Query query = (Query) ea.get(0);
-				//Set<ExtendedAnswer> resolved = parse(query);
-				Set<ExtendedAnswer> resolved = query.resolveQueries(this);
-				ea.remove(0);
-				for (ExtendedAnswer ea2: resolved) {
-					ea2.addAll(ea);
-					resultSet.add(ea2);
-				}
-				resultSet.remove(ea);
-			}
-		}
 		*/
 
 		Set<ExtendedAnswer> realResults = new HashSet<>();
 		for (ExtendedAnswer ea: resultSet)
-			realResults.addAll(ea.getEASetFromQueryResolve(this));
+			realResults.addAll(ea.getEASetFromInnerQueryResolution(this));
 
 		return realResults;
 	}
