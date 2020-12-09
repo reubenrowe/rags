@@ -67,10 +67,6 @@ public class AnswerIdentifier
 		return this.m_isTerminal;
 	}
 
-	public boolean Whitespace() {
-		return this.m_identifier.isBlank();
-	}
-
 	public Object clone() {
 		AnswerIdentifier ai = new AnswerIdentifier();
 		ai.m_identifier = this.m_identifier;

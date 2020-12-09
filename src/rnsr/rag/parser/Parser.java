@@ -149,7 +149,8 @@ public class Parser
 				// consume one token from the input and use it to advance the candidate set,
 				// discarding any non-matching forms
 				Answer a = input.removeHeadToken();
-				candidate.advance(a, !a.Identifier().Whitespace());
+				//candidate.advance(a, !a.Identifier().Whitespace());		// ignores whitespace
+				candidate.advance(a, true);
 
 			}
 			
