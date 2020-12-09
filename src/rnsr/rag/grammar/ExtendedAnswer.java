@@ -1,6 +1,11 @@
 package rnsr.rag.grammar;
 
 import rnsr.rag.grammar.interfaces.IPolynomialTerm;
+import rnsr.rag.parser.Parser;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents a concatenation (string) of Answers
@@ -54,5 +59,32 @@ public	class		ExtendedAnswer
 			return a;
 		}
 	}
+
+	public Set<ExtendedAnswer> getEASetFromQueryResolve(Parser parser) {
+		ArrayList<Set<ExtendedAnswer>> subEaSetList = new ArrayList<>();
+		for (IPolynomialTerm pt: this)
+			subEaSetList.add(pt.resolveQueries(parser));
+		return extendedAnswerPermutations(subEaSetList);
+	}
+
+	private Set<ExtendedAnswer> extendedAnswerPermutations(ArrayList<Set<ExtendedAnswer>> polyAnswers) {
+		ArrayList<ExtendedAnswer> perms = new ArrayList<>();
+
+		// Creating an empty list for every permutation of the Answers possible
+		int sum = 1;
+		for (Set<ExtendedAnswer> possibleAnswerSet: polyAnswers) sum *= possibleAnswerSet.size();
+		for (int i = 0; i < sum; i++) perms.add(new ExtendedAnswer());
+
+		// Filling the list of permutations of Answers
+		for (int i = 0; i < perms.size(); i++) {
+			ArrayList<IPolynomialTerm> currentPossibilityPool = perms.get(i);
+			for (int j = 0; j < sum; j++) {
+				perms.get(j).add(currentPossibilityPool.get(j % currentPossibilityPool.size()));
+			}
+		}
+
+		return new HashSet<>(perms);
+	}
+
 
 }

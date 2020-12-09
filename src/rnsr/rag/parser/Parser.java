@@ -4,6 +4,7 @@ import rnsr.rag.grammar.*;
 import rnsr.rag.grammar.exception.*;
 import rnsr.rag.parser.exception.ParseException;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -237,13 +238,12 @@ public class Parser
 			sb.append("The result set is empty!");
 			throw new ParseException(sb.toString());
 		}
-		
-		*/
 
 		for (ExtendedAnswer ea: resultSet) {
 			if (ea.get(0) instanceof Query) {
 				Query query = (Query) ea.get(0);
-				Set<ExtendedAnswer> resolved = parse(query);
+				//Set<ExtendedAnswer> resolved = parse(query);
+				Set<ExtendedAnswer> resolved = query.resolveQueries(this);
 				ea.remove(0);
 				for (ExtendedAnswer ea2: resolved) {
 					ea2.addAll(ea);
@@ -252,7 +252,12 @@ public class Parser
 				resultSet.remove(ea);
 			}
 		}
+		*/
 
-		return resultSet;
+		Set<ExtendedAnswer> realResults = new HashSet<>();
+		for (ExtendedAnswer ea: resultSet)
+			realResults.addAll(ea.getEASetFromQueryResolve(this));
+
+		return realResults;
 	}
 }

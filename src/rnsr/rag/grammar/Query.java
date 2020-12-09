@@ -106,7 +106,10 @@ public	class		Query
 		for (Polynomial p1: possiblePolynomialsMetaSyntax) {
 			for (Polynomial p2: possiblePolynomialsSyntax) {
 				try {
-					queriesReturnSet.addAll(parser.parse(new Query(p1, p2)));
+					Set<ExtendedAnswer> results = parser.parse(new Query(p1, p2));
+					for (ExtendedAnswer ea: results)
+						queriesReturnSet.addAll(ea.getEASetFromQueryResolve(parser));
+					//queriesReturnSet.addAll(parser.parse(new Query(p1, p2)));
 				} catch (ParseException e) {
 					throw new Error(e);
 				}
