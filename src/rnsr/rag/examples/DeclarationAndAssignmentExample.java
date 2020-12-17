@@ -542,7 +542,7 @@ public	class		DeclarationAndAssignmentExample
 		args.add(vars.get(1));	// e
 		
 		c = new Configuration();
-		c.add(new Answer(new AnswerIdentifier("int")));
+		c.add(new Answer(new AnswerIdentifier("int ")));
 		
 		answerArgs = new ArrayList<Polynomial>();
 		answerArgs.add(new Polynomial(new Answer(id_echo)));

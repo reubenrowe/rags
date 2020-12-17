@@ -241,8 +241,10 @@ public	class		Answer
 
 		for (int i = 0; i < argAnswerListList.size(); i++) {
 			ArrayList<ExtendedAnswer> currentArgAnswers = argAnswerListList.get(i);
-			for (int j = 0; j < sum; j++)
-				argPolynomialListList.get(j).add(currentArgAnswers.get(j % currentArgAnswers.get(i).size()));
+			for (int j = 0; j < sum; j++) {
+				//System.out.println(j + " - " + i + " - " + argPolynomialListList.size());
+				argPolynomialListList.get(j).add(currentArgAnswers.get(j % argAnswerListList.get(i).size()));
+			}
 		}
 
 		for (ArrayList<Polynomial> argList: argPolynomialListList) {

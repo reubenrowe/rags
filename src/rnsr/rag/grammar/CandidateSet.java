@@ -215,14 +215,14 @@ public	class		CandidateSet
 														VariableNotFoundException,
 														InvalidTermException
 	{
-		HashSet<ExtendedAnswer> resultset = new HashSet<ExtendedAnswer>();
+		HashSet<ExtendedAnswer> resultSet = new HashSet<>();
 
 		for (SententialForm form : this)
 		{
-			resultset.add(form.Result().resolve(form.Variables()).toExtendedAnswer());
+			resultSet.add(form.Result().resolve(form.Variables()).toExtendedAnswer());
 		}
 
-		return resultset;
+		return resultSet;
 	}
 	
 	/**
