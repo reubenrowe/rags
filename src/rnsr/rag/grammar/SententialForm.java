@@ -269,11 +269,13 @@ public	class		SententialForm
 	}
 
 	public String toString() {
-		String s = "[";
+		String s = "'";
 		for (IConfigurationTerm c: m_configuration) {
-			s += c + ", ";
+			s += c + " ";
 		}
-		s += "]";
+		s += "', ";
+		s += ("Variable count: " + m_variables.size() + ", ");
+		s += ("'" + m_result + "'");
 		return s;
 	}
 	

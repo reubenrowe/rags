@@ -1,11 +1,8 @@
 package rnsr.rag.grammar;
 
+import rnsr.rag.grammar.exception.CloneException;
 import rnsr.rag.grammar.interfaces.IConfigurationTerm;
 import rnsr.rag.grammar.interfaces.IContextClonable;
-
-import rnsr.rag.grammar.exception.CloneException;
-import rnsr.rag.grammar.exception.VariableNotBoundException;
-import rnsr.rag.grammar.exception.VariableNotFoundException;
 
 /**
  * Represents a pair in the configuration algebra of a recursive adaptive grammar
@@ -55,6 +52,11 @@ public	class		Pair
 	public Pair clone(ContextMapping context) throws CloneException
 	{
 		return new Pair(this.m_left.clone(context), this.m_right.clone(context));
+	}
+
+	@Override
+	public String toString() {
+		return "<" + m_left + ", " + m_right + ">";
 	}
 
 }

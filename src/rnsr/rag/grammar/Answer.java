@@ -215,6 +215,7 @@ public	class		Answer
 				possibleAnswers.add(new Polynomial(this).toExtendedAnswer());
 				return possibleAnswers;
 			}
+
 			return handleArguments(possibleAnswers, parser);
 		} catch (InvalidTermException | ArgumentMismatchException e) {
 			throw new Error(e);
@@ -229,21 +230,24 @@ public	class		Answer
 	 * @return The set we add all possible answer forms
 	 * @throws ArgumentMismatchException Thrown when the number of supplied arguments doesn't match the arity of the identifier
 	 */
+
 	public Set<ExtendedAnswer> handleArguments(Set<ExtendedAnswer> possibleAnswerSet, Parser parser) throws ArgumentMismatchException {
+
 		ArrayList<ArrayList<ExtendedAnswer>> argAnswerListList = new ArrayList<>();
 		ArrayList<ArrayList<Polynomial>> argPolynomialListList = new ArrayList<>();
 
-		for (Polynomial p: m_arguments) argAnswerListList.add(handleSingleArg(p, parser));
+		// List of (list of polynomial permutations) for every polynomial argument
+		for (Polynomial p: m_arguments) { argAnswerListList.add(handleSingleArg(p, parser)); }
 
 		int sum = 1;
 		for (ArrayList<ExtendedAnswer> answerSet: argAnswerListList) sum *= answerSet.size();
 		for (int i = 0; i < sum; i++) argPolynomialListList.add(new ArrayList<>());
 
-		for (int i = 0; i < argAnswerListList.size(); i++) {
-			ArrayList<ExtendedAnswer> currentArgAnswers = argAnswerListList.get(i);
-			for (int j = 0; j < sum; j++) {
-				//System.out.println(j + " - " + i + " - " + argPolynomialListList.size());
-				argPolynomialListList.get(j).add(currentArgAnswers.get(j % argAnswerListList.get(i).size()));
+		for (int i = 0; i < argAnswerListList.size(); i++) {	// For every polynomial argument
+			ArrayList<ExtendedAnswer> currentArgAnswers = argAnswerListList.get(i);		// Get the possible permutations for that argument
+			for (int j = 0; j < argPolynomialListList.size(); j++) {
+				//argPolynomialListList.get(j).add(currentArgAnswers.get(j % currentArgAnswers.get(i).size()));
+				argPolynomialListList.get(j).add(currentArgAnswers.get(j % currentArgAnswers.size()));
 			}
 		}
 
@@ -264,7 +268,10 @@ public	class		Answer
 	public ArrayList<ExtendedAnswer> handleSingleArg(Polynomial p, Parser parser) {
 		ArrayList<Set<ExtendedAnswer>> termSets = new ArrayList<>();
 		for (IPolynomialTerm ipt: p) termSets.add(ipt.resolveQueries(parser));
-		return new ArrayList<>(ExtendedAnswer.extendedAnswerPermutations(termSets));
+		//System.out.println("-----------------------------\nDoing polynomial permutations for an argument of " + p.size() + " polynomial terms ("+ m_identifier.Identifier() + ")");
+		Set<ExtendedAnswer> permsSet = ExtendedAnswer.extendedAnswerPermutations(termSets);
+		//System.out.println("Resulting permutations number: " + permsSet.size());
+		return new ArrayList<>(permsSet);
 	}
 
 	/**

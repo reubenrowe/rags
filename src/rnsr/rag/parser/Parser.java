@@ -13,6 +13,8 @@ import java.util.Set;
 public class Parser
 {
 
+	private int depth = 0;
+
 	private Grammar m_grammar = null;
 	
 	/**
@@ -84,6 +86,11 @@ public class Parser
 	
 	public Set<ExtendedAnswer> parse(Query q) throws ParseException
 	{
+
+		for (int i = 0; i <= depth; i++) System.out.print("\t");
+		System.out.println("Doing query: " + q + " [ ");
+		depth++;
+
 		// Set up initial sentential form and initialise candidate set
 		Variable value = new Variable();
 		
@@ -120,6 +127,7 @@ public class Parser
 				try
 				{
 					candidate.fork(this);
+					printCSFork(candidate);
 				}
 				catch (InvalidTermException e)
 				{
@@ -149,6 +157,7 @@ public class Parser
 				// consume one token from the input and use it to advance the candidate set,
 				// discarding any non-matching forms
 				Answer a = input.removeHeadToken();
+				printCSAdvance(input, a, candidate);
 				//candidate.advance(a, !a.Identifier().Identifier().isBlank());		// ignores whitespace
 				candidate.advance(a, true);
 
@@ -179,6 +188,7 @@ public class Parser
 			try
 			{
 				candidate.fork(this);
+				printCSFork(candidate);
 			}
 			catch (InvalidTermException e)
 			{
@@ -244,6 +254,30 @@ public class Parser
 		for (ExtendedAnswer ea: resultSet)
 			realResults.addAll(ea.getEASetFromInnerQueryResolution(this));
 
-		return realResults;
+		depth--;
+		for (int i = 0; i <= depth; i++) System.out.print("\t");
+		System.out.println("]");
+
+		return resultSet;
 	}
+
+	private void printCSAdvance(ExtendedAnswer input, Answer a, CandidateSet cs) {
+		String buf = "";
+		for (int i = 0; i <= depth; i++) buf += "\t";
+		System.out.println(buf + "New input: '" + input + "' (removed '" + a + "')");
+		System.out.println(buf + "After advance CS: ");
+		for (SententialForm sf: cs) {
+			System.out.println(buf + "\t(" + sf + ")");
+		}
+	}
+
+	private void printCSFork(CandidateSet cs) {
+		String buf = "";
+		for (int i = 0; i <= depth; i++) buf += "\t";
+		System.out.println(buf + "After fork CS:");
+		for (SententialForm sf: cs) {
+			System.out.println(buf + "\t(" + sf + ")");
+		}
+	}
+
 }

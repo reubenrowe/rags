@@ -118,7 +118,6 @@ public	class		Query
 					Set<ExtendedAnswer> results = parser.parse(new Query(p1, p2));
 					for (ExtendedAnswer ea: results)
 						queriesReturnSet.addAll(ea.getEASetFromInnerQueryResolution(parser));
-					//queriesReturnSet.addAll(parser.parse(new Query(p1, p2)));
 				} catch (ParseException e) {
 					throw new Error(e);
 				}
