@@ -96,8 +96,10 @@ public class Parser
 	
 	public Set<ExtendedAnswer> parse(Query q) throws ParseException
 	{
+
 		// Query begin trace
 		printCSQueryBegin(q);
+		depth++;
 
 		// Set up initial sentential form and initialise candidate set
 		Variable value = new Variable();
@@ -262,6 +264,8 @@ public class Parser
 		for (ExtendedAnswer ea: resultSet)
 			realResults.addAll(ea.getEASetFromInnerQueryResolution(this));
 
+		depth--;
+
 		return resultSet;
 	}
 
@@ -276,20 +280,20 @@ public class Parser
 		StringBuilder trace = new StringBuilder();
 		String buf = formatTraceBuffer();
 		trace.append(buf + "New input: '" + input + "' (removed '" + a + "')\n");
-		trace.append(getCSFormatted(buf, cs));
+		trace.append(getCSFormatted(buf, "advance", cs));
 		traceHandler.printTraceToFile(trace.toString());
 	}
 
 	private void printCSFork(CandidateSet cs) {
 		StringBuilder trace = new StringBuilder();
 		String buf = formatTraceBuffer();
-		trace.append(getCSFormatted(buf, cs));
+		trace.append(getCSFormatted(buf, "fork", cs));
 		traceHandler.printTraceToFile(trace.toString());
 	}
 
-	private String getCSFormatted(String buf, CandidateSet cs) {
+	private String getCSFormatted(String buf, String action, CandidateSet cs) {
 		StringBuilder trace = new StringBuilder();
-		trace.append(buf + "New CS:\n");
+		trace.append(buf + "After " + action + " CS:\n");
 		for (SententialForm sf: cs)
 			trace.append(buf + "\t(" + sf + ")\n");
 		return trace.toString();
@@ -297,7 +301,7 @@ public class Parser
 
 	private String formatTraceBuffer() {
 		String buf = "";
-		for (int i = 0; i <= depth; i++) buf += "\n";
+		for (int i = 0; i <= depth; i++) buf += "\t";
 		return buf;
 	}
 
