@@ -268,9 +268,7 @@ public	class		Answer
 	public ArrayList<ExtendedAnswer> handleSingleArg(Polynomial p, Parser parser) {
 		ArrayList<Set<ExtendedAnswer>> termSets = new ArrayList<>();
 		for (IPolynomialTerm ipt: p) termSets.add(ipt.resolveQueries(parser));
-		//System.out.println("-----------------------------\nDoing polynomial permutations for an argument of " + p.size() + " polynomial terms ("+ m_identifier.Identifier() + ")");
 		Set<ExtendedAnswer> permsSet = ExtendedAnswer.extendedAnswerPermutations(termSets);
-		//System.out.println("Resulting permutations number: " + permsSet.size());
 		return new ArrayList<>(permsSet);
 	}
 

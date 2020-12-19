@@ -3,6 +3,7 @@ package rnsr.rag.parser;
 import rnsr.rag.grammar.*;
 import rnsr.rag.grammar.exception.*;
 import rnsr.rag.parser.exception.ParseException;
+import rnsr.rag.util.TraceHandler;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,6 +17,8 @@ public class Parser
 	private int depth = 0;
 
 	private Grammar m_grammar = null;
+
+	private TraceHandler traceHandler = new TraceHandler();
 	
 	/**
 	 * Default Constructor
@@ -59,7 +62,10 @@ public class Parser
 		{
 			throw new ParseException("There is no start symbol!");
 		}
-		
+
+		// Open trace file
+		traceHandler.openFile();
+
 		// Construct the initial query
 		Polynomial parseInput = new Polynomial();
 		parseInput.add(new Answer(new AnswerIdentifier(input)));
@@ -69,6 +75,9 @@ public class Parser
 		
 		// Parse the query
 		Set<ExtendedAnswer> resultSet = this.parse(initialQuery);
+
+		// Close trace file
+		traceHandler.closeFile();
 
 		// If result set is empty, this is an error
 		if (resultSet.size() == 0)
@@ -80,16 +89,15 @@ public class Parser
 			sb.append("The result set is empty!");
 			throw new ParseException(sb.toString());
 		}
+
 	
 		return resultSet;
 	}
 	
 	public Set<ExtendedAnswer> parse(Query q) throws ParseException
 	{
-
-		for (int i = 0; i <= depth; i++) System.out.print("\t");
-		System.out.println("Doing query: " + q + " [ ");
-		depth++;
+		// Query begin trace
+		printCSQueryBegin(q);
 
 		// Set up initial sentential form and initialise candidate set
 		Variable value = new Variable();
@@ -254,30 +262,43 @@ public class Parser
 		for (ExtendedAnswer ea: resultSet)
 			realResults.addAll(ea.getEASetFromInnerQueryResolution(this));
 
-		depth--;
-		for (int i = 0; i <= depth; i++) System.out.print("\t");
-		System.out.println("]");
-
 		return resultSet;
 	}
 
+	private void printCSQueryBegin(Query q) {
+		StringBuilder trace = new StringBuilder();
+		String buf = formatTraceBuffer();
+		trace.append(buf + "Doing Query: " + q + "\n");
+		traceHandler.printTraceToFile(trace.toString());
+	}
+
 	private void printCSAdvance(ExtendedAnswer input, Answer a, CandidateSet cs) {
-		String buf = "";
-		for (int i = 0; i <= depth; i++) buf += "\t";
-		System.out.println(buf + "New input: '" + input + "' (removed '" + a + "')");
-		System.out.println(buf + "After advance CS: ");
-		for (SententialForm sf: cs) {
-			System.out.println(buf + "\t(" + sf + ")");
-		}
+		StringBuilder trace = new StringBuilder();
+		String buf = formatTraceBuffer();
+		trace.append(buf + "New input: '" + input + "' (removed '" + a + "')\n");
+		trace.append(getCSFormatted(buf, cs));
+		traceHandler.printTraceToFile(trace.toString());
 	}
 
 	private void printCSFork(CandidateSet cs) {
+		StringBuilder trace = new StringBuilder();
+		String buf = formatTraceBuffer();
+		trace.append(getCSFormatted(buf, cs));
+		traceHandler.printTraceToFile(trace.toString());
+	}
+
+	private String getCSFormatted(String buf, CandidateSet cs) {
+		StringBuilder trace = new StringBuilder();
+		trace.append(buf + "New CS:\n");
+		for (SententialForm sf: cs)
+			trace.append(buf + "\t(" + sf + ")\n");
+		return trace.toString();
+	}
+
+	private String formatTraceBuffer() {
 		String buf = "";
-		for (int i = 0; i <= depth; i++) buf += "\t";
-		System.out.println(buf + "After fork CS:");
-		for (SententialForm sf: cs) {
-			System.out.println(buf + "\t(" + sf + ")");
-		}
+		for (int i = 0; i <= depth; i++) buf += "\n";
+		return buf;
 	}
 
 }
