@@ -270,8 +270,9 @@ public	class		SententialForm
 
 	public String toString() {
 		String s = "'";
-		for (IConfigurationTerm c: m_configuration) {
-			s += c + " ";
+		for (int i = 0; i < m_configuration.size(); i++) {
+			s += m_configuration.get(i);
+			if (i < m_configuration.size() - 1) s += " ";
 		}
 		s += "', ";
 		s += ("Variable count: " + m_variables.size() + ", ");

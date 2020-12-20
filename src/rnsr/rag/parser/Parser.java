@@ -167,10 +167,9 @@ public class Parser
 				// consume one token from the input and use it to advance the candidate set,
 				// discarding any non-matching forms
 				Answer a = input.removeHeadToken();
-				printCSAdvance(input, a, candidate);
 				//candidate.advance(a, !a.Identifier().Identifier().isBlank());		// ignores whitespace
 				candidate.advance(a, true);
-
+				printCSAdvance(input, a, candidate);
 			}
 			
 			/* We are not throwing an exception, in case the query not 
@@ -265,7 +264,7 @@ public class Parser
 			realResults.addAll(ea.getEASetFromInnerQueryResolution(this));
 
 		depth--;
-
+		printCSFinished(q, realResults);
 		return resultSet;
 	}
 
@@ -273,6 +272,17 @@ public class Parser
 		StringBuilder trace = new StringBuilder();
 		String buf = formatTraceBuffer();
 		trace.append(buf + "Doing Query: " + q + "\n");
+		traceHandler.printTraceToFile(trace.toString());
+	}
+
+	private void printCSFinished(Query q, Set<ExtendedAnswer> results) {
+		StringBuilder trace = new StringBuilder();
+		String buf = formatTraceBuffer();
+		trace.append(buf + "Return:\n");
+		//trace.append(getCSFormatted(buf, "done " + q, cs));
+		for (ExtendedAnswer ea: results)
+			trace.append(buf + "\t'" + ea + "'\n");
+		if (results.size() <= 0) trace.append(buf + "\tEMPTY\n");
 		traceHandler.printTraceToFile(trace.toString());
 	}
 
@@ -296,12 +306,13 @@ public class Parser
 		trace.append(buf + "After " + action + " CS:\n");
 		for (SententialForm sf: cs)
 			trace.append(buf + "\t(" + sf + ")\n");
+		if (cs.size() <= 0) trace.append(buf + "\tEMPTY\n");
 		return trace.toString();
 	}
 
 	private String formatTraceBuffer() {
 		String buf = "";
-		for (int i = 0; i <= depth; i++) buf += "\t";
+		for (int i = 0; i < depth; i++) buf += "\t";
 		return buf;
 	}
 
