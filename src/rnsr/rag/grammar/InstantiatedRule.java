@@ -1,5 +1,7 @@
 package rnsr.rag.grammar;
 
+import java.util.ArrayList;
+
 /**
  * An instance of a rule form which can be applied directly to a sentential form
  */
@@ -18,11 +20,12 @@ public	class		InstantiatedRule
 	 * @param variables - the variable map used by this rule instance
 	 * @param result - the sematic value of this rule instance
 	 */
-	public InstantiatedRule(Configuration configuration, VariableSet variables, Polynomial result)
+	public InstantiatedRule(Configuration configuration, VariableSet variables, Polynomial result, ArrayList<VariableCondition> conditions)
 	{
 		this.m_configuration = configuration;
 		this.m_variables = variables;
 		this.m_result = result;
+		this.m_conditions = conditions;
 	}
 	
 	/**
@@ -56,6 +59,6 @@ public	class		InstantiatedRule
 		VariableSet vars = new VariableSet();
 		vars.put(v);
 
-		return new InstantiatedRule(c, vars, new Polynomial(v));
+		return new InstantiatedRule(c, vars, new Polynomial(v), null);
 	}
 }

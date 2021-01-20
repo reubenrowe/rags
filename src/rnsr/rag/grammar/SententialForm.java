@@ -20,6 +20,7 @@ public	class		SententialForm
 		implements	IClonable<SententialForm>, IConsumable
 {
 
+
 	/**
 	 * Default Constructor
 	 */

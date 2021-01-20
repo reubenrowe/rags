@@ -1,6 +1,8 @@
 package rnsr.rag.grammar;
 
-import rnsr.rag.grammar.exception.VariableNotFoundException;
+import rnsr.rag.grammar.exception.*;
+
+import java.util.ArrayList;
 
 /**
  * This is the base class for all objects based upon a configuration.
@@ -23,7 +25,12 @@ public abstract class SententialFormBase
 	 * The semantic value of this sentential form
 	 */
 	protected Polynomial m_result = null;
-	
+
+	/**
+	 * Conditions on the variables in the sentential form
+	 */
+	protected ArrayList<VariableCondition> m_conditions = null;
+
 	/**
 	 * The sematic value of this sentential form
 	 */
@@ -31,7 +38,8 @@ public abstract class SententialFormBase
 	{
 		return this.m_result;
 	}
-	
+
+
 	/**
 	 * Binds the given polynomial to the specified variable
 	 * @param v - The variable to bind to

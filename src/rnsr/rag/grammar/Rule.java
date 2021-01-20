@@ -13,8 +13,7 @@ public	class		Rule
 {
 
 	private ArrayList<Variable> m_arguments = null;
-	private ArrayList<VariableCondition> m_conditions = null;
-	
+
 	/**
 	 * Default Constructor
 	 */
@@ -102,7 +101,7 @@ public	class		Rule
 		Polynomial clonedResult = this.m_result.clone(cloneContext);
 		
 		// Construct the instantiated rule
-		InstantiatedRule r = new InstantiatedRule(clonedDerivative, newVars, clonedResult);
+		InstantiatedRule r = new InstantiatedRule(clonedDerivative, newVars, clonedResult, m_conditions);
 		
 		// Bind variables
 		r.bind(cloneContext.get(this.m_arguments.get(0)), new Polynomial(answer));
