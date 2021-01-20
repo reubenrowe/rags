@@ -25,6 +25,10 @@ public	class		Variable
 		this(null);
 	}
 
+	public boolean isConstrained() {
+		return possibleAnswers != null && possibleAnswers.size() > 0;
+	}
+
 	public HashSet<Answer> getPossibleAnswers() {
 		return possibleAnswers;
 	}
@@ -61,7 +65,6 @@ public	class		Variable
 	public String toString()
 	{
 		// TODO : Implement a better naming scheme for variables
-		//return "v" + index;
 		return "v";
 	}
 
