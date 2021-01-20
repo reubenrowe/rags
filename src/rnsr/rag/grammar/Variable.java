@@ -15,6 +15,15 @@ public	class		Variable
 {
 
 	private int index;
+	private HashSet<String> possibleValues;
+
+	public Variable(HashSet<String> possibleValues) {
+		this.possibleValues = possibleValues;
+	}
+	
+	public Variable() {
+		this(null);
+	}
 
 	/**
 	 * IContextClonable method - clones this Variable
