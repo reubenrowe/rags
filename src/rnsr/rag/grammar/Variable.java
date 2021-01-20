@@ -25,6 +25,14 @@ public	class		Variable
 		this(null);
 	}
 
+	public HashSet<Answer> getPossibleAnswers() {
+		return possibleAnswers;
+	}
+
+	public void setPossibleAnswers(HashSet<Answer> possibleAnswers) {
+		this.possibleAnswers = possibleAnswers;
+	}
+
 	/**
 	 * IContextClonable method - clones this Variable
 	 */

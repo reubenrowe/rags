@@ -6,6 +6,7 @@ import rnsr.rag.grammar.exception.RuleFunctionException;
 import rnsr.rag.grammar.exception.VariableNotFoundException;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class PeanoAdderExample extends CommandLineInputBase {
 
@@ -22,6 +23,11 @@ public class PeanoAdderExample extends CommandLineInputBase {
         AnswerIdentifier answer_Plus = new AnswerIdentifier("+");
 
         Grammar g = new Grammar(answer_Add);
+
+        // &ALPHABET
+        HashSet<Answer> alphabetSet = new HashSet<>();
+        for (char c: "abcdefghijklmnopqrstuvwxyz".toCharArray())
+            alphabetSet.add(new Answer(new AnswerIdentifier(String.valueOf(c))));
 
         /* ********** RULE PRODUCTIONS ********** */
 
@@ -193,6 +199,29 @@ public class PeanoAdderExample extends CommandLineInputBase {
                 vars.get(1)
         ));
         g.addRule(answer_Dec, new Rule(c, varSet, new Polynomial(vars.get(1)), args));
+
+        // z,zP:&ALPHABET;z != zP; : <NotLet[z], #> -> <zP, _v1>
+        vars = new ArrayList<>();
+        varSet = new VariableSet();
+        for (int i = 0; i <= 3; i++) {
+            Variable v = new Variable();
+            vars.add(i, v);
+            varSet.put(v);
+        }
+        vars.get(1).setPossibleAnswers(alphabetSet);
+        vars.get(2).setPossibleAnswers(alphabetSet);
+        ArrayList<VariableCondition> conditions = new ArrayList<>();
+        conditions.add(new VariableCondition(vars.get(1), vars.get(2), VariableCondition.VariableConditionType.NE));
+        args = new ArrayList<>();
+        args.add(vars.get(0));
+        args.add(vars.get(1));
+        args.add(vars.get(2));
+        c = new Configuration();
+        c.add(new Pair(
+                new Polynomial(args.get(2)),
+                vars.get(3)
+        ));
+        g.addRule(new AnswerIdentifier("NotLet", 1), new Rule(c, varSet, new Polynomial(args.get(1)), args, conditions));
 
         /* ****************************************/
 

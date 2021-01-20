@@ -233,10 +233,6 @@ public class PeanoAdderExampleNew extends CommandLineInputBase {
         poly1.add(vars.get(3));
         g.addRule(answer_Star_1, new Rule(c, varSet, poly1, args));
         ////////////////////////////////////////////////////
-
-
-
-        ////////////////////////////////////////////////////
         return g;
     }
     public static void main(String[] args) {
