@@ -176,6 +176,10 @@ public	class		SententialForm
 		// Append the rule instance variables to the sentential form
 		this.m_variables.putAll(ruleInstance.Variables());
 
+		// Append conditions on variables to the sentential form
+		if (ruleInstance.m_conditions != null)
+			this.m_conditions.addAll(ruleInstance.m_conditions);
+
 		// Bind the result of the rule instance to the binding variable of the replaced term
 		this.bind(((Pair) t).Right(), ruleInstance.Result());
 	}

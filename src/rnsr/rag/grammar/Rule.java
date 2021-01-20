@@ -96,10 +96,10 @@ public	class		Rule
 			newVars.put(newVar);
 		}
 		
-		// Clone the rule derivative and result
+		// Clone the rule derivative, result and conditions
 		Configuration clonedDerivative = this.m_configuration.clone(cloneContext);
 		Polynomial clonedResult = this.m_result.clone(cloneContext);
-		
+
 		// Construct the instantiated rule
 		InstantiatedRule r = new InstantiatedRule(clonedDerivative, newVars, clonedResult, m_conditions);
 		
