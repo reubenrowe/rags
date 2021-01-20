@@ -15,12 +15,12 @@ public	class		Variable
 {
 
 	private int index;
-	private HashSet<String> possibleValues;
+	private HashSet<Answer> possibleAnswers;
 
-	public Variable(HashSet<String> possibleValues) {
-		this.possibleValues = possibleValues;
+	public Variable(HashSet<Answer> possibleAnswers) {
+		this.possibleAnswers = possibleAnswers;
 	}
-	
+
 	public Variable() {
 		this(null);
 	}
