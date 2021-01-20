@@ -228,12 +228,12 @@ public	class		DeclarationAndAssignmentExample
 					vars = new ArrayList<Variable>();
 					args = new ArrayList<Variable>();
 					varSet = new VariableSet();
-					
+
 					Variable v = new Variable();
 					vars.add(v);
 					varSet.put(v);
 					args.add(v);
-					
+
 					c = new Configuration();
 					c.add(new Answer(alphabetTerminalIds.get(j)));
 					
@@ -525,7 +525,9 @@ public	class		DeclarationAndAssignmentExample
 		
 		g.addRule(id_combine, new Rule(c, varSet, new Polynomial(new Answer(id_union, answerArgs)), args));		
 		
-		// decl(e) : <v0, combine(e, (make_env : v1))> -> "int " <echo star(echo), v1> <(e : undef) : v1, v2> ";"
+		// decl(e) : <v0, combine(e, (make_env : v1))> -> "int " <echo star(echo), :q
+		//
+		// v1> <(e : undef) : v1, v2> ";"
 		AnswerIdentifier id_decl = new AnswerIdentifier("decl", 1);
 		vars = new ArrayList<Variable>();
 		varSet = new VariableSet();
