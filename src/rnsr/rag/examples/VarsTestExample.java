@@ -13,7 +13,7 @@ public class VarsTestExample extends CommandLineInputBase {
     public Grammar CreateRAG() throws ArgumentMismatchException, RuleFunctionException, VariableNotFoundException {
 
         // Construct Answer Identifier set
-        AnswerIdentifier start = new AnswerIdentifier("Start");
+        AnswerIdentifier start = new AnswerIdentifier("Start", 0);
         AnswerIdentifier notLet = new AnswerIdentifier("NotLet", 1);
 
         Grammar g = new Grammar(start);
@@ -34,7 +34,7 @@ public class VarsTestExample extends CommandLineInputBase {
         Configuration c;
         Polynomial poly;
 
-        // Start: <v0, _v1> -> <NotLet["a"], _v1>
+        // <Start, _v1> -> <NotLet["a"], _v1>
         vars = new ArrayList<>();
         varSet = new VariableSet();
         for (int i = 0; i <= 1; i++) {
@@ -45,13 +45,15 @@ public class VarsTestExample extends CommandLineInputBase {
         args = new ArrayList<>();
         args.add(vars.get(0));
         c = new Configuration();
+        ArrayList<Polynomial> param = new ArrayList<>();
+        param.add(new Polynomial(new Answer(new AnswerIdentifier("a"))));
         c.add(new Pair(
-                new Polynomial(new Answer(notLet)),
+                new Polynomial(new Answer(notLet, param)),
                 vars.get(1)
         ));
         g.addRule(start, new Rule(c, varSet, new Polynomial(vars.get(1)), args));
 
-        // z,zP:&ALPHABET;z != zP; : <NotLet[z], #> -> <zP, _v1>
+        // _z,_zP:&ALPHABET;_z != _zP; : <NotLet[_z], #> -> <_zP, _v1>
         vars = new ArrayList<>();
         varSet = new VariableSet();
         for (int i = 0; i <= 3; i++) {
@@ -86,7 +88,7 @@ public class VarsTestExample extends CommandLineInputBase {
             System.err.println("Expecting some input to parse!");
             System.exit(0);
         }
-        performTest(new PeanoAdderExample(), args[0]);
+        performTest(new VarsTestExample(), args[0]);
     }
 
 }

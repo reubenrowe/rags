@@ -11,6 +11,8 @@ import rnsr.rag.grammar.exception.InvalidTermException;
 import rnsr.rag.grammar.exception.VariableNotBoundException;
 import rnsr.rag.grammar.exception.VariableNotFoundException;
 
+import java.util.ArrayList;
+
 /**
  * Represents a RAG sentential form (i.e. a configuration and a 
  * semantic value encapsulated with variable context information)
@@ -32,11 +34,12 @@ public	class		SententialForm
 	 * @param variables - the variable map used by this sentential form
 	 * @param result - the sematic value of this sentential form
 	 */
-	public SententialForm(Configuration configuration, VariableSet variables, Polynomial result)
+	public SententialForm(Configuration configuration, VariableSet variables, Polynomial result, ArrayList<VariableCondition> conditions)
 	{
 		this.m_configuration = configuration;
 		this.m_variables = variables;
 		this.m_result = result;
+		this.m_conditions = conditions;
 	}
 	
 	/**
@@ -259,7 +262,7 @@ public	class		SententialForm
 		}
 		
 		// Create and return a new Sentential form using the cloned components
-		return new SententialForm(clonedConfiguration, newVars, clonedResult);
+		return new SententialForm(clonedConfiguration, newVars, clonedResult, m_conditions);
 	}
 	
 	/**

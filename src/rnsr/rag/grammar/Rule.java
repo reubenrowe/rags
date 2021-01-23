@@ -113,5 +113,9 @@ public	class		Rule
 		
 		return r;
 	}
+
+	public ArrayList<VariableCondition> getConditions() {
+		return m_conditions;
+	}
 	
 }
