@@ -14,6 +14,8 @@ public	class		Variable
 		implements	IPolynomialTerm, IContextClonable<Variable>
 {
 
+	private int index;
+
 	/**
 	 * IContextClonable method - clones this Variable
 	 */
@@ -38,14 +40,24 @@ public	class		Variable
 	{
 		return super.equals(v);
 	}
-	
+
 	public String toString()
 	{
 		// TODO : Implement a better naming scheme for variables
-		return "v";		
+		//return "v" + index;
+		return "v";
 	}
 
 	public HashSet<ExtendedAnswer> resolveQueries(Parser parser) {
 		return new HashSet<>();
 	}
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
+	public int getIndex() {
+		return index;
+	}
+
 }
