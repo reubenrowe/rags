@@ -1,11 +1,20 @@
 package rnsr.rag.examples;
 
-import rnsr.rag.grammar.*;
-import rnsr.rag.grammar.exception.RuleFunctionException;
-import rnsr.rag.grammar.exception.VariableNotFoundException;
-
 import java.util.ArrayList;
 import java.util.HashSet;
+
+import rnsr.rag.grammar.Answer;
+import rnsr.rag.grammar.AnswerIdentifier;
+import rnsr.rag.grammar.Configuration;
+import rnsr.rag.grammar.Grammar;
+import rnsr.rag.grammar.Pair;
+import rnsr.rag.grammar.Polynomial;
+import rnsr.rag.grammar.Rule;
+import rnsr.rag.grammar.Variable;
+import rnsr.rag.grammar.VariableSet;
+
+import rnsr.rag.grammar.exception.RuleFunctionException;
+import rnsr.rag.grammar.exception.VariableNotFoundException;
 
 /**
  * This class creates a RAG for the language {www | w in Z*} where the alphabet Z = {'z'}.
@@ -26,7 +35,7 @@ public	class		TripleStringExample
 		AnswerIdentifier answer_S = new AnswerIdentifier("S", 0);
 		AnswerIdentifier answer_W = new AnswerIdentifier("W", 0);
 		AnswerIdentifier answer_C = new AnswerIdentifier("C", 0);
-
+		
 		HashSet<AnswerIdentifier> answerSet = new HashSet<AnswerIdentifier>();
 		answerSet.add(answer_z);
 		answerSet.add(answer_S);
@@ -56,7 +65,7 @@ public	class		TripleStringExample
 		
 		args = new ArrayList<Variable>();
 		args.add(vars.get(0));
-
+		
 		c = new Configuration();
 		c.add(new Pair(
 				new Polynomial(new Answer(answer_W)),
@@ -70,7 +79,7 @@ public	class		TripleStringExample
 				new Polynomial(vars.get(1)),
 				vars.get(3)
 			));
-
+		
 		g.addRule(answer_S,
 				new Rule(c, varSet, new Polynomial(vars.get(3)), args)
 			);
@@ -117,8 +126,7 @@ public	class		TripleStringExample
 		
 		poly = new Polynomial();
 		poly.add(vars.get(1));
-		poly.add(vars.get(
-				2));
+		poly.add(vars.get(2));
 		
 		g.addRule(answer_W, new Rule(c, varSet, poly, args));
 		

@@ -20,7 +20,6 @@ public	class		SententialForm
 		implements	IClonable<SententialForm>, IConsumable
 {
 
-
 	/**
 	 * Default Constructor
 	 */
@@ -270,14 +269,14 @@ public	class		SententialForm
 	}
 
 	public String toString() {
-		String s = "\"";
-		for (IConfigurationTerm c: m_configuration) {
-			s += c;
+		String s = "'";
+		for (int i = 0; i < m_configuration.size(); i++) {
+			s += m_configuration.get(i);
+			if (i < m_configuration.size() - 1) s += " ";
 		}
-		s += "\", ";
+		s += "', ";
 		s += ("Variable count: " + m_variables.size() + ", ");
-		//s+= m_variables + ", ";
-		s += ("\"" + m_result + "\"");
+		s += ("'" + m_result + "'");
 		return s;
 	}
 	

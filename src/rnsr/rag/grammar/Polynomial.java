@@ -196,7 +196,7 @@ public	class		Polynomial
 		{
 			if ((sb.length() > 0) && !(t instanceof Answer && ((Answer) t).Identifier().Terminal()))
 			{
-				sb.append(",");
+				sb.append(" ");
 			}
 			sb.append(t.toString());
 		}

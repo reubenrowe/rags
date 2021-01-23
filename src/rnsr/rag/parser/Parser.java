@@ -265,7 +265,7 @@ public class Parser
 
 		depth--;
 		printCSFinished(q, realResults);
-		return realResults;
+		return resultSet;
 	}
 
 	private void printCSQueryBegin(Query q) {

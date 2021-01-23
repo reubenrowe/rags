@@ -18,16 +18,22 @@ public class PeanoAdderExample extends CommandLineInputBase {
         AnswerIdentifier answer_ReArr = new AnswerIdentifier("ReArr", 0);
         AnswerIdentifier answer_Inc = new AnswerIdentifier("Inc", 0);
         AnswerIdentifier answer_Dec = new AnswerIdentifier("Dec", 0);
+        AnswerIdentifier answer_Dq = new AnswerIdentifier("Dq" , 0);
         AnswerIdentifier answer_S = new AnswerIdentifier("s");
         AnswerIdentifier answer_Zero = new AnswerIdentifier("0");
         AnswerIdentifier answer_Plus = new AnswerIdentifier("+");
 
-        Grammar g = new Grammar(answer_Add);
+        HashSet<AnswerIdentifier> answerSet = new HashSet<>();
+        answerSet.add(answer_Add);
+        answerSet.add(answer_Num);
+        answerSet.add(answer_ReArr);
+        answerSet.add(answer_Inc);
+        answerSet.add(answer_Dec);
+        answerSet.add(answer_S);
+        answerSet.add(answer_Zero);
+        answerSet.add(answer_Plus);
 
-        // &ALPHABET
-        HashSet<Answer> alphabetSet = new HashSet<>();
-        for (char c: "abcdefghijklmnopqrstuvwxyz".toCharArray())
-            alphabetSet.add(new Answer(new AnswerIdentifier(String.valueOf(c))));
+        Grammar g = new Grammar(answerSet, answer_Add);
 
         /* ********** RULE PRODUCTIONS ********** */
 
@@ -37,6 +43,26 @@ public class PeanoAdderExample extends CommandLineInputBase {
         VariableSet varSet;
         Configuration c;
         Polynomial poly;
+
+        // Dq(q): <v0, v1> -> <q, v1>
+        /*
+        vars = new ArrayList<>();
+        varSet = new VariableSet();
+        for (int i = 0; i <= 2; i++) {
+            Variable v = new Variable();
+            vars.add(i, v);
+            varSet.put(v);
+        }
+        args = new ArrayList<Variable>();
+        args.add(vars.get(0)); // Dq
+        args.add(vars.get(1)); // q
+        c = new Configuration();
+        c.add(new Pair(
+                new Polynomial(args.get(1)),
+                vars.get(2)
+        ));
+        g.addRule(answer_Dq, new Rule(c, varSet, new Polynomial(vars.get(2)), args));
+        */
 
         // Add: <v0, ReArr?(v1 + v2)> -> <Num, v1> '+' <Add, v2>
         vars = new ArrayList<>();
@@ -199,29 +225,6 @@ public class PeanoAdderExample extends CommandLineInputBase {
                 vars.get(1)
         ));
         g.addRule(answer_Dec, new Rule(c, varSet, new Polynomial(vars.get(1)), args));
-
-        // z,zP:&ALPHABET;z != zP; : <NotLet[z], #> -> <zP, _v1>
-        vars = new ArrayList<>();
-        varSet = new VariableSet();
-        for (int i = 0; i <= 3; i++) {
-            Variable v = new Variable();
-            vars.add(i, v);
-            varSet.put(v);
-        }
-        vars.get(1).setPossibleAnswers(alphabetSet);
-        vars.get(2).setPossibleAnswers(alphabetSet);
-        ArrayList<VariableCondition> conditions = new ArrayList<>();
-        conditions.add(new VariableCondition(vars.get(1), vars.get(2), VariableCondition.VariableConditionType.NE));
-        args = new ArrayList<>();
-        args.add(vars.get(0));
-        args.add(vars.get(1));
-        args.add(vars.get(2));
-        c = new Configuration();
-        c.add(new Pair(
-                new Polynomial(args.get(2)),
-                vars.get(3)
-        ));
-        g.addRule(new AnswerIdentifier("NotLet", 1), new Rule(c, varSet, new Polynomial(args.get(1)), args, conditions));
 
         /* ****************************************/
 
