@@ -72,6 +72,10 @@ public	class		SententialForm
 	 */
 	public void normalise() throws VariableNotBoundException, VariableNotFoundException
 	{
+
+		ArrayList<SententialForm> sfList = new ArrayList<>();
+		sfList.add(this);
+
 		// If the polynomial is a concatenation
 		if (Head() instanceof Pair)
 		{
@@ -86,12 +90,12 @@ public	class		SententialForm
 				Polynomial newPolynomial = new Polynomial();
 				if (leftTerm instanceof Variable)
 				{
-					if (!this.m_variables.containsKey(((Variable) leftTerm)))
+					if (!this.m_variables.containsKey((leftTerm)))
 					{
 						throw new VariableNotFoundException();
 					}
 					
-					newPolynomial = this.m_variables.get((Variable) leftTerm);
+					newPolynomial = this.m_variables.get(leftTerm);
 					
 					if (newPolynomial.Empty())
 					{
@@ -140,10 +144,12 @@ public	class		SententialForm
 				}
 				
 				Polynomial resolved = (Polynomial) this.m_variables.get(v).clone();
-				
+
 				if (resolved.Empty())
 				{
-					throw new VariableNotBoundException();
+					if (!v.isConstrained()) throw new VariableNotBoundException();
+					// replace variable with one of its possibilities
+
 				}
 				
 				// Create new pair with resolved variable

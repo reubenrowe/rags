@@ -189,7 +189,7 @@ public	class		CandidateSet
 		{
 			SententialForm current = i.next();
 			IConfigurationTerm headTerm = current.Head();
-			
+
 			if ((headTerm != null) && (headTerm instanceof Answer) && (((Answer) headTerm).match(input)))
 			{
 				try
@@ -204,7 +204,8 @@ public	class		CandidateSet
 			}
 			else if (discardNonMatching)
 			{
-				i.remove();
+
+				if (!(headTerm == null && input.Identifier().Identifier().isBlank())) i.remove();
 			}
 		}
 	}
