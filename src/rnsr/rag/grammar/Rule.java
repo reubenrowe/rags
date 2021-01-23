@@ -91,11 +91,10 @@ public	class		Rule
 		ContextMapping cloneContext = new ContextMapping();
 		for (Variable v : this.m_variables.keySet())
 		{
-			Variable newVar = new Variable();
-			cloneContext.put(v, newVar);
-			newVars.put(newVar);
+			cloneContext.put(v, v);
+			newVars.put(v);
 		}
-		
+
 		// Clone the rule derivative, result and conditions
 		Configuration clonedDerivative = this.m_configuration.clone(cloneContext);
 		Polynomial clonedResult = this.m_result.clone(cloneContext);
