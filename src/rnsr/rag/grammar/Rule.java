@@ -94,6 +94,8 @@ public	class		Rule
 			Variable newVar = new Variable();
 			cloneContext.put(v, newVar);
 			newVars.put(newVar);
+			//cloneContext.put(v, v);
+			//newVars.put(v);
 		}
 		
 		// Clone the rule derivative, result and conditions

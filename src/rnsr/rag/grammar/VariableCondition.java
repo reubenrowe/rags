@@ -26,4 +26,8 @@ public class VariableCondition {
         return condition;
     }
 
+    public String toString() {
+        return "(" + v1 + " " + condition + " " + v2 + ")";
+    }
+
 }
