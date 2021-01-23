@@ -1,9 +1,9 @@
 package rnsr.rag.grammar;
 
-import java.util.ArrayList;
-
 import rnsr.rag.grammar.exception.CloneException;
 import rnsr.rag.grammar.exception.VariableNotFoundException;
+
+import java.util.ArrayList;
 
 /**
  * A Rule production for a rescursive adaptive grammar (RAG)
@@ -13,7 +13,7 @@ public	class		Rule
 {
 
 	private ArrayList<Variable> m_arguments = null;
-	
+
 	/**
 	 * Default Constructor
 	 */
@@ -25,23 +25,39 @@ public	class		Rule
 	 * @param variables - the variable map used by this rule form
 	 * @param result - the sematic value of this rule form
 	 */
-	public Rule(Configuration configuration, VariableSet variables, Polynomial result)
+	public Rule(Configuration configuration, VariableSet variables, Polynomial result)  throws VariableNotFoundException
 	{
-		this.m_configuration = configuration;
-		this.m_variables = variables;
-		this.m_result = result;
+		this(configuration, variables, result, null, null);
 	}
-	
+
 	/**
 	 * Constructs a new Rule object
 	 * @param configuration - The configuration of terms represented by this rule form
 	 * @param variables - the variable map used by this rule form
 	 * @param result - the sematic value of this rule form
 	 * @param args - the argument list for this rule form
+	 * @throws VariableNotFoundException
 	 */
 	public Rule(Configuration configuration, VariableSet variables, Polynomial result, ArrayList<Variable> args) throws VariableNotFoundException
 	{
-		this(configuration, variables, result);
+		this(configuration, variables, result, args, null);
+	}
+
+	/**
+	 * Constructs a new Rule object
+	 * @param configuration - The configuration of terms represented by this rule form
+	 * @param variables - the variable map used by this rule form
+	 * @param result - the sematic value of this rule form
+	 * @param args - the argument list for this rule form
+	 * @param conditions - list of conditions on the variables contained in this rule
+	 */
+	public Rule(Configuration configuration, VariableSet variables, Polynomial result, ArrayList<Variable> args, ArrayList<VariableCondition> conditions) throws VariableNotFoundException
+	{
+		//this(configuration, variables, result);
+		this.m_configuration = configuration;
+		this.m_variables = variables;
+		this.m_result = result;
+		this.m_conditions = conditions;
 		this.setArguments(args);
 	}
 	
@@ -80,12 +96,12 @@ public	class		Rule
 			newVars.put(newVar);
 		}
 		
-		// Clone the rule derivative and result
+		// Clone the rule derivative, result and conditions
 		Configuration clonedDerivative = this.m_configuration.clone(cloneContext);
 		Polynomial clonedResult = this.m_result.clone(cloneContext);
-		
+
 		// Construct the instantiated rule
-		InstantiatedRule r = new InstantiatedRule(clonedDerivative, newVars, clonedResult);
+		InstantiatedRule r = new InstantiatedRule(clonedDerivative, newVars, clonedResult, m_conditions);
 		
 		// Bind variables
 		r.bind(cloneContext.get(this.m_arguments.get(0)), new Polynomial(answer));
@@ -96,6 +112,10 @@ public	class		Rule
 		}
 		
 		return r;
+	}
+
+	public ArrayList<VariableCondition> getConditions() {
+		return m_conditions;
 	}
 	
 }

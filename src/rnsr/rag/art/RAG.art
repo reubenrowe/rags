@@ -1,0 +1,18 @@
+ragStart ::= ragName^^ ragRules
+ragName ::= 'Name:'^ &STRING_DQ^^ ';'^
+
+ragRules ::= #^ | ragRule ragRules^
+ragRewrite ::=  ragSymbol ':'^ ragRules^
+ragRule ::= ragPair '->'^ ragRuleRHS^
+ragRuleRHS ::= ragEmptyString | ragEmptySet | ragCat
+ragCat ::= ragPair | ragPair ragCat
+ragPair ::= ragUnion^^ | '<'^ ragUnion ','^ ragPair '>'^ | '<'^ ragUnion ','^ ragEmptyString '>'^
+ragUnion ::= ragQuery^^ | ragUnion '\/'^ ragQuery
+ragQuery ::= ragInverse^^ | ragInverse '?'^ ragQuery
+ragInverse ::= ragElement^^ | '!'^ ragPair
+ragElement ::= ragSymbol^^ | ragMap^^ | '('^ ragPair^^ ')'^
+ragMap ::= '['^ ragElement ','^ ragElement ']'^
+
+ragEmptyString ::= '#'^
+ragEmptySet ::= '{}'^
+ragSymbol ::= &ID | &STRING_DQ

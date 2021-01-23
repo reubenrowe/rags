@@ -5,6 +5,7 @@ import rnsr.rag.grammar.exception.*;
 import rnsr.rag.parser.exception.ParseException;
 import rnsr.rag.util.TraceHandler;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,12 +20,12 @@ public class Parser
 	private Grammar m_grammar = null;
 
 	private TraceHandler traceHandler = new TraceHandler();
-
+	
 	/**
 	 * Default Constructor
 	 */
 	public Parser() { }
-
+	
 	/**
 	 * Constructs a new parser based on the specified recursive adaptive grammar
 	 * @param g - The grammar which this parser will use
@@ -41,7 +42,7 @@ public class Parser
 	{
 		return this.m_grammar;
 	}
-
+	
 	/**
 	 * Parses the given input according to the grammar specified in this parser object
 	 * @param input - the input to be parsed
@@ -55,7 +56,7 @@ public class Parser
 		{
 			throw new ParseException("There is no grammar to parse by!");
 		}
-
+		
 		// Check we have a start symbol
 		Answer startSymbol = this.m_grammar.StartSymbol();
 		if (startSymbol == null)
@@ -72,7 +73,7 @@ public class Parser
 		Polynomial metaSyntax = new Polynomial();
 		metaSyntax.add(startSymbol);
 		Query initialQuery = new Query(metaSyntax, parseInput);
-
+		
 		// Parse the query
 		Set<ExtendedAnswer> resultSet = this.parse(initialQuery);
 
@@ -90,10 +91,10 @@ public class Parser
 			throw new ParseException(sb.toString());
 		}
 
-
+	
 		return resultSet;
 	}
-
+	
 	public Set<ExtendedAnswer> parse(Query q) throws ParseException
 	{
 
@@ -103,20 +104,20 @@ public class Parser
 
 		// Set up initial sentential form and initialise candidate set
 		Variable value = new Variable();
-
+		
 		Polynomial result = new Polynomial();
 		result.add(value);
 
 		VariableSet varSet = new VariableSet();
 		varSet.put(value);
-
+		
 		Pair startPair = new Pair(q.Metasyntax(), value);
-
+		
 		Configuration c = new Configuration();
 		c.add(startPair);
-
-		CandidateSet candidate = new CandidateSet(new SententialForm(c, varSet, result));
-
+		
+		CandidateSet candidate = new CandidateSet(new SententialForm(c, varSet, result, new ArrayList<>()));
+		
 		// Get input
 		ExtendedAnswer input = null;
 		try
@@ -127,7 +128,7 @@ public class Parser
 		{
 			throw new ParseException("Error parsing Query - Query syntax contains invalid terms!", e);
 		}
-
+		
 		do
 		{
 			candidate.removeEmptyForms();
@@ -161,7 +162,7 @@ public class Parser
 				}
 				candidate.advance(new Answer(AnswerIdentifier.Lambda()));
 			}
-
+			
 			if (!input.isEmpty())
 			{
 				// consume one token from the input and use it to advance the candidate set,
@@ -221,7 +222,7 @@ public class Parser
 			}
 			candidate.advance(new Answer(AnswerIdentifier.Lambda()));
 		}
-
+		
 		// discard any non-empty forms that are left - they cannot match the input at this point!
 		candidate.removeNonEmptyForms();
 

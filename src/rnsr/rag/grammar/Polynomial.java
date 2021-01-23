@@ -22,7 +22,7 @@ public	class		Polynomial
 	 * Default constructor
 	 */
 	public Polynomial() { super(); }
-
+	
 	/**
 	 * Constructs a new Polynomial containing only the specified term
 	 * @param t the term with which to initially populate the polynomial
@@ -32,19 +32,19 @@ public	class		Polynomial
 		super();
 		this.add(t);
 	}
-
+	
 	/**
 	 * IContextClonable method - clones this polynomial
 	 */
 	public Polynomial clone(ContextMapping context) throws CloneException
 	{
 		Polynomial clone = new Polynomial();
-
+		
 		for (IPolynomialTerm t : this)
 		{
 			clone.add((IPolynomialTerm) ((IContextClonable) t).clone(context));
 		}
-
+		
 		return clone;
 	}
 
@@ -56,7 +56,7 @@ public	class		Polynomial
 	{
 		ExtendedAnswer xAnswer = new ExtendedAnswer();
 		boolean hasLambdas = false;
-
+		
 		for (IPolynomialTerm t : this)
 		{
 			if (t instanceof Variable)
@@ -79,12 +79,12 @@ public	class		Polynomial
 				xAnswer.add(t);
 			}
 		}
-
+		
 		if (xAnswer.isEmpty() && hasLambdas)
 		{
 			xAnswer.add(new Answer(AnswerIdentifier.Lambda()));
 		}
-
+		
 		return xAnswer;
 	}
 
@@ -94,7 +94,7 @@ public	class		Polynomial
 	public Polynomial resolve(VariableSet vars) throws VariableNotBoundException, VariableNotFoundException
 	{
 		Polynomial resolvedPolynomial = new Polynomial();
-
+		
 		for (IPolynomialTerm t : this)
 		{
 			if (t instanceof Variable)
@@ -106,7 +106,7 @@ public	class		Polynomial
 				else
 				{
 					Polynomial p = vars.get(t);
-
+					
 					if (p.Empty())
 					{
 						throw new VariableNotBoundException();
@@ -122,10 +122,10 @@ public	class		Polynomial
 				resolvedPolynomial.add((IPolynomialTerm) ((IResolvable) t).resolve(vars));
 			}
 		}
-
+		
 		return resolvedPolynomial;
 	}
-
+	
 	/**
 	 * Indicates whether this polynomial contains any terms or not
 	 */
@@ -133,7 +133,7 @@ public	class		Polynomial
 	{
 		return (this.size() == 0);
 	}
-
+	
 	/**
 	 * Overload method to check the equality of polynomials.
 	 * This method performs an pair-wise equality check on each of the elements of the two polynomials
@@ -145,12 +145,12 @@ public	class		Polynomial
 		{
 			return false;
 		}
-
+		
 		for (int i = 0; i < this.size(); i++)
 		{
 			IPolynomialTerm t1 = this.get(i);
 			IPolynomialTerm t2 = p.get(i);
-
+			
 			if      ((t1 instanceof Variable) && (t2 instanceof Variable))
 			{
 				if (!((Variable) t1).equals((Variable) t2))
@@ -172,26 +172,26 @@ public	class		Polynomial
 					return false;
 				}
 			}
-
+			
 			// Otherwise, the two terms are not of the same type, so the polynomials are not equal
 			else
 			{
 				return false;
 			}
 		}
-
+		
 		// If we get here, then all the elements of this polynomial are equal, ergo so is the polynomial
 		return true;
 	}
-
-
+	
+	
 	/**
 	 * Overridden method to return a string representation of this polynomial
 	 */
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder();
-
+		
 		for (IPolynomialTerm t : this)
 		{
 			if ((sb.length() > 0) && !(t instanceof Answer && ((Answer) t).Identifier().Terminal()))
@@ -200,8 +200,8 @@ public	class		Polynomial
 			}
 			sb.append(t.toString());
 		}
-
+		
 		return sb.toString();
 	}
-
+	
 }

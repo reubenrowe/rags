@@ -11,6 +11,8 @@ import rnsr.rag.grammar.exception.InvalidTermException;
 import rnsr.rag.grammar.exception.VariableNotBoundException;
 import rnsr.rag.grammar.exception.VariableNotFoundException;
 
+import java.util.ArrayList;
+
 /**
  * Represents a RAG sentential form (i.e. a configuration and a 
  * semantic value encapsulated with variable context information)
@@ -20,36 +22,38 @@ public	class		SententialForm
 		implements	IClonable<SententialForm>, IConsumable
 {
 
+
 	/**
 	 * Default Constructor
 	 */
 	public SententialForm() { }
-
+	
 	/**
 	 * Constructs a new Sentential Form object
 	 * @param configuration - The configuration of terms represented by this sentential form
 	 * @param variables - the variable map used by this sentential form
 	 * @param result - the sematic value of this sentential form
 	 */
-	public SententialForm(Configuration configuration, VariableSet variables, Polynomial result)
+	public SententialForm(Configuration configuration, VariableSet variables, Polynomial result, ArrayList<VariableCondition> conditions)
 	{
 		this.m_configuration = configuration;
 		this.m_variables = variables;
 		this.m_result = result;
+		this.m_conditions = conditions;
 	}
-
+	
 	/**
 	 * Returns the head term of the configuration represented by this sentential form
 	 */
 	public IConfigurationTerm Head()
 	{
 		IConfigurationTerm t = null;
-
+		
 		if (this.m_configuration.size() > 0)
 		{
 			t = this.m_configuration.get(0);
 		}
-
+		
 		return t;
 	}
 
@@ -86,9 +90,9 @@ public	class		SententialForm
 					{
 						throw new VariableNotFoundException();
 					}
-
+					
 					newPolynomial = this.m_variables.get((Variable) leftTerm);
-
+					
 					if (newPolynomial.Empty())
 					{
 						throw new VariableNotBoundException();
@@ -98,53 +102,53 @@ public	class		SententialForm
 				{
 					newPolynomial.add(leftTerm);
 				}
-
+				
 				Variable v1 = new Variable();
 				this.m_variables.put(v1);
 				Pair newHead = new Pair(newPolynomial, v1);
-
+				
 				// Put the remainder of the polynomial in a new Pair
 				Variable v2 = new Variable();
 				this.m_variables.put(v2);
 				Pair replacement = new Pair(p, v2);
-
+				
 				// Insert the replacement and new Pairs at the head of the configuration
 				this.m_configuration.add(0, replacement);
 				this.m_configuration.add(0, newHead);
-
+				
 				// Bind the old result to a concatenation of the new pairs' results
 				Polynomial combinedResult = new Polynomial();
 				combinedResult.add(v1);
 				combinedResult.add(v2);
 				this.bind(head.Right(), combinedResult);
-
+				
 				// Now recursively call normalise() in case the head term requires further resolution
 				normalise();
 			}
-
+			
 			// If the term is a variable, we need to resolve
 			else if (((Pair) Head()).Left().get(0) instanceof Variable)
 			{
 				// remove the head pair, as we will be creating new pairs to replace it
 				Pair head = (Pair) this.m_configuration.remove(0);
-
+				
 				// Resolve the variable in this pair's polynomial
 				Variable v = (Variable) head.Left().get(0);
 				if (!this.m_variables.containsKey(v))
 				{
 					throw new VariableNotFoundException();
 				}
-
+				
 				Polynomial resolved = (Polynomial) this.m_variables.get(v).clone();
-
+				
 				if (resolved.Empty())
 				{
 					throw new VariableNotBoundException();
 				}
-
+				
 				// Create new pair with resolved variable
 				Pair newPair = new Pair(resolved, head.Right());
-
+				
 				// Insert new pair into configuration
 				this.m_configuration.add(0, newPair);
 
@@ -153,7 +157,7 @@ public	class		SententialForm
 			}
 		}
 	}
-
+	
 	/**
 	 * Applies the given rule to the pair at the head of this sentential form
 	 * @param ruleInstance - The rule instance to apply
@@ -175,6 +179,10 @@ public	class		SententialForm
 		// Append the rule instance variables to the sentential form
 		this.m_variables.putAll(ruleInstance.Variables());
 
+		// Append conditions on variables to the sentential form
+		if (ruleInstance.m_conditions != null)
+			this.m_conditions.addAll(ruleInstance.m_conditions);
+
 		// Bind the result of the rule instance to the binding variable of the replaced term
 		this.bind(((Pair) t).Right(), ruleInstance.Result());
 	}
@@ -184,20 +192,20 @@ public	class		SententialForm
 	 * applies the rule to the cloned form, returning the result
 	 */
 	public SententialForm applyRule(Rule rule) throws	CloneException,
-			InvalidTermException,
-			VariableNotFoundException
+														InvalidTermException,
+														VariableNotFoundException
 	{
 		// Clone the sentential form
 		SententialForm clone = this.cloneObject();
 
 		// Get the head term
 		IConfigurationTerm head = clone.Head();
-
+		
 		if (head == null)
 		{
 			throw new InvalidTermException("This sentential form is empty!");
 		}
-
+		
 		if (!(head instanceof Pair))
 		{
 			throw new InvalidTermException("Term at the head of this sentential form is not a pair!");
@@ -206,15 +214,15 @@ public	class		SententialForm
 		Pair headPair = (Pair) head;
 		Polynomial p = headPair.Left();
 		IPolynomialTerm t = p.get(0);
-
+		
 		if (!(t instanceof Answer))
 		{
 			throw new InvalidTermException("Polynomial term contained in the head pair is not an Answer!");
 		}
-
+		
 		InstantiatedRule ruleInstance = rule.instantiate((Answer) t);
 		clone.applyRule(ruleInstance);
-
+		
 		return clone;
 	}
 
@@ -229,34 +237,34 @@ public	class		SententialForm
 		{
 			cloneContext.put(v, new Variable());
 		}
-
+		
 		// Clone the configuration and result
 		Polynomial clonedResult = this.m_result.clone(cloneContext);
 		Configuration clonedConfiguration = this.m_configuration.clone(cloneContext);
-
+		
 		// Create the new variable set and populate with clones of variable bindings
 		VariableSet newVars = new VariableSet();
 		for (Variable v : this.m_variables.keySet())
 		{
 			Polynomial p = this.m_variables.get(v);
-
+			
 			// If the source variable is not bound, then neither will the destination be
 			if (p.Empty())
 			{
 				newVars.put(cloneContext.get(v));
 			}
-
+			
 			// If the source variable is bound, bind destination variable to a clone of the bound polynomial
 			else
 			{
 				newVars.put(cloneContext.get(v), p.clone(cloneContext));
 			}
 		}
-
+		
 		// Create and return a new Sentential form using the cloned components
-		return new SententialForm(clonedConfiguration, newVars, clonedResult);
+		return new SententialForm(clonedConfiguration, newVars, clonedResult, m_conditions);
 	}
-
+	
 	/**
 	 * IConsumable method - consumes the head token of this sentential form
 	 * if it matches the given answer. Throws an exception otherwise.
@@ -279,5 +287,5 @@ public	class		SententialForm
 		s += ("\"" + m_result + "\"");
 		return s;
 	}
-
+	
 }

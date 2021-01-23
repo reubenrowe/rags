@@ -15,6 +15,27 @@ public	class		Variable
 {
 
 	private int index;
+	private HashSet<Answer> possibleAnswers;
+
+	public Variable(HashSet<Answer> possibleAnswers) {
+		this.possibleAnswers = possibleAnswers;
+	}
+
+	public Variable() {
+		this(null);
+	}
+
+	public boolean isConstrained() {
+		return possibleAnswers != null && possibleAnswers.size() > 0;
+	}
+
+	public HashSet<Answer> getPossibleAnswers() {
+		return possibleAnswers;
+	}
+
+	public void setPossibleAnswers(HashSet<Answer> possibleAnswers) {
+		this.possibleAnswers = possibleAnswers;
+	}
 
 	/**
 	 * IContextClonable method - clones this Variable
@@ -40,11 +61,10 @@ public	class		Variable
 	{
 		return super.equals(v);
 	}
-
+	
 	public String toString()
 	{
 		// TODO : Implement a better naming scheme for variables
-		//return "v" + index;
 		return "v";
 	}
 

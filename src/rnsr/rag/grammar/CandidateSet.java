@@ -161,6 +161,7 @@ public	class		CandidateSet
 					{
 						tempSet.add(currentForm.applyRule(r));
 					}
+
 				}
 			}
 		}
