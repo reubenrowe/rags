@@ -26,10 +26,8 @@ public class PeanoAdderExample extends CommandLineInputBase {
 
         // &ALPHABET
         HashSet<Answer> alphabetSet = new HashSet<>();
-        for (char c: "abcdefghijklmnopqrstuvwxyz".toCharArray()) {
+        for (char c: "abcdefghijklmnopqrstuvwxyz".toCharArray())
             alphabetSet.add(new Answer(new AnswerIdentifier(String.valueOf(c))));
-            alphabetSet.add(new Answer(new AnswerIdentifier(String.valueOf(Character.toUpperCase(c)))));
-        }
 
         /* ********** RULE PRODUCTIONS ********** */
 

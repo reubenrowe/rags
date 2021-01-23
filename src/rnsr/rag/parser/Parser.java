@@ -5,7 +5,6 @@ import rnsr.rag.grammar.exception.*;
 import rnsr.rag.parser.exception.ParseException;
 import rnsr.rag.util.TraceHandler;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -116,7 +115,7 @@ public class Parser
 		Configuration c = new Configuration();
 		c.add(startPair);
 		
-		CandidateSet candidate = new CandidateSet(new SententialForm(c, varSet, result, new ArrayList<>()));
+		CandidateSet candidate = new CandidateSet(new SententialForm(c, varSet, result));
 		
 		// Get input
 		ExtendedAnswer input = null;

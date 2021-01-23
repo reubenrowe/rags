@@ -65,7 +65,7 @@ public	class		Variable
 	public String toString()
 	{
 		// TODO : Implement a better naming scheme for variables
-		return "v" + this.hashCode();
+		return "v";
 	}
 
 	public HashSet<ExtendedAnswer> resolveQueries(Parser parser) {
