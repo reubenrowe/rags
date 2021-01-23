@@ -83,7 +83,10 @@ public	class		CandidateSet
 			i.remove();
 
 			// Normalise the sentential form, to make sure that we have something that we can apply a rule to
-			currentForm.normalise();
+			HashSet<SententialForm> normalisedSet = currentForm.normalise();
+			if(normalisedSet.size() > 1) {
+				System.out.println("owo");
+			}
 
 			// Get the head of the sentential form
 			IConfigurationTerm head = currentForm.Head();

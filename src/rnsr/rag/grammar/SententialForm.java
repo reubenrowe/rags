@@ -12,6 +12,7 @@ import rnsr.rag.grammar.exception.VariableNotBoundException;
 import rnsr.rag.grammar.exception.VariableNotFoundException;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Represents a RAG sentential form (i.e. a configuration and a 
@@ -70,11 +71,11 @@ public	class		SententialForm
 	 * If the head element is a pair, the first term of polynomial contained in its left-hand side is
 	 * split off into a separate pair, and any variables resolved.
 	 */
-	public void normalise() throws VariableNotBoundException, VariableNotFoundException
+	public HashSet<SententialForm> normalise() throws VariableNotBoundException, VariableNotFoundException
 	{
 
-		ArrayList<SententialForm> sfList = new ArrayList<>();
-		sfList.add(this);
+		HashSet<SententialForm> sfSet = new HashSet<>();
+		sfSet.add(this);
 
 		// If the polynomial is a concatenation
 		if (Head() instanceof Pair)
@@ -127,7 +128,7 @@ public	class		SententialForm
 				this.bind(head.Right(), combinedResult);
 				
 				// Now recursively call normalise() in case the head term requires further resolution
-				normalise();
+				sfSet.addAll(normalise());
 			}
 			
 			// If the term is a variable, we need to resolve
@@ -159,9 +160,10 @@ public	class		SententialForm
 				this.m_configuration.add(0, newPair);
 
 				// Now recursively call normalise() in case the head term requires further resolution
-				normalise();
+				sfSet.addAll(normalise());
 			}
 		}
+		return sfSet;
 	}
 	
 	/**
