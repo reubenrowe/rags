@@ -116,5 +116,9 @@ public	class		Rule
 	public ArrayList<VariableCondition> getConditions() {
 		return m_conditions;
 	}
+
+	public String toString() {
+		return "RULE - c: " + m_configuration + ", res: " + m_result;
+	}
 	
 }

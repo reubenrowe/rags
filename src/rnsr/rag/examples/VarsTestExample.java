@@ -34,7 +34,7 @@ public class VarsTestExample extends CommandLineInputBase {
         Configuration c;
         Polynomial poly;
 
-        // <Start, _v1> -> <NotLet["a"], _v1>
+        // <Start, _v1> -> <NotLet["z"], _v1>
         vars = new ArrayList<>();
         varSet = new VariableSet();
         for (int i = 0; i <= 1; i++) {
@@ -46,14 +46,14 @@ public class VarsTestExample extends CommandLineInputBase {
         args.add(vars.get(0));
         c = new Configuration();
         ArrayList<Polynomial> param = new ArrayList<>();
-        param.add(new Polynomial(new Answer(new AnswerIdentifier("a"))));
+        param.add(new Polynomial(new Answer(new AnswerIdentifier("z"))));
         c.add(new Pair(
                 new Polynomial(new Answer(notLet, param)),
                 vars.get(1)
         ));
         g.addRule(start, new Rule(c, varSet, new Polynomial(vars.get(1)), args));
 
-        // _z,_zP:&ALPHABET;_z != _zP; : <NotLet[_z], #> -> <_zP, _v1>
+        // _z,_zP:&ALPHABET;_z != _zP; : <NotLet[_z], _zP> -> <_zP, _v1>
         vars = new ArrayList<>();
         varSet = new VariableSet();
         for (int i = 0; i <= 3; i++) {
@@ -74,7 +74,7 @@ public class VarsTestExample extends CommandLineInputBase {
                 new Polynomial(args.get(2)),
                 vars.get(3)
         ));
-        g.addRule(notLet, new Rule(c, varSet, new Polynomial(args.get(1)), args, conditions));
+        g.addRule(notLet, new Rule(c, varSet, new Polynomial(args.get(2)), args, conditions));
 
         /* ****************************************/
 

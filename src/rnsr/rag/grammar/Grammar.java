@@ -1,12 +1,12 @@
 package rnsr.rag.grammar;
 
+import rnsr.rag.grammar.exception.RuleFunctionException;
+import rnsr.rag.grammar.exception.VariableNotFoundException;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
-
-import rnsr.rag.grammar.exception.RuleFunctionException;
-import rnsr.rag.grammar.exception.VariableNotFoundException;
 
 /**
  * This class represents a recursive adaptive grammar, and implements its rule function
@@ -185,7 +185,7 @@ public class Grammar
 			Variable v0 = new Variable();
 			v.put(v0);
 			
-			ArrayList<Variable> args = new ArrayList<Variable>();
+			ArrayList<Variable> args = new ArrayList<>();
 			args.add(v0);
 			
 			Polynomial result = new Polynomial(new Answer(AnswerIdentifier.Lambda()));

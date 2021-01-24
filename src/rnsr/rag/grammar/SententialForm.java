@@ -155,9 +155,10 @@ public	class		SententialForm
 					HashSet<Answer> possibleAnswers = v.getPossibleAnswers();
 					for (Answer a: possibleAnswers) {
 						SententialForm sf = this.cloneObject();
-						Pair newPair = new Pair(new Polynomial(a), head.Right());
+						Polynomial answerPoly = new Polynomial(a);
+						Pair newPair = new Pair(answerPoly, head.Right());
 						sf.m_configuration.add(0, newPair);
-						System.out.println("created : " + sf);
+						sf.m_variables.put(head.Right(), answerPoly);
 						sfSet.addAll(sf.normalise());
 					}
 					sfSet.remove(this);
@@ -257,6 +258,7 @@ public	class		SententialForm
 		
 		// Clone the configuration and result
 		Polynomial clonedResult = this.m_result.clone(cloneContext);
+		System.out.println("SF: " + this);
 		Configuration clonedConfiguration = this.m_configuration.clone(cloneContext);
 		
 		// Create the new variable set and populate with clones of variable bindings

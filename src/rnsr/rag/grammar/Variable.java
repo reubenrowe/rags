@@ -40,6 +40,7 @@ public	class		Variable
 	/**
 	 * IContextClonable method - clones this Variable
 	 */
+	/*
 	public Variable clone(ContextMapping context) throws CloneException
 	{
 		if (context.containsKey(this))
@@ -48,8 +49,16 @@ public	class		Variable
 		}
 		else
 		{
+			System.out.println(this + " not seen before.");
 			throw new CloneException("Variable cannot be found in context!");
 		}
+	}
+	*/
+
+	public Variable clone(ContextMapping context) throws CloneException {
+		if (context.containsKey(this)) return context.get(this);
+		else context.put(this, this);
+		return this;
 	}
 
 	/**
@@ -64,7 +73,7 @@ public	class		Variable
 	public String toString()
 	{
 		// TODO : Implement a better naming scheme for variables
-		return "v";
+		return "v" + this.hashCode();
 	}
 
 	public HashSet<ExtendedAnswer> resolveQueries(Parser parser) {
