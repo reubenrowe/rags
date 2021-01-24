@@ -117,6 +117,7 @@ public	class		Answer
 	 */
 	public Answer clone(ContextMapping context) throws CloneException
 	{
+
 		Answer clone = new Answer(this.m_identifier);
 		
 		if (this.m_arguments != null && this.m_arguments.size() != 0)
@@ -139,7 +140,7 @@ public	class		Answer
 		
 		return clone;
 	}
-	
+
 	/**
 	 * IResolvable method - resolves any variables in the Answer to their bound terms
 	 */

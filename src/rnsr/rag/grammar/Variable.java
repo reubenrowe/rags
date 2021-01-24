@@ -52,7 +52,6 @@ public	class		Variable
 		}
 	}
 
-
 	/**
 	 * Overload method to check the equality of variables. NB. This method just calls the
 	 * superclass (Object) method as variables are only equal if they reference the same object
@@ -65,7 +64,7 @@ public	class		Variable
 	public String toString()
 	{
 		// TODO : Implement a better naming scheme for variables
-		return "v" + this.hashCode();
+		return "v";
 	}
 
 	public HashSet<ExtendedAnswer> resolveQueries(Parser parser) {

@@ -71,8 +71,7 @@ public	class		SententialForm
 	 * If the head element is a pair, the first term of polynomial contained in its left-hand side is
 	 * split off into a separate pair, and any variables resolved.
 	 */
-	public HashSet<SententialForm> normalise() throws VariableNotBoundException, VariableNotFoundException
-	{
+	public HashSet<SententialForm> normalise() throws VariableNotBoundException, VariableNotFoundException, CloneException {
 
 		HashSet<SententialForm> sfSet = new HashSet<>();
 		sfSet.add(this);
@@ -134,6 +133,9 @@ public	class		SententialForm
 			// If the term is a variable, we need to resolve
 			else if (((Pair) Head()).Left().get(0) instanceof Variable)
 			{
+
+				System.out.println("B : " + this);
+
 				// remove the head pair, as we will be creating new pairs to replace it
 				Pair head = (Pair) this.m_configuration.remove(0);
 				
@@ -149,18 +151,25 @@ public	class		SententialForm
 				if (resolved.Empty())
 				{
 					if (!v.isConstrained()) throw new VariableNotBoundException();
-					// replace variable with one of its possibilities
-
+					// replace typed variable with one of its possibilities
+					HashSet<Answer> possibleAnswers = v.getPossibleAnswers();
+					for (Answer a: possibleAnswers) {
+						SententialForm sf = this.cloneObject();
+						Pair newPair = new Pair(new Polynomial(a), head.Right());
+						sf.m_configuration.add(0, newPair);
+						System.out.println("created : " + sf);
+						sfSet.addAll(sf.normalise());
+					}
+					sfSet.remove(this);
+				} else {
+					// Create new pair with resolved variable
+					Pair newPair = new Pair(resolved, head.Right());
+					// Insert new pair into configuration
+					this.m_configuration.add(0, newPair);
+					// Now recursively call normalise() in case the head term requires further resolution
+					sfSet.addAll(normalise());
 				}
-				
-				// Create new pair with resolved variable
-				Pair newPair = new Pair(resolved, head.Right());
-				
-				// Insert new pair into configuration
-				this.m_configuration.add(0, newPair);
-
-				// Now recursively call normalise() in case the head term requires further resolution
-				sfSet.addAll(normalise());
+				System.out.println("A : " + this);
 			}
 		}
 		return sfSet;

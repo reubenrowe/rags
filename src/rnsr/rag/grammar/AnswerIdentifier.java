@@ -67,7 +67,7 @@ public class AnswerIdentifier
 		return this.m_isTerminal;
 	}
 
-	public Object clone() {
+	public AnswerIdentifier clone() {
 		AnswerIdentifier ai = new AnswerIdentifier();
 		ai.m_identifier = this.m_identifier;
 		ai.m_arity = this.m_arity;

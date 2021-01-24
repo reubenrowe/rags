@@ -1,6 +1,12 @@
 package rnsr.rag.grammar;
 
+import rnsr.rag.grammar.exception.CloneException;
+
 public class VariableCondition {
+
+    public VariableCondition clone(ContextMapping context) throws CloneException {
+        return null;
+    }
 
     public static enum VariableConditionType { NE; }
 

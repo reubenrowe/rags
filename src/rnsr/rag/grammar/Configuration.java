@@ -22,15 +22,15 @@ public	class		Configuration
 	public Configuration clone(ContextMapping context) throws CloneException
 	{
 		Configuration clone = new Configuration();
-		
+
 		for (IConfigurationTerm t : this)
 		{
-			clone.add((IConfigurationTerm) ((IContextClonable) t).clone(context));			
+			clone.add((IConfigurationTerm) ((IContextClonable) t).clone(context));
 		}
-		
+
 		return clone;
 	}
-	
+
 	/**
 	 * IConsumable method - consumes the head token of this configuration
 	 * if it matches the given answer. Throws an exception otherwise.

@@ -54,7 +54,7 @@ public	class		Query
 	{
 		return this.m_syntax;
 	}
-	
+
 	/**
 	 * IContextClonable method - clones this Query
 	 */

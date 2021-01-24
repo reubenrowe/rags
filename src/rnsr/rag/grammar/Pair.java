@@ -45,7 +45,7 @@ public	class		Pair
 	{
 		return this.m_right;
 	}
-	
+
 	/**
 	 * IContextClonable method - clones this Pair
 	 */
