@@ -133,9 +133,6 @@ public	class		SententialForm
 			// If the term is a variable, we need to resolve
 			else if (((Pair) Head()).Left().get(0) instanceof Variable)
 			{
-
-				System.out.println("B : " + this);
-
 				// remove the head pair, as we will be creating new pairs to replace it
 				Pair head = (Pair) this.m_configuration.remove(0);
 				
@@ -154,8 +151,8 @@ public	class		SententialForm
 					// replace typed variable with one of its possibilities
 					HashSet<Answer> possibleAnswers = v.getPossibleAnswers();
 					for (Answer a: possibleAnswers) {
-						SententialForm sf = this.cloneObject();
 						Polynomial answerPoly = new Polynomial(a);
+						SententialForm sf = this.cloneObject(v, answerPoly);
 						Pair newPair = new Pair(answerPoly, head.Right());
 						sf.m_configuration.add(0, newPair);
 						sf.m_variables.put(head.Right(), answerPoly);
@@ -170,7 +167,6 @@ public	class		SententialForm
 					// Now recursively call normalise() in case the head term requires further resolution
 					sfSet.addAll(normalise());
 				}
-				System.out.println("A : " + this);
 			}
 		}
 		return sfSet;
@@ -244,44 +240,73 @@ public	class		SententialForm
 		return clone;
 	}
 
+	public SententialForm cloneObject() throws CloneException {
+		return cloneObject(null, null);
+	}
+
 	/**
 	 * IClonable method - clones this sentential form
 	 */
-	public SententialForm cloneObject() throws CloneException
+	public SententialForm cloneObject(Variable replacedTypedVariable, Polynomial replacement) throws CloneException
 	{
+
 		// Create a new variable set and context mapping
 		ContextMapping cloneContext = new ContextMapping();
 		for (Variable v : this.m_variables.keySet())
 		{
-			cloneContext.put(v, new Variable());
+			Variable vNew = new Variable(v.getPossibleAnswers());
+			vNew.setTag(v.getTag());    // FOR DEBUGGING
+			cloneContext.put(v, vNew);
 		}
 		
 		// Clone the configuration and result
 		Polynomial clonedResult = this.m_result.clone(cloneContext);
-		System.out.println("SF: " + this);
 		Configuration clonedConfiguration = this.m_configuration.clone(cloneContext);
 		
 		// Create the new variable set and populate with clones of variable bindings
 		VariableSet newVars = new VariableSet();
-		for (Variable v : this.m_variables.keySet())
-		{
+
+		if (replacedTypedVariable != null && replacement != null) {
+			newVars.put(replacedTypedVariable, replacement);
+			newVars.put(cloneContext.get(replacedTypedVariable), replacement);
+		}
+
+		for (Variable v : this.m_variables.keySet()) {
 			Polynomial p = this.m_variables.get(v);
-			
 			// If the source variable is not bound, then neither will the destination be
-			if (p.Empty())
-			{
+			if (p.Empty()) {
 				newVars.put(cloneContext.get(v));
 			}
-			
 			// If the source variable is bound, bind destination variable to a clone of the bound polynomial
-			else
-			{
+			else {
 				newVars.put(cloneContext.get(v), p.clone(cloneContext));
 			}
 		}
+
+		ArrayList<VariableCondition> newConditions = new ArrayList<>();
+
+		// Clone conditions
+		for (VariableCondition cond: m_conditions) {
+			Variable vLeftOld = cond.getFirstVariable();
+			Variable vRightOld = cond.getSecondVariable();
+			VariableCondition.VariableConditionType vCondOld = cond.getConditionType();
+			newConditions.add(new VariableCondition(cloneContext.get(vLeftOld), cloneContext.get(vRightOld), vCondOld));
+		}
 		
 		// Create and return a new Sentential form using the cloned components
-		return new SententialForm(clonedConfiguration, newVars, clonedResult, m_conditions);
+		return new SententialForm(clonedConfiguration, newVars, clonedResult, newConditions);
+	}
+
+	public void checkVariableConditions() {
+
+		for (VariableCondition cond: m_conditions) {
+			System.out.println(cond);
+			Polynomial p1 = m_variables.get(cond.getFirstVariable());
+			System.out.println("p1 : " + p1);
+			Polynomial p2 = m_variables.get(cond.getSecondVariable());
+			System.out.println("p2 : " + p2);
+		}
+
 	}
 	
 	/**

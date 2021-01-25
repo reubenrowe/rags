@@ -39,12 +39,9 @@ public	class		Polynomial
 	public Polynomial clone(ContextMapping context) throws CloneException
 	{
 		Polynomial clone = new Polynomial();
-		
-		for (IPolynomialTerm t : this)
-		{
+		for (IPolynomialTerm t : this) {
 			clone.add((IPolynomialTerm) ((IContextClonable) t).clone(context));
 		}
-		
 		return clone;
 	}
 
@@ -105,8 +102,9 @@ public	class		Polynomial
 				}
 				else
 				{
+
 					Polynomial p = vars.get(t);
-					
+
 					if (p.Empty())
 					{
 						throw new VariableNotBoundException();
@@ -125,6 +123,10 @@ public	class		Polynomial
 		
 		return resolvedPolynomial;
 	}
+
+
+
+
 	
 	/**
 	 * Indicates whether this polynomial contains any terms or not

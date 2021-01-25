@@ -42,6 +42,10 @@ public class VarsTestExample extends CommandLineInputBase {
             vars.add(i, v);
             varSet.put(v);
         }
+
+        vars.get(0).setTag("_v0 (in Start)");
+        vars.get(1).setTag("_v1 (in Start)");
+
         args = new ArrayList<>();
         args.add(vars.get(0));
         c = new Configuration();
@@ -61,6 +65,12 @@ public class VarsTestExample extends CommandLineInputBase {
             vars.add(i, v);
             varSet.put(v);
         }
+
+        vars.get(0).setTag("v0 (in NotLet)");
+        vars.get(1).setTag("_z (in NotLet)");
+        vars.get(2).setTag("_zP (in NotLet)");
+        vars.get(3).setTag("_v1 (in NotLet)");
+
         vars.get(1).setPossibleAnswers(alphabetSet);
         vars.get(2).setPossibleAnswers(alphabetSet);
         ArrayList<VariableCondition> conditions = new ArrayList<>();

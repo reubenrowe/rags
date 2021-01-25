@@ -176,13 +176,13 @@ public class Grammar
 		}
 		
 		// If the trigger is a Terminal Answer, we also need to generate a predicate rule for it
-		if (bindingAnswer.Terminal())
-		{
+		if (bindingAnswer.Terminal()) {
 			Configuration c = new Configuration();
 			c.add(new Answer(bindingAnswer));
 			
 			VariableSet v = new VariableSet();
 			Variable v0 = new Variable();
+			v0.setTag("_v0 (in '" + bindingAnswer.Identifier() + "')");
 			v.put(v0);
 			
 			ArrayList<Variable> args = new ArrayList<>();
@@ -190,13 +190,11 @@ public class Grammar
 			
 			Polynomial result = new Polynomial(new Answer(AnswerIdentifier.Lambda()));
 			
-			try
-			{
+			try {
 				Rule r = new Rule(c, v, result, args);
 				s.add(r);
 			}
-			catch (VariableNotFoundException e)
-			{
+			catch (VariableNotFoundException e) {
 				// If this is thrown something is seriously wrong, as we have just added the variable in question
 				throw new Error(e);
 			}

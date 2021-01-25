@@ -225,6 +225,10 @@ public	class		CandidateSet
 
 		for (SententialForm form : this)
 		{
+
+			// Test
+			//form.checkVariableConditions();
+
 			resultSet.add(form.Result().resolve(form.Variables()).toExtendedAnswer());
 		}
 

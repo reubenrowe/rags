@@ -91,13 +91,26 @@ public	class		Rule
 		ContextMapping cloneContext = new ContextMapping();
 		for (Variable v : this.m_variables.keySet())
 		{
-			cloneContext.put(v, v);
-			newVars.put(v);
+			Variable newV = new Variable(v.getPossibleAnswers());
+			newV.setTag(v.getTag());
+			cloneContext.put(v, newV);
+			newVars.put(newV, this.m_variables.get(v));
 		}
 
 		// Clone the rule derivative, result and conditions
 		Configuration clonedDerivative = this.m_configuration.clone(cloneContext);
 		Polynomial clonedResult = this.m_result.clone(cloneContext);
+
+		// Clone variable conditions
+		ArrayList<VariableCondition> newConds = new ArrayList<>();
+		if (m_conditions != null) {
+			for (VariableCondition vc : m_conditions) {
+				Variable v1 = cloneContext.get(vc.getFirstVariable());
+				Variable v2 = cloneContext.get(vc.getSecondVariable());
+				VariableCondition newCond = new VariableCondition(v1, v2, vc.getConditionType());
+				newConds.add(newCond);
+			}
+		}
 
 		// Construct the instantiated rule
 		InstantiatedRule r = new InstantiatedRule(clonedDerivative, newVars, clonedResult, m_conditions);
@@ -105,8 +118,7 @@ public	class		Rule
 		// Bind variables
 		r.bind(cloneContext.get(this.m_arguments.get(0)), new Polynomial(answer));
 		
-		for (int i = 0; i < answer.Identifier().Arity(); i++)
-		{
+		for (int i = 0; i < answer.Identifier().Arity(); i++) {
 			r.bind(cloneContext.get(this.m_arguments.get(i + 1)), answer.Arguments().get(i));
 		}
 		
