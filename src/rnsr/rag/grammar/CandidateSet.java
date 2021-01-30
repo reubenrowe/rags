@@ -92,8 +92,7 @@ public	class		CandidateSet
 			{
 				// This form survives "as is" to the next round
 				tempSet.add(currentForm);
-			}
-			else if (head != null && head instanceof Pair)
+			} else if (head != null && head instanceof Pair)
 			{
 				Pair headPair = (Pair) head;
 				Polynomial p = headPair.Left();
@@ -110,7 +109,7 @@ public	class		CandidateSet
 				
 				// If the term in the polynomial is a variable, then this is an error
 				// as we expect the sentential form normalise() operation to resolve the variable for us
-				if (t instanceof Variable)
+				if (t instanceof Variable && !((Variable)t).isConstrained())
 				{
 					// throw an error here as this is a problem with the algorithm, not the parse
 					throw new Error("Polynomial Term type different than expected: found Variable!");

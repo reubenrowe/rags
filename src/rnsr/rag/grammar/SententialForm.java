@@ -136,6 +136,7 @@ public	class		SententialForm
 				Polynomial resolved = (Polynomial) this.m_variables.get(v).clone();
 
 				if (resolved.Empty()) {
+					if (v.isConstrained()) return; // If the variable is unbound, but is typed, we leave binding to later
 					throw new VariableNotBoundException();
 				}
 
