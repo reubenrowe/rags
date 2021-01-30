@@ -208,8 +208,8 @@ public	class		CandidateSet
 			}
 			else if (discardNonMatching)
 			{
-
-				if (!(headTerm == null && input.Identifier().Identifier().isBlank())) i.remove();
+				if (!(headTerm == null && input.Identifier().Identifier().isBlank()))
+					i.remove();
 			}
 		}
 	}
