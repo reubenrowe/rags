@@ -1,18 +1,12 @@
 package rnsr.rag.grammar;
 
+import rnsr.rag.grammar.exception.*;
 import rnsr.rag.grammar.interfaces.IClonable;
 import rnsr.rag.grammar.interfaces.IConfigurationTerm;
 import rnsr.rag.grammar.interfaces.IConsumable;
 import rnsr.rag.grammar.interfaces.IPolynomialTerm;
 
-import rnsr.rag.grammar.exception.AnswerMismatchException;
-import rnsr.rag.grammar.exception.CloneException;
-import rnsr.rag.grammar.exception.InvalidTermException;
-import rnsr.rag.grammar.exception.VariableNotBoundException;
-import rnsr.rag.grammar.exception.VariableNotFoundException;
-
 import java.util.ArrayList;
-import java.util.HashSet;
 
 /**
  * Represents a RAG sentential form (i.e. a configuration and a 
@@ -71,11 +65,8 @@ public	class		SententialForm
 	 * If the head element is a pair, the first term of polynomial contained in its left-hand side is
 	 * split off into a separate pair, and any variables resolved.
 	 */
-	public HashSet<SententialForm> normalise() throws VariableNotBoundException, VariableNotFoundException, CloneException {
-
-		HashSet<SententialForm> sfSet = new HashSet<>();
-		sfSet.add(this);
-
+	public void normalise() throws VariableNotBoundException, VariableNotFoundException
+	{
 		// If the polynomial is a concatenation
 		if (Head() instanceof Pair)
 		{
@@ -90,13 +81,13 @@ public	class		SententialForm
 				Polynomial newPolynomial = new Polynomial();
 				if (leftTerm instanceof Variable)
 				{
-					if (!this.m_variables.containsKey((leftTerm)))
+					if (!this.m_variables.containsKey(((Variable) leftTerm)))
 					{
 						throw new VariableNotFoundException();
 					}
-					
-					newPolynomial = this.m_variables.get(leftTerm);
-					
+
+					newPolynomial = this.m_variables.get((Variable) leftTerm);
+
 					if (newPolynomial.Empty())
 					{
 						throw new VariableNotBoundException();
@@ -106,70 +97,58 @@ public	class		SententialForm
 				{
 					newPolynomial.add(leftTerm);
 				}
-				
+
 				Variable v1 = new Variable();
 				this.m_variables.put(v1);
 				Pair newHead = new Pair(newPolynomial, v1);
-				
+
 				// Put the remainder of the polynomial in a new Pair
 				Variable v2 = new Variable();
 				this.m_variables.put(v2);
 				Pair replacement = new Pair(p, v2);
-				
+
 				// Insert the replacement and new Pairs at the head of the configuration
 				this.m_configuration.add(0, replacement);
 				this.m_configuration.add(0, newHead);
-				
+
 				// Bind the old result to a concatenation of the new pairs' results
 				Polynomial combinedResult = new Polynomial();
 				combinedResult.add(v1);
 				combinedResult.add(v2);
 				this.bind(head.Right(), combinedResult);
-				
+
 				// Now recursively call normalise() in case the head term requires further resolution
-				sfSet.addAll(normalise());
+				normalise();
 			}
-			
+
 			// If the term is a variable, we need to resolve
 			else if (((Pair) Head()).Left().get(0) instanceof Variable)
 			{
 				// remove the head pair, as we will be creating new pairs to replace it
 				Pair head = (Pair) this.m_configuration.remove(0);
-				
+
 				// Resolve the variable in this pair's polynomial
 				Variable v = (Variable) head.Left().get(0);
-				if (!this.m_variables.containsKey(v))
-				{
+				if (!this.m_variables.containsKey(v)) {
 					throw new VariableNotFoundException();
 				}
-				
+
 				Polynomial resolved = (Polynomial) this.m_variables.get(v).clone();
 
-				if (resolved.Empty())
-				{
-					if (!v.isConstrained()) throw new VariableNotBoundException();
-					// replace typed variable with one of its possibilities
-					HashSet<Answer> possibleAnswers = v.getPossibleAnswers();
-					for (Answer a: possibleAnswers) {
-						Polynomial answerPoly = new Polynomial(a);
-						SententialForm sf = this.cloneObject(v, answerPoly);
-						Pair newPair = new Pair(answerPoly, head.Right());
-						sf.m_configuration.add(0, newPair);
-						sf.m_variables.put(head.Right(), answerPoly);
-						sfSet.addAll(sf.normalise());
-					}
-					sfSet.remove(this);
-				} else {
-					// Create new pair with resolved variable
-					Pair newPair = new Pair(resolved, head.Right());
-					// Insert new pair into configuration
-					this.m_configuration.add(0, newPair);
-					// Now recursively call normalise() in case the head term requires further resolution
-					sfSet.addAll(normalise());
+				if (resolved.Empty()) {
+					throw new VariableNotBoundException();
 				}
+
+				// Create new pair with resolved variable
+				Pair newPair = new Pair(resolved, head.Right());
+
+				// Insert new pair into configuration
+				this.m_configuration.add(0, newPair);
+
+				// Now recursively call normalise() in case the head term requires further resolution
+				normalise();
 			}
 		}
-		return sfSet;
 	}
 	
 	/**
