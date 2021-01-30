@@ -191,7 +191,6 @@ public class Parser
 		}
 		while (!input.isEmpty() && !candidate.isEmpty());
 
-
 		// Do a final pass to advance past any trailing lambda derivations
 		while (candidate.CanApplyRules())
 		{
@@ -222,7 +221,8 @@ public class Parser
 			}
 			candidate.advance(new Answer(AnswerIdentifier.Lambda()));
 		}
-		
+
+
 		// discard any non-empty forms that are left - they cannot match the input at this point!
 		candidate.removeNonEmptyForms();
 
@@ -230,6 +230,7 @@ public class Parser
 		Set<ExtendedAnswer> resultSet = null;
 		try
 		{
+			System.out.println(candidate);
 			resultSet = candidate.ResultSet();
 		}
 		catch (VariableNotBoundException e)

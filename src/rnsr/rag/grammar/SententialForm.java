@@ -222,17 +222,16 @@ public	class		SententialForm
 	}
 
 	public SententialForm cloneObject() throws CloneException {
-		return cloneObject(null, null);
+		return cloneObject(new ContextMapping());
 	}
 
 	/**
 	 * IClonable method - clones this sentential form
 	 */
-	public SententialForm cloneObject(Variable replacedTypedVariable, Polynomial replacement) throws CloneException
+	public SententialForm cloneObject(ContextMapping cloneContext) throws CloneException
 	{
 
 		// Create a new variable set and context mapping
-		ContextMapping cloneContext = new ContextMapping();
 		for (Variable v : this.m_variables.keySet())
 		{
 			Variable vNew = new Variable(v.getPossibleAnswers());
@@ -246,11 +245,6 @@ public	class		SententialForm
 		
 		// Create the new variable set and populate with clones of variable bindings
 		VariableSet newVars = new VariableSet();
-
-		if (replacedTypedVariable != null && replacement != null) {
-			newVars.put(replacedTypedVariable, replacement);
-			newVars.put(cloneContext.get(replacedTypedVariable), replacement);
-		}
 
 		for (Variable v : this.m_variables.keySet()) {
 			Polynomial p = this.m_variables.get(v);

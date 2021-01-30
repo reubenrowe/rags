@@ -72,16 +72,26 @@ public	class		Variable
 		return new HashSet<>();
 	}
 
-	public void setIndex(int index) {
-		this.index = index;
-	}
-
-	public int getIndex() {
-		return index;
-	}
-
 	private String tag;
+
 	public String getTag() { return tag; }
+
 	public void setTag(String tag) { this.tag = tag; }
+
+	public void resolveForConstraints(String input, SententialForm currentForm, CandidateSet candidates) throws CloneException {
+		Pair p = (Pair) currentForm.m_configuration.remove(0);
+		Variable originalRHS = p.Right();
+		for (Answer a: possibleAnswers) {
+			String aID = a.Identifier().Identifier();		// Assuming a is terminal
+			if (aID.startsWith(input)) {
+				ContextMapping cloneContext = new ContextMapping();
+				SententialForm clonedForm = currentForm.cloneObject(cloneContext);
+				clonedForm.m_configuration.add(0, new Answer(new AnswerIdentifier(aID)));
+				clonedForm.m_variables.put(cloneContext.get(this), new Polynomial(a));
+				clonedForm.m_variables.put(cloneContext.get(originalRHS), new Polynomial(cloneContext.get(this)));
+				candidates.add(clonedForm);
+			}
+		}
+	}
 
 }

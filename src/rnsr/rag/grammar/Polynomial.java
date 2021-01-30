@@ -107,6 +107,11 @@ public	class		Polynomial
 
 					if (p.Empty())
 					{
+
+
+						System.out.println(t + " not bound!");
+
+
 						throw new VariableNotBoundException();
 					}
 					else

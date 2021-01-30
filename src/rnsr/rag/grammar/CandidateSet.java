@@ -87,7 +87,7 @@ public	class		CandidateSet
 
 			// Get the head of the sentential form
 			IConfigurationTerm head = currentForm.Head();
-			
+
 			if (head == null || head instanceof Answer) {
 				// This form survives "as is" to the next round
 				tempSet.add(currentForm);
@@ -201,7 +201,14 @@ public	class		CandidateSet
 				}
 			} else if (headTerm instanceof Pair && discardNonMatching) {
 
-				System.out.println("P: " + headTerm);
+				Variable unbound = (Variable) ((Pair) headTerm).Left().get(0);
+				try {
+					unbound.resolveForConstraints(input.Identifier().Identifier(), current, this);
+					this.remove(current);
+					this.advance(input, true);
+				} catch (CloneException e) {
+					throw new Error(e);
+				}
 
 			} else if (discardNonMatching)
 			{
@@ -225,6 +232,10 @@ public	class		CandidateSet
 
 			// Test
 			//form.checkVariableConditions();
+
+			for (Variable v: form.m_variables.keySet()) {
+				System.out.println("\t - " + v + "  -->  " + form.m_variables.get(v));
+			}
 
 			resultSet.add(form.Result().resolve(form.Variables()).toExtendedAnswer());
 		}
