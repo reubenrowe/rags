@@ -88,12 +88,10 @@ public	class		CandidateSet
 			// Get the head of the sentential form
 			IConfigurationTerm head = currentForm.Head();
 			
-			if      (head == null || head instanceof Answer)
-			{
+			if (head == null || head instanceof Answer) {
 				// This form survives "as is" to the next round
 				tempSet.add(currentForm);
-			} else if (head != null && head instanceof Pair)
-			{
+			} else if (head != null && head instanceof Pair) {
 				Pair headPair = (Pair) head;
 				Polynomial p = headPair.Left();
 				
@@ -104,15 +102,16 @@ public	class		CandidateSet
 					// throw an error here as this is a problem with the algorithm, not the parse
 					throw new Error("Length of polynomial more than expected!");
 				}
-				
+
 				IPolynomialTerm t = p.get(0);
 				
 				// If the term in the polynomial is a variable, then this is an error
 				// as we expect the sentential form normalise() operation to resolve the variable for us
-				if (t instanceof Variable && !((Variable)t).isConstrained())
+				if (t instanceof Variable)
 				{
 					// throw an error here as this is a problem with the algorithm, not the parse
-					throw new Error("Polynomial Term type different than expected: found Variable!");
+					if (((Variable) t).isConstrained()) this.add(currentForm);
+					else throw new Error("Polynomial Term type different than expected: found Variable!");
 				}
 
 				// If the term is a query then we first need to parse it
@@ -188,11 +187,11 @@ public	class		CandidateSet
 		{
 			SententialForm current = i.next();
 			IConfigurationTerm headTerm = current.Head();
-
 			if ((headTerm != null) && (headTerm instanceof Answer) && (((Answer) headTerm).match(input)))
 			{
 				try
 				{
+
 					current.consumeToken(input);
 				}
 				catch (AnswerMismatchException e)
@@ -200,8 +199,11 @@ public	class		CandidateSet
 					// Throw an error: we have used the match() method, so this exception shouldn't be thrown
 					throw new Error(e);
 				}
-			}
-			else if (discardNonMatching)
+			} else if (headTerm instanceof Pair && discardNonMatching) {
+
+				System.out.println("P: " + headTerm);
+
+			} else if (discardNonMatching)
 			{
 				if (!(headTerm == null && input.Identifier().Identifier().isBlank()))
 					i.remove();
@@ -240,6 +242,8 @@ public	class		CandidateSet
 			IConfigurationTerm t = form.Head();
 			if (t != null && (t instanceof Pair))
 			{
+				Polynomial p =  ((Pair) t).Left();
+				if (p.size() == 1 && p.get(0) instanceof Variable && ((Variable) p.get(0)).isConstrained()) continue;
 				return true;
 			}
 		}
