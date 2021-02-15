@@ -234,7 +234,7 @@ public	class		SententialForm
 		// Create a new variable set and context mapping
 		for (Variable v : this.m_variables.keySet())
 		{
-			Variable vNew = new Variable(v.getPossibleAnswers());
+			Variable vNew = new Variable(v.getType());
 			vNew.setTag(v.getTag());    // FOR DEBUGGING
 			cloneContext.put(v, vNew);
 		}
@@ -249,13 +249,13 @@ public	class		SententialForm
 		for (Variable v : this.m_variables.keySet()) {
 			Polynomial p = this.m_variables.get(v);
 			// If the source variable is not bound, then neither will the destination be
-			if (p.Empty()) {
-				newVars.put(cloneContext.get(v));
-			}
+			//if (p.Empty()) {
+			//	newVars.put(cloneContext.get(v));
+			//}
 			// If the source variable is bound, bind destination variable to a clone of the bound polynomial
-			else {
+			//else {
 				newVars.put(cloneContext.get(v), p.clone(cloneContext));
-			}
+			//}
 		}
 
 		ArrayList<VariableCondition> newConditions = new ArrayList<>();

@@ -91,7 +91,7 @@ public	class		Rule
 		ContextMapping cloneContext = new ContextMapping();
 		for (Variable v : this.m_variables.keySet())
 		{
-			Variable newV = new Variable(v.getPossibleAnswers());
+			Variable newV = new Variable(v.getType());
 			newV.setTag(v.getTag());
 			cloneContext.put(v, newV);
 			newVars.put(newV, this.m_variables.get(v));
@@ -113,7 +113,7 @@ public	class		Rule
 		}
 
 		// Construct the instantiated rule
-		InstantiatedRule r = new InstantiatedRule(clonedDerivative, newVars, clonedResult, m_conditions);
+		InstantiatedRule r = new InstantiatedRule(clonedDerivative, newVars, clonedResult, newConds);
 		
 		// Bind variables
 		r.bind(cloneContext.get(this.m_arguments.get(0)), new Polynomial(answer));

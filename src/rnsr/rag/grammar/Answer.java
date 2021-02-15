@@ -278,7 +278,6 @@ public	class		Answer
 	 */
 	public boolean equals(Answer a)
 	{
-		// Check the the identifiers match
 		if (this.m_identifier.equals(a.Identifier()))
 		{
 			// If there are arguments, then we need to check them first

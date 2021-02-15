@@ -4,6 +4,7 @@ import rnsr.rag.grammar.*;
 import rnsr.rag.grammar.exception.ArgumentMismatchException;
 import rnsr.rag.grammar.exception.RuleFunctionException;
 import rnsr.rag.grammar.exception.VariableNotFoundException;
+import rnsr.rag.grammar.types.LetterType;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -210,8 +211,8 @@ public class PeanoAdderExample extends CommandLineInputBase {
             vars.add(i, v);
             varSet.put(v);
         }
-        vars.get(1).setPossibleAnswers(alphabetSet);
-        vars.get(2).setPossibleAnswers(alphabetSet);
+        vars.get(1).setType(new LetterType());
+        vars.get(1).setType(new LetterType());
         ArrayList<VariableCondition> conditions = new ArrayList<>();
         conditions.add(new VariableCondition(vars.get(1), vars.get(2), VariableCondition.VariableConditionType.NE));
         args = new ArrayList<>();

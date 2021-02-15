@@ -78,7 +78,7 @@ public class AnswerIdentifier
 	public boolean equals(AnswerIdentifier id)
 	{
 		return (
-				id.m_identifier == this.m_identifier &&
+				id.m_identifier.equals(this.m_identifier) &&
 				id.m_arity == this.m_arity &&
 				id.m_isTerminal == this.m_isTerminal
 			);

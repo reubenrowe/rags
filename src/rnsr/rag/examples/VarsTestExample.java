@@ -4,6 +4,7 @@ import rnsr.rag.grammar.*;
 import rnsr.rag.grammar.exception.ArgumentMismatchException;
 import rnsr.rag.grammar.exception.RuleFunctionException;
 import rnsr.rag.grammar.exception.VariableNotFoundException;
+import rnsr.rag.grammar.types.WordType;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,12 +19,15 @@ public class VarsTestExample extends CommandLineInputBase {
 
         Grammar g = new Grammar(start);
 
-        // &ALPHABET
-        HashSet<Answer> alphabetSet = new HashSet<>();
+        // &LETTER
+        HashSet<Answer> letterSet = new HashSet<>();
         for (char c: "abcdefghijklmnopqrstuvwxyz".toCharArray()) {
-            alphabetSet.add(new Answer(new AnswerIdentifier(String.valueOf(c))));
-            alphabetSet.add(new Answer(new AnswerIdentifier(String.valueOf(Character.toUpperCase(c)))));
+            letterSet.add(new Answer(new AnswerIdentifier(String.valueOf(c))));
+            letterSet.add(new Answer(new AnswerIdentifier(String.valueOf(Character.toUpperCase(c)))));
         }
+
+        // &WORD
+        
 
         /* ********** RULE PRODUCTIONS ********** */
 
@@ -71,8 +75,8 @@ public class VarsTestExample extends CommandLineInputBase {
         vars.get(2).setTag("_zP (in NotLet)");
         vars.get(3).setTag("_v1 (in NotLet)");
 
-        vars.get(1).setPossibleAnswers(alphabetSet);
-        vars.get(2).setPossibleAnswers(alphabetSet);
+        vars.get(1).setType(new WordType());
+        vars.get(2).setType(new WordType());
         ArrayList<VariableCondition> conditions = new ArrayList<>();
         conditions.add(new VariableCondition(vars.get(1), vars.get(2), VariableCondition.VariableConditionType.NE));
         args = new ArrayList<>();

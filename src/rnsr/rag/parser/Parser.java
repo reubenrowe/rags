@@ -230,7 +230,6 @@ public class Parser
 		Set<ExtendedAnswer> resultSet = null;
 		try
 		{
-			System.out.println(candidate);
 			resultSet = candidate.ResultSet();
 		}
 		catch (VariableNotBoundException e)

@@ -227,16 +227,7 @@ public	class		CandidateSet
 	{
 		HashSet<ExtendedAnswer> resultSet = new HashSet<>();
 
-		for (SententialForm form : this)
-		{
-
-			// Test
-			//form.checkVariableConditions();
-
-			for (Variable v: form.m_variables.keySet()) {
-				System.out.println("\t - " + v + "  -->  " + form.m_variables.get(v));
-			}
-
+		for (SententialForm form : this) {
 			resultSet.add(form.Result().resolve(form.Variables()).toExtendedAnswer());
 		}
 
