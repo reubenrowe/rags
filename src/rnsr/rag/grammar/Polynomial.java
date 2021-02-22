@@ -1,9 +1,6 @@
 package rnsr.rag.grammar;
 
-import rnsr.rag.grammar.exception.CloneException;
-import rnsr.rag.grammar.exception.InvalidTermException;
-import rnsr.rag.grammar.exception.VariableNotBoundException;
-import rnsr.rag.grammar.exception.VariableNotFoundException;
+import rnsr.rag.grammar.exception.*;
 import rnsr.rag.grammar.interfaces.IContextClonable;
 import rnsr.rag.grammar.interfaces.IPolynomialTerm;
 import rnsr.rag.grammar.interfaces.IResolvable;
@@ -211,8 +208,21 @@ public	class		Polynomial
 		return sb.toString();
 	}
 
-	public VariableSet unify(Polynomial other) {
-		return null;
+	public VariableSet unify(Polynomial other) throws PolynomialUnificationException {
+		// Currently assuming only variables in this polynomial, string in other
+		VariableSet newBindings = new VariableSet();
+		Polynomial remainder = new Polynomial();
+		for (IPolynomialTerm pt: this) {
+			if (remainder.Empty())
+				throw new PolynomialUnificationException("Ran out of polynomial terms to unify!");
+			Variable currentVar = (Variable) pt;
+			UnificationSetting u = currentVar.unify(other);
+			remainder = u.getRemainder();
+			newBindings.putAll(u.getVariables());
+		}
+		if (!remainder.Empty())
+			throw new PolynomialUnificationException("Ran out of variables to unify!");
+		return newBindings;
 	}
 	
 }
