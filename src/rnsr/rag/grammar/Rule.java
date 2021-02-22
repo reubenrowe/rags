@@ -119,7 +119,7 @@ public	class		Rule
 		r.bind(cloneContext.get(this.m_arguments.get(0)), new Polynomial(answer));
 		
 		for (int i = 0; i < answer.Identifier().Arity(); i++) {
-			r.bind(cloneContext.get(this.m_arguments.get(i + 1)), answer.Arguments().get(i));
+			r.bind(cloneContext.get(this.m_arguments.get(i + 1)), answer.Arguments().get(i));	// HERE
 		}
 		
 		return r;

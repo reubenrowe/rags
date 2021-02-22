@@ -309,4 +309,8 @@ public	class		Answer
 		}
 	}
 
+	public UnificationSetting unify(Polynomial poly) {
+		return null;
+	}
+
 }

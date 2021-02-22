@@ -145,4 +145,8 @@ public	class		Variable
 		return true;
 	}
 
+	public UnificationSetting unify(Polynomial poly) {
+		return null;
+	}
+
 }

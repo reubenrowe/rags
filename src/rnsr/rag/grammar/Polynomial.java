@@ -210,5 +210,9 @@ public	class		Polynomial
 		
 		return sb.toString();
 	}
+
+	public VariableSet unify(Polynomial other) {
+		return null;
+	}
 	
 }
