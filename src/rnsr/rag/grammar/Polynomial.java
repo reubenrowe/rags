@@ -215,8 +215,8 @@ public	class		Polynomial
 		for (IPolynomialTerm pt: this) {
 			if (remainder.Empty())
 				throw new PolynomialUnificationException("Ran out of polynomial terms to unify!");
-			Variable currentVar = (Variable) pt;
-			UnificationSetting u = currentVar.unify(other);
+			IPolynomialTerm currentTerm = pt;
+			UnificationSetting u = currentTerm.unify(other);
 			remainder = u.getRemainder();
 			newBindings.putAll(u.getVariables());
 		}
