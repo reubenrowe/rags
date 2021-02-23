@@ -30,4 +30,8 @@ public class LetterType implements IVariableType {
         return isConcat;
     }
 
+    public String toString() {
+        return "&LETTER";
+    }
+
 }

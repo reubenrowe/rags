@@ -1,6 +1,7 @@
 package rnsr.rag.grammar;
 
 import rnsr.rag.grammar.exception.CloneException;
+import rnsr.rag.grammar.exception.PolynomialUnificationException;
 import rnsr.rag.grammar.interfaces.IContextClonable;
 import rnsr.rag.grammar.interfaces.IPolynomialTerm;
 import rnsr.rag.grammar.interfaces.IVariableType;
@@ -145,8 +146,34 @@ public	class		Variable
 		return true;
 	}
 
-	public UnificationSetting unify(Polynomial poly) {
-		return null;
+	public UnificationSetting unify(Polynomial poly) throws PolynomialUnificationException {
+		Polynomial rest = new Polynomial();
+		VariableSet bindings = new VariableSet();
+		Answer polyAnswer = (Answer) poly.get(0);
+		String polyAnswerID = polyAnswer.Identifier().Identifier();
+		HashSet<Answer> typePossibilities = (HashSet<Answer>) type.getPool();
+		if (!type.isConcat()) { // atomic type, e.g. LETTER.
+			for (Answer a: typePossibilities) {
+				String aID = a.Identifier().Identifier();
+				if (polyAnswerID.startsWith(aID)) {
+					if (polyAnswerID.length() > aID.length()) // If equal, no need to fill the new Polynomial since no remainder
+						rest.add(new Answer(new AnswerIdentifier(polyAnswerID.substring(aID.length()))));
+					else
+						rest = poly;	// Used all of poly
+					bindings.put(this, new Polynomial(a));
+					break;
+				}
+			}
+		} else { // concatenation type, e.g. WORD - positive closure over LETTER
+			for (char c: polyAnswerID.toCharArray()) {
+				Answer cAns = new Answer(new AnswerIdentifier(String.valueOf(c)));
+				if (!typePossibilities.contains(cAns))
+					throw new PolynomialUnificationException(polyAnswerID + " could not satisfy type " + type + "!"); // Error case
+			}
+			rest = poly;
+			bindings.put(this, rest);
+		}
+		return new UnificationSetting(bindings, rest);
 	}
 
 }

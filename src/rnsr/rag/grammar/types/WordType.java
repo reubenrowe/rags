@@ -29,4 +29,8 @@ public class WordType implements IVariableType {
     public boolean isConcat() {
         return isConcat;
     }
+
+    public String toString() {
+        return "&WORD";
+    }
 }
