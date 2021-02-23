@@ -152,7 +152,7 @@ public	class		Variable
 		Answer polyAnswer = (Answer) poly.get(0);
 		String polyAnswerID = polyAnswer.Identifier().Identifier();
 		HashSet<Answer> typePossibilities = (HashSet<Answer>) type.getPool();
-		if (!type.isConcat()) { // atomic type, e.g. LETTER.
+		if (!type.isConcat()) { // atomic Havetype, e.g. LETTER.
 			for (Answer a: typePossibilities) {
 				String aID = a.Identifier().Identifier();
 				if (polyAnswerID.startsWith(aID)) {
