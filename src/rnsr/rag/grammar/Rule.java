@@ -2,6 +2,7 @@ package rnsr.rag.grammar;
 
 import rnsr.rag.grammar.exception.CloneException;
 import rnsr.rag.grammar.exception.VariableNotFoundException;
+import rnsr.rag.grammar.interfaces.IPolynomialTerm;
 
 import java.util.ArrayList;
 
@@ -12,7 +13,7 @@ public	class		Rule
 		extends		SententialFormBase
 {
 
-	private ArrayList<Variable> m_arguments = null;
+	private ArrayList<Polynomial> m_arguments = null;
 
 	/**
 	 * Default Constructor
@@ -38,7 +39,7 @@ public	class		Rule
 	 * @param args - the argument list for this rule form
 	 * @throws VariableNotFoundException
 	 */
-	public Rule(Configuration configuration, VariableSet variables, Polynomial result, ArrayList<Variable> args) throws VariableNotFoundException
+	public Rule(Configuration configuration, VariableSet variables, Polynomial result, ArrayList<Polynomial> args) throws VariableNotFoundException
 	{
 		this(configuration, variables, result, args, null);
 	}
@@ -51,7 +52,7 @@ public	class		Rule
 	 * @param args - the argument list for this rule form
 	 * @param conditions - list of conditions on the variables contained in this rule
 	 */
-	public Rule(Configuration configuration, VariableSet variables, Polynomial result, ArrayList<Variable> args, ArrayList<VariableCondition> conditions) throws VariableNotFoundException
+	public Rule(Configuration configuration, VariableSet variables, Polynomial result, ArrayList<Polynomial> args, ArrayList<VariableCondition> conditions) throws VariableNotFoundException
 	{
 		//this(configuration, variables, result);
 		this.m_configuration = configuration;
@@ -64,14 +65,16 @@ public	class		Rule
 	/**
 	 * Sets the argument list for this rule
 	 */
-	public void setArguments(ArrayList<Variable> args) throws VariableNotFoundException
+	public void setArguments(ArrayList<Polynomial> args) throws VariableNotFoundException
 	{
 		// Check that all the variables in the specified list are present in the variable set for this rule
-		for (Variable v : args)
-		{
-			if (!this.m_variables.containsKey(v))
-			{
-				throw new VariableNotFoundException("Argument not present in variable set!");
+		for (Polynomial p : args) {
+			for (IPolynomialTerm pt: p) {
+				if (!(pt instanceof Variable)) continue;
+				Variable v = (Variable) pt;
+				if (!this.m_variables.containsKey(v)) {
+					throw new VariableNotFoundException("Argument not present in variable set!");
+				}
 			}
 		}
 		
