@@ -16,7 +16,7 @@ public class StringEqualityExample extends CommandLineInputBase {
         AnswerIdentifier eq = new AnswerIdentifier("Eq", 1);
         AnswerIdentifier ok = new AnswerIdentifier("ok");
 
-        Grammar g = new Grammar();
+        Grammar g = new Grammar(start);
 
         // &LETTER
         // "new LetterType()" in constructor
@@ -47,11 +47,11 @@ public class StringEqualityExample extends CommandLineInputBase {
         c.add(new Answer(ok));
         ArrayList<Polynomial> params = new ArrayList<>();
         params.add(new Polynomial(new Answer(ok)));
-        Polynomial poly1 = new Polynomial(new Answer(new AnswerIdentifier("eq"), params));
-        Polynomial poly2 = new Polynomial(new Answer(ok));
-        Query q = new Query(poly1, poly2);
-        g.addRule(start, new Rule(c, varSet, new Polynomial(q), args));
-
+        //Polynomial poly1 = new Polynomial(new Answer(new AnswerIdentifier("eq"), params));
+        //Polynomial poly2 = new Polynomial(new Answer(ok));
+        //Query q = new Query(poly1, poly2);
+        //g.addRule(start, new Rule(c, varSet, new Polynomial(q), args));
+        g.addRule(start, new Rule(c, varSet, new Polynomial(new Answer(ok)), args));
 
         // _z:&LETTER, t:&WORD <Eq(zt), F> -> #
 
