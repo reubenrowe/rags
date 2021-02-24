@@ -185,8 +185,8 @@ public class Grammar
 			v0.setTag("_v0 (in '" + bindingAnswer.Identifier() + "')");
 			v.put(v0);
 			
-			ArrayList<Variable> args = new ArrayList<>();
-			args.add(v0);
+			ArrayList<Polynomial> args = new ArrayList<>();
+			args.add(new Polynomial(v0));
 			
 			Polynomial result = new Polynomial(new Answer(AnswerIdentifier.Lambda()));
 			

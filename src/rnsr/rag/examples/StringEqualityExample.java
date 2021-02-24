@@ -26,9 +26,9 @@ public class StringEqualityExample extends CommandLineInputBase {
 
         /* ********** RULE PRODUCTIONS ********** */
 
-        // Declare variables for reuse
+        // Declare variables for reuse/home/luke/Programming/Jara/SLELabs
         ArrayList<Variable> vars;
-        ArrayList<Variable> args;
+        ArrayList<Polynomial> args;
         VariableSet varSet;
         Configuration c;
         Polynomial poly;
@@ -42,7 +42,7 @@ public class StringEqualityExample extends CommandLineInputBase {
             varSet.put(v);
         }
         args = new ArrayList<>();
-        args.add(vars.get(0));
+        args.add(new Polynomial(vars.get(0)));
         c = new Configuration();
         c.add(new Answer(ok));
         ArrayList<Polynomial> params = new ArrayList<>();
@@ -75,7 +75,7 @@ public class StringEqualityExample extends CommandLineInputBase {
             System.err.println("Expecting some input to parse!");
             System.exit(0);
         }
-        performTest(new VarsTestExample(), args[0]);
+        performTest(new StringEqualityExample(), args[0]);
     }
 
 }
