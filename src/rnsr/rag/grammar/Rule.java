@@ -1,6 +1,7 @@
 package rnsr.rag.grammar;
 
 import rnsr.rag.grammar.exception.CloneException;
+import rnsr.rag.grammar.exception.PolynomialUnificationException;
 import rnsr.rag.grammar.exception.VariableNotFoundException;
 import rnsr.rag.grammar.interfaces.IPolynomialTerm;
 
@@ -117,12 +118,27 @@ public	class		Rule
 
 		// Construct the instantiated rule
 		InstantiatedRule r = new InstantiatedRule(clonedDerivative, newVars, clonedResult, newConds);
-		
-		// Bind variables
-		r.bind(cloneContext.get(this.m_arguments.get(0)), new Polynomial(answer));
-		
+
+
+		// Binding v_0
+		r.bind(cloneContext.get(m_arguments.get(0).get(0)), new Polynomial(answer));
+
+		// Unification of polynomial parameters to Polynomial arguments
+
 		for (int i = 0; i < answer.Identifier().Arity(); i++) {
-			r.bind(cloneContext.get(this.m_arguments.get(i + 1)), answer.Arguments().get(i));	// HERE
+
+			//r.bind(cloneContext.get(this.m_arguments.get(i + 1)), answer.Arguments().get(i));	// OLD CODE - LEAVE HERE TEMP
+
+			try {
+
+				//answer - the polynomial holding the answer to match the variable(s) to
+				//m_args.get(i+1) - the polynomial holding the variable(s) in arg i
+				newVars.putAll(m_arguments.get(i+1).unify(answer.Arguments().get(i)));
+
+			} catch (PolynomialUnificationException e) {
+				e.printStackTrace();	// Temporary lazy exception handling
+			}
+
 		}
 		
 		return r;

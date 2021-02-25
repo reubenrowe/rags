@@ -36,7 +36,7 @@ public class StringEqualityExample extends CommandLineInputBase {
         // <Start, (eq("ok") ? "ok")> -> "ok"
         vars = new ArrayList<>();
         varSet = new VariableSet();
-        for (int i = 0; i <= 1; i++) {
+        for (int i = 0; i < 1; i++) {
             Variable v = new Variable();
             vars.add(i, v);
             varSet.put(v);
