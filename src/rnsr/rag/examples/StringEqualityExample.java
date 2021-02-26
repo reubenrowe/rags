@@ -4,6 +4,8 @@ import rnsr.rag.grammar.*;
 import rnsr.rag.grammar.exception.ArgumentMismatchException;
 import rnsr.rag.grammar.exception.RuleFunctionException;
 import rnsr.rag.grammar.exception.VariableNotFoundException;
+import rnsr.rag.grammar.types.LetterType;
+import rnsr.rag.grammar.types.WordType;
 
 import java.util.ArrayList;
 
@@ -13,6 +15,7 @@ public class StringEqualityExample extends CommandLineInputBase {
 
         // Construct Answer Identifier set
         AnswerIdentifier start = new AnswerIdentifier("Start", 0);
+        AnswerIdentifier test = new AnswerIdentifier("Test", 1);
         AnswerIdentifier eq = new AnswerIdentifier("Eq", 1);
         AnswerIdentifier ok = new AnswerIdentifier("ok");
 
@@ -33,34 +36,51 @@ public class StringEqualityExample extends CommandLineInputBase {
         Configuration c;
         Polynomial poly;
 
-        // <Start, (eq("ok") ? "ok")> -> "ok"
+        // <Start, _v1> -> <Test("testing"), _v1>
         vars = new ArrayList<>();
         varSet = new VariableSet();
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i <= 1; i++) {
             Variable v = new Variable();
             vars.add(i, v);
             varSet.put(v);
         }
+
         args = new ArrayList<>();
         args.add(new Polynomial(vars.get(0)));
+
         c = new Configuration();
-        c.add(new Answer(ok));
-        ArrayList<Polynomial> params = new ArrayList<>();
-        params.add(new Polynomial(new Answer(ok)));
-        //Polynomial poly1 = new Polynomial(new Answer(new AnswerIdentifier("eq"), params));
-        //Polynomial poly2 = new Polynomial(new Answer(ok));
-        //Query q = new Query(poly1, poly2);
-        //g.addRule(start, new Rule(c, varSet, new Polynomial(q), args));
-        g.addRule(start, new Rule(c, varSet, new Polynomial(new Answer(ok)), args));
+        ArrayList<Polynomial> testArg = new ArrayList<>();
+        testArg.add(new Polynomial(new Answer(new AnswerIdentifier("testing"))));
+        c.add(new Pair(new Polynomial(new Answer(test, testArg)), vars.get(1)));
 
-        // _z:&LETTER, t:&WORD <Eq(zt), F> -> #
+        g.addRule(start, new Rule(c, varSet, new Polynomial(vars.get(1)), args));
 
 
-        // _z:&LETTER, t:&WORD <Eq(zt), F> -> z <eq(t), F>
 
+        // <Test(_z_t), _v1> -> <_z, _v1> <_t, _v2>
+        vars = new ArrayList<>();
+        varSet = new VariableSet();
+        for (int i = 0; i <= 4; i++) {
+            Variable v = new Variable();
+            vars.add(i, v);
+            varSet.put(v);
+        }
 
-        // _z:&LETTER, t:&WORD <Eq(zt), F> -> <not(z), _v1> <star(letter), _v2>
+        vars.get(1).setType(new LetterType());
+        vars.get(2).setType(new WordType());
 
+        args = new ArrayList<>();
+        args.add(new Polynomial(vars.get(0)));
+        poly = new Polynomial();
+        poly.add(vars.get(1));
+        poly.add(vars.get(2));
+        args.add(poly);
+
+        c = new Configuration();
+        c.add(new Pair(new Polynomial(args.get(1).get(0)), vars.get(3)));
+        c.add(new Pair(new Polynomial(args.get(1).get(1)), vars.get(4)));
+
+        g.addRule(test, new Rule(c, varSet, new Polynomial(vars.get(3)), args));
 
 
         /* ****************************************/
