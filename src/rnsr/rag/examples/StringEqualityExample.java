@@ -16,25 +16,22 @@ public class StringEqualityExample extends CommandLineInputBase {
         // Construct Answer Identifier set
         AnswerIdentifier start = new AnswerIdentifier("Start", 0);
         AnswerIdentifier test = new AnswerIdentifier("Test", 1);
-        AnswerIdentifier eq = new AnswerIdentifier("Eq", 1);
-        AnswerIdentifier ok = new AnswerIdentifier("ok");
 
         Grammar g = new Grammar(start);
 
-        // &LETTER
-        // "new LetterType()" in constructor
 
-        // &WORD
-        // "new WordType()" in constructor
 
         /* ********** RULE PRODUCTIONS ********** */
 
-        // Declare variables for reuse/home/luke/Programming/Jara/SLELabs
+
+
         ArrayList<Variable> vars;
         ArrayList<Polynomial> args;
         VariableSet varSet;
         Configuration c;
         Polynomial poly;
+
+
 
         // <Start, _v1> -> <Test("testing"), _v1>
         vars = new ArrayList<>();
@@ -83,7 +80,10 @@ public class StringEqualityExample extends CommandLineInputBase {
         g.addRule(test, new Rule(c, varSet, new Polynomial(vars.get(3)), args));
 
 
+
         /* ****************************************/
+
+
 
         return g;
 

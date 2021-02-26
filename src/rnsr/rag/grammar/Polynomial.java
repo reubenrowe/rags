@@ -211,17 +211,25 @@ public	class		Polynomial
 	public VariableSet unify(Polynomial other) throws PolynomialUnificationException {
 		// Currently assuming only variables in this polynomial, string in other
 		VariableSet newBindings = new VariableSet();
-		Polynomial remainder = new Polynomial();
+		Polynomial remainder = null;
+
+		try {
+			remainder = other.clone(new ContextMapping());
+		} catch (CloneException e) {
+			e.printStackTrace();
+		}
+
 		for (IPolynomialTerm pt: this) {
 			if (remainder.Empty())
 				throw new PolynomialUnificationException("Ran out of polynomial terms to unify!");
 			IPolynomialTerm currentTerm = pt;
-			UnificationSetting u = currentTerm.unify(other);
+			UnificationSetting u = currentTerm.unify(remainder);
 			remainder = u.getRemainder();
 			newBindings.putAll(u.getVariables());
 		}
-		if (!remainder.Empty())
+		if (!remainder.Empty()) {
 			throw new PolynomialUnificationException("Ran out of variables to unify!");
+		}
 		return newBindings;
 	}
 	

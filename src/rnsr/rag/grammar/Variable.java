@@ -166,12 +166,17 @@ public	class		Variable
 			}
 		} else { // concatenation type, e.g. WORD - positive closure over LETTER
 			for (char c: polyAnswerID.toCharArray()) {
-				Answer cAns = new Answer(new AnswerIdentifier(String.valueOf(c)));
-				if (!typePossibilities.contains(cAns))
+				boolean inSet = false;
+				for (Answer a: typePossibilities) {
+					inSet = new Answer(new AnswerIdentifier(String.valueOf(c))).equals(a);
+					if (inSet) break;
+				}
+				if (!inSet)
 					throw new PolynomialUnificationException(polyAnswerID + " could not satisfy type " + type + "!"); // Error case
+
 			}
-			rest = poly;
-			bindings.put(this, rest);
+			rest = new Polynomial();
+			bindings.put(this, poly);
 		}
 		return new UnificationSetting(bindings, rest);
 	}

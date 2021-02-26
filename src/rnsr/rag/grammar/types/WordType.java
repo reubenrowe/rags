@@ -19,7 +19,7 @@ public class WordType implements IVariableType {
     }
 
     public boolean match(String token) {
-        return pool.contains(token);
+        return pool.contains(new Answer(new AnswerIdentifier(token)));
     }
 
     public HashSet<Answer> getPool() {
