@@ -78,7 +78,7 @@ public class ListEqualityExample extends CommandLineInputBase {
         args.add(new Polynomial(vars.get(0)));
         args.add(new Polynomial(vars.get(1)));
         c = new Configuration();
-        c.add(new Pair(args.get(2), vars.get(3)));
+        c.add(new Pair(new Polynomial(vars.get(2)), vars.get(3)));
         g.addRule(not, new Rule(c, varSet, new Polynomial(new Answer(AnswerIdentifier.Lambda())), args, conditions));
 
 

@@ -223,6 +223,9 @@ public	class		Polynomial
 			if (remainder.Empty())
 				throw new PolynomialUnificationException("Ran out of polynomial terms to unify!");
 			IPolynomialTerm currentTerm = pt;
+
+			System.out.println(pt.getClass() + " : " + pt + " : " + remainder);
+
 			UnificationSetting u = currentTerm.unify(remainder);
 			remainder = u.getRemainder();
 			newBindings.putAll(u.getVariables());

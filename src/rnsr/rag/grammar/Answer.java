@@ -317,18 +317,28 @@ public	class		Answer
 		Answer otherAns = (Answer) firstTerm;
 
 		if (otherAns.equals(this)) {
-
-			if (otherAns.m_identifier.Terminal()) {
+			if (otherAns.m_identifier.Terminal() || (this.m_arguments == null && otherAns.m_arguments == null)) {
+				Polynomial newRemainder = poly.clone(new ContextMapping());
+				newRemainder.remove(0);
+				return new UnificationSetting(newBindings, newRemainder);
+			} else if (this.m_arguments.size() == otherAns.m_arguments.size()) {
+				for (int i = 0; i < this.m_arguments.size(); i++) {
+					try {
+						newBindings.putAll(this.m_arguments.get(i).unify(otherAns.m_arguments.get(i)));
+					} catch (PolynomialUnificationException e) {
+						e.printStackTrace();
+					}
+				}
 				Polynomial newRemainder = poly.clone(new ContextMapping());
 				newRemainder.remove(0);
 				return new UnificationSetting(newBindings, newRemainder);
 			} else {
-
+				// Not equal number of arguments
+				return new UnificationSetting(newBindings, poly);
 			}
-
+		} else {
+			return new UnificationSetting(newBindings, poly);
 		}
-
-		return null;
 
 	}
 
