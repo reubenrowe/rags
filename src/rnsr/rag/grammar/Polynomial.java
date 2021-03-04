@@ -208,7 +208,7 @@ public	class		Polynomial
 		return sb.toString();
 	}
 
-	public VariableSet unify(Polynomial other) throws PolynomialUnificationException {
+	public VariableSet unify(Polynomial other) throws PolynomialUnificationException, CloneException {
 		// Currently assuming only variables in this polynomial, string in other
 		VariableSet newBindings = new VariableSet();
 		Polynomial remainder = null;
