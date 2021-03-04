@@ -89,8 +89,6 @@ public	class		Variable
 			String aID = a.Identifier().Identifier();		// Assuming a is terminal
 			if (aID.startsWith(input)) {
 
-				//if (!checkConditions(currentForm, a)) continue; // Before cloning - check conditions on answer
-
 				ContextMapping cloneContext = new ContextMapping();
 				SententialForm clonedForm = currentForm.cloneObject(cloneContext);
 

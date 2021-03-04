@@ -228,7 +228,10 @@ public	class		CandidateSet
 		HashSet<ExtendedAnswer> resultSet = new HashSet<>();
 
 		for (SententialForm form : this) {
+
+			if (!form.checkVariableConditions()) continue;
 			resultSet.add(form.Result().resolve(form.Variables()).toExtendedAnswer());
+
 		}
 
 		return resultSet;

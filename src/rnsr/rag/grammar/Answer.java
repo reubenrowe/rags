@@ -309,8 +309,27 @@ public	class		Answer
 		}
 	}
 
-	public UnificationSetting unify(Polynomial poly) {
+	public UnificationSetting unify(Polynomial poly) throws CloneException {
+		VariableSet newBindings = new VariableSet();
+
+		IPolynomialTerm firstTerm = poly.get(0);
+		if (!(firstTerm instanceof Answer)) return new UnificationSetting(newBindings, poly);
+		Answer otherAns = (Answer) firstTerm;
+
+		if (otherAns.equals(this)) {
+
+			if (otherAns.m_identifier.Terminal()) {
+				Polynomial newRemainder = poly.clone(new ContextMapping());
+				newRemainder.remove(0);
+				return new UnificationSetting(newBindings, newRemainder);
+			} else {
+
+			}
+
+		}
+
 		return null;
+
 	}
 
 }

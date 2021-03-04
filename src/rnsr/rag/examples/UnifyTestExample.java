@@ -9,7 +9,7 @@ import rnsr.rag.grammar.types.WordType;
 
 import java.util.ArrayList;
 
-public class StringEqualityExample extends CommandLineInputBase {
+public class UnifyTestExample extends CommandLineInputBase {
 
     public Grammar CreateRAG() throws ArgumentMismatchException, RuleFunctionException, VariableNotFoundException {
 
@@ -95,7 +95,7 @@ public class StringEqualityExample extends CommandLineInputBase {
             System.err.println("Expecting some input to parse!");
             System.exit(0);
         }
-        performTest(new StringEqualityExample(), args[0]);
+        performTest(new UnifyTestExample(), args[0]);
     }
 
 }

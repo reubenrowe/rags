@@ -123,49 +123,35 @@ public	class		DeclarationAndAssignmentExample
 		AnswerIdentifier id_star = new AnswerIdentifier("star", 1);
 		vars = new ArrayList<Variable>();
 		varSet = new VariableSet();
-
-		for (int i = 0; i < 2; i++)
-		{
+		for (int i = 0; i < 2; i++) {
 			Variable v = new Variable();
 			vars.add(i, v);
 			varSet.put(v);
 		}
-		
 		args = new ArrayList<Variable>();
 		args.add(vars.get(0));	// star
 		args.add(vars.get(1));	// a
-		
 		c = new Configuration();
 		c.add(new Answer(AnswerIdentifier.Lambda()));
-		
 		g.addRule(id_star, new Rule(c, varSet, new Polynomial(new Answer(AnswerIdentifier.Lambda())), args));
 		
 		// star(a) : <v0, v1v2> -> <a, v1> <star(a), v2>
 		vars = new ArrayList<Variable>();
 		varSet = new VariableSet();
-		for (int i = 0; i < 4; i++)
-		{
+		for (int i = 0; i < 4; i++) {
 			Variable v = new Variable();
 			vars.add(i, v);
 			varSet.put(v);
 		}
-		
 		args = new ArrayList<Variable>();
 		args.add(vars.get(0));	// star
 		args.add(vars.get(1));	// a
-		
 		c = new Configuration();
-		c.add(new Pair(
-				new Polynomial(args.get(1)), vars.get(2)
-			));
-		c.add(new Pair(
-				new Polynomial(args.get(0)), vars.get(3)
-			));
-		
+		c.add(new Pair(new Polynomial(args.get(1)), vars.get(2)));
+		c.add(new Pair(new Polynomial(args.get(0)), vars.get(3)));
 		poly = new Polynomial();
 		poly.add(vars.get(2));
 		poly.add(vars.get(3));
-		
 		g.addRule(id_star, new Rule(c, varSet, poly, args));
 		
 		// letter : For all z in alphabet <v0, λ> -> z

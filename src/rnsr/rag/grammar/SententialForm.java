@@ -272,16 +272,17 @@ public	class		SententialForm
 		return new SententialForm(clonedConfiguration, newVars, clonedResult, newConditions);
 	}
 
-	public void checkVariableConditions() {
-
+	public boolean checkVariableConditions() {
 		for (VariableCondition cond: m_conditions) {
-			System.out.println(cond);
 			Polynomial p1 = m_variables.get(cond.getFirstVariable());
-			System.out.println("p1 : " + p1);
 			Polynomial p2 = m_variables.get(cond.getSecondVariable());
-			System.out.println("p2 : " + p2);
+			switch (cond.getConditionType()) {
+				case NE:
+					if (p1.equals(p2)) return false;
+					else continue;
+			}
 		}
-
+		return true;
 	}
 	
 	/**

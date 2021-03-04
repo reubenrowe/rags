@@ -3,6 +3,7 @@ package rnsr.rag.grammar.interfaces;
 import rnsr.rag.grammar.ExtendedAnswer;
 import rnsr.rag.grammar.Polynomial;
 import rnsr.rag.grammar.UnificationSetting;
+import rnsr.rag.grammar.exception.CloneException;
 import rnsr.rag.grammar.exception.PolynomialUnificationException;
 import rnsr.rag.parser.Parser;
 
@@ -31,6 +32,6 @@ public interface IPolynomialTerm
 	 * @param poly The Polynomial to unify with the current polynomial term.
 	 * @return UnificationSetting object containing the binding and polynomial information from the unification
 	 */
-	public UnificationSetting unify(Polynomial poly) throws PolynomialUnificationException;
+	public UnificationSetting unify(Polynomial poly) throws PolynomialUnificationException, CloneException;
 
 }
