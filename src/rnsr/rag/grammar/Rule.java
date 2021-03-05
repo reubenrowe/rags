@@ -123,16 +123,19 @@ public	class		Rule
 		// Binding v_0
 		r.bind(cloneContext.get(m_arguments.get(0).get(0)), new Polynomial(answer));
 
-		// Unification of polynomial parameters to Polynomial arguments
 
+		// Unification of polynomial parameters to Polynomial arguments
 		for (int i = 0; i < answer.Identifier().Arity(); i++) {
 
 			//r.bind(cloneContext.get(this.m_arguments.get(i + 1)), answer.Arguments().get(i));	// OLD CODE - LEAVE HERE TEMP
 
 			try {
-
 				//answer - the polynomial holding the answer to match the variable(s) to
 				//m_args.get(i+1) - the polynomial holding the variable(s) in arg i
+				System.out.println("----------------------------------");
+				System.out.println(this);
+				System.out.println(answer);
+				System.out.println("----------------------------------");
 				newVars.putAll(m_arguments.get(i+1).unify(answer.Arguments().get(i)));
 
 			} catch (PolynomialUnificationException e) {
