@@ -314,7 +314,11 @@ public class ListEqualityExample extends CommandLineInputBase {
         args.add(new Polynomial(vars.get(1)));	// a
         c = new Configuration();
         c.add(new Pair(args.get(1), vars.get(2)));
-        c.add(new Pair(args.get(0), vars.get(3)));
+
+        answerArgs = new ArrayList<>();
+        answerArgs.add(new Polynomial(vars.get(1)));
+        c.add(new Pair(new Polynomial(new Answer(id_star, answerArgs)), vars.get(3)));
+
         poly = new Polynomial();
         poly.add(vars.get(2));
         poly.add(vars.get(3));

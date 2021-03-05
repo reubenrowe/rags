@@ -209,7 +209,6 @@ public	class		Polynomial
 	}
 
 	public VariableSet unify(Polynomial other) throws PolynomialUnificationException, CloneException {
-		System.out.println("---------------\nAttempting to unify: \n\t - " + this + "\n\t - " + other);
 		// Currently assuming only variables in this polynomial, string in other
 		VariableSet newBindings = new VariableSet();
 		Polynomial remainder = null;
@@ -221,7 +220,6 @@ public	class		Polynomial
 		}
 
 		for (IPolynomialTerm pt: this) {
-			System.out.println(" - Doing " + pt + " with remainder " + remainder);
 			if (remainder.Empty())
 				throw new PolynomialUnificationException("Ran out of polynomial terms to unify!");
 			IPolynomialTerm currentTerm = pt;
@@ -229,10 +227,7 @@ public	class		Polynomial
 			UnificationSetting u = currentTerm.unify(remainder);
 			remainder = u.getRemainder();
 			newBindings.putAll(u.getVariables());
-			System.out.println(" - Afterwards remainder: " + remainder);
-
 		}
-		System.out.println(" - After all LHS terms, remainder : '" + remainder + "'" + " - empty? " + remainder.Empty());
 		if (!remainder.Empty()) {
 			//System.out.println("Oh no, ran out of terms to unify!");
 			//throw new PolynomialUnificationException("Ran out of terms to unify!");

@@ -6,6 +6,7 @@ import rnsr.rag.grammar.interfaces.IPolynomialTerm;
 import rnsr.rag.parser.Parser;
 import rnsr.rag.parser.exception.ParseException;
 
+import java.util.ConcurrentModificationException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -74,10 +75,20 @@ public	class		CandidateSet
 		CandidateSet tempSet = new CandidateSet();
 
 		Iterator<SententialForm> i = this.iterator();
-		while (i.hasNext())
-		{
+		while (i.hasNext()) {
+
+
 			// Get the next sentential form in the candidate set
-			SententialForm currentForm = i.next();
+			SententialForm currentForm;
+			try {
+				currentForm = i.next();
+				System.out.println("====== DOING : " + currentForm);
+			} catch (ConcurrentModificationException e) {
+				e.printStackTrace();
+				System.exit(-1);
+				currentForm = null;
+			}
+
 
 			// Remove it from the original list
 			i.remove();
@@ -110,7 +121,7 @@ public	class		CandidateSet
 				if (t instanceof Variable)
 				{
 					// throw an error here as this is a problem with the algorithm, not the parse
-					if (((Variable) t).isConstrained()) this.add(currentForm);
+					if (((Variable) t).isConstrained()) tempSet.add(currentForm);
 					else throw new Error("Polynomial Term type different than expected: found Variable!");
 				}
 
@@ -162,6 +173,7 @@ public	class		CandidateSet
 
 				}
 			}
+			System.out.println("====== DONE WITH : " + currentForm + "\n\n");
 		}
 		this.addAll(tempSet);
 	}

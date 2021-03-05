@@ -120,7 +120,7 @@ public	class		Rule
 		InstantiatedRule r = new InstantiatedRule(clonedDerivative, newVars, clonedResult, newConds);
 
 
-		// Binding v_0
+		// Binding v_0 to answer
 		r.bind(cloneContext.get(m_arguments.get(0).get(0)), new Polynomial(answer));
 
 
@@ -132,10 +132,6 @@ public	class		Rule
 			try {
 				//answer - the polynomial holding the answer to match the variable(s) to
 				//m_args.get(i+1) - the polynomial holding the variable(s) in arg i
-				System.out.println("----------------------------------");
-				System.out.println(this);
-				System.out.println(answer);
-				System.out.println("----------------------------------");
 				newVars.putAll(m_arguments.get(i+1).unify(answer.Arguments().get(i)));
 
 			} catch (PolynomialUnificationException e) {
