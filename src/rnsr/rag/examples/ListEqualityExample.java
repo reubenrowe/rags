@@ -60,46 +60,22 @@ public class ListEqualityExample extends CommandLineInputBase {
         c.add(new Pair(new Polynomial(new Answer(eq_1, answerArgs)), vars.get(1)));
         g.addRule(start, new Rule(c, varSet, new Polynomial(vars.get(1)), args));
 
-        // _z1: LETTER, _z2: LETTER, _z1 != _z2; <not(_z1), #> -> <_z2, _v1>
+
+        // <eq(#), T> -> #
         vars = new ArrayList<>();
         varSet = new VariableSet();
-        for (int i = 0; i <= 3; i++) {
+        for (int i = 0; i <= 0; i++) {
             Variable v = new Variable();
             vars.add(i, v);
             varSet.put(v);
         }
-        vars.get(1).setType(new LetterType());
-        vars.get(2).setType(new LetterType());
-
-        conditions = new ArrayList<>();
-        conditions.add(new VariableCondition(vars.get(1), vars.get(2), VariableCondition.VariableConditionType.NE));
-
         args = new ArrayList<>();
         args.add(new Polynomial(vars.get(0)));
-        args.add(new Polynomial(vars.get(1)));
         c = new Configuration();
-        c.add(new Pair(new Polynomial(vars.get(2)), vars.get(3)));
-        g.addRule(not, new Rule(c, varSet, new Polynomial(new Answer(AnswerIdentifier.Lambda())), args, conditions));
-
-
-        // _t: WORD; <eq(_t), T> -> <_t, _v1>
-        vars = new ArrayList<>();
-        varSet = new VariableSet();
-        for (int i = 0; i <= 2; i++) {
-            Variable v = new Variable();
-            vars.add(i, v);
-            varSet.put(v);
-        }
-        vars.get(1).setType(new WordType());
-        args = new ArrayList<>();
-        args.add(new Polynomial(vars.get(0)));
-        args.add(new Polynomial(vars.get(1)));
-        c = new Configuration();
-        c.add(new Pair(args.get(1), vars.get(2)));
+        c.add(new Answer(AnswerIdentifier.Lambda()));
         g.addRule(eq_1, new Rule(c, varSet, new Polynomial(new Answer(true_terminal)), args));
 
-
-        // _t: WORD; <eq(#), F> -> <letter, _v1> <star(letter), _v2>
+        // <eq(#), F> -> <letter, _v1> <star(letter), _v2>
         vars = new ArrayList<>();
         varSet = new VariableSet();
         for (int i = 0; i <= 2; i++) {
@@ -139,30 +115,6 @@ public class ListEqualityExample extends CommandLineInputBase {
         g.addRule(eq_1, new Rule(c, varSet, new Polynomial(new Answer(false_terminal)), args));
 
 
-        // _z: LETTER, _t: WORD; <eq(_z_t), _v1> -> <_z, _v1> <eq(_t), _v2>
-        vars = new ArrayList<>();
-        varSet = new VariableSet();
-        for (int i = 0; i <= 4; i++) {
-            Variable v = new Variable();
-            vars.add(i, v);
-            varSet.put(v);
-        }
-        vars.get(1).setType(new LetterType());
-        vars.get(2).setType(new WordType());
-        args = new ArrayList<>();
-        args.add(new Polynomial(vars.get(0)));
-        poly = new Polynomial();
-        poly.add(vars.get(1));
-        poly.add(vars.get(2));
-        args.add(poly);
-        c = new Configuration();
-        c.add(new Pair(new Polynomial(vars.get(1)), vars.get(3)));
-        answerArgs = new ArrayList<>();
-        answerArgs.add(new Polynomial(vars.get(2)));
-        c.add(new Pair(new Polynomial(new Answer(eq_1, answerArgs)), vars.get(4)));
-        g.addRule(eq_1, new Rule(c, varSet, new Polynomial(vars.get(1)), args));
-
-
         // _z: LETTER, _t: WORD; <eq(_z_t), F> -> <not(_z), _v1> <star(letter), _v2>
         vars = new ArrayList<>();
         varSet = new VariableSet();
@@ -185,6 +137,30 @@ public class ListEqualityExample extends CommandLineInputBase {
         answerArgs.add(new Polynomial(new Answer(letter)));
         c.add(new Pair(new Polynomial(new Answer(id_star, answerArgs)), vars.get(4)));
         g.addRule(eq_2, new Rule(c, varSet, new Polynomial(new Answer(false_terminal)), args));
+
+
+        // _z: LETTER, _t: WORD; <eq(_z_t), _v1> -> <_z, _v1> <eq(_t), _v2>
+        vars = new ArrayList<>();
+        varSet = new VariableSet();
+        for (int i = 0; i <= 4; i++) {
+            Variable v = new Variable();
+            vars.add(i, v);
+            varSet.put(v);
+        }
+        vars.get(1).setType(new LetterType());
+        vars.get(2).setType(new WordType());
+        args = new ArrayList<>();
+        args.add(new Polynomial(vars.get(0)));
+        poly = new Polynomial();
+        poly.add(vars.get(1));
+        poly.add(vars.get(2));
+        args.add(poly);
+        c = new Configuration();
+        c.add(new Pair(new Polynomial(vars.get(1)), vars.get(3)));
+        answerArgs = new ArrayList<>();
+        answerArgs.add(new Polynomial(vars.get(2)));
+        c.add(new Pair(new Polynomial(new Answer(eq_1, answerArgs)), vars.get(4)));
+        g.addRule(eq_1, new Rule(c, varSet, new Polynomial(vars.get(1)), args));
 
 
         // <or, F> -> F F
