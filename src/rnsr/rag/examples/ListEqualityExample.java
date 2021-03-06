@@ -53,6 +53,10 @@ public class ListEqualityExample extends CommandLineInputBase {
             vars.add(i, v);
             varSet.put(v);
         }
+
+        vars.get(0).setTag("_v0 in 1");
+        vars.get(1).setTag("_v1 in 1");
+
         args = new ArrayList<>();
         args.add(new Polynomial(vars.get(0)));
         c = new Configuration();
@@ -71,6 +75,9 @@ public class ListEqualityExample extends CommandLineInputBase {
             vars.add(i, v);
             varSet.put(v);
         }
+
+        vars.get(0).setTag("_v0 in 2");
+
         args = new ArrayList<>();
         args.add(new Polynomial(vars.get(0)));
         args.add(new Polynomial(new Answer(AnswerIdentifier.Lambda())));
@@ -87,6 +94,11 @@ public class ListEqualityExample extends CommandLineInputBase {
             vars.add(i, v);
             varSet.put(v);
         }
+
+        vars.get(0).setTag("_v0 in 3");
+        vars.get(1).setTag("_v1 in 3");
+        vars.get(2).setTag("_v2 in 3");
+
         args = new ArrayList<>();
         args.add(new Polynomial(vars.get(0)));
         args.add(new Polynomial(new Answer(AnswerIdentifier.Lambda())));
@@ -111,6 +123,11 @@ public class ListEqualityExample extends CommandLineInputBase {
         vars.get(2).setType(new WordType());
         vars.get(1).setTag("_z in 4");
         vars.get(2).setTag("_t in 4");
+
+        vars.get(0).setTag("_v0 in 4");
+        vars.get(1).setTag("_z in 4");
+        vars.get(2).setTag("_t in 4");
+
         args = new ArrayList<>();
         args.add(new Polynomial(vars.get(0)));
         poly = new Polynomial();
@@ -133,8 +150,13 @@ public class ListEqualityExample extends CommandLineInputBase {
         }
         vars.get(1).setType(new LetterType());
         vars.get(2).setType(new WordType());
+
+        vars.get(0).setTag("_v0 in 5");
         vars.get(1).setTag("_z in 5");
         vars.get(2).setTag("_t in 5");
+        vars.get(3).setTag("_v1 in 5");
+        vars.get(4).setTag("_v1 in 5");
+
         args = new ArrayList<>();
         args.add(new Polynomial(vars.get(0)));
         args.add(new Polynomial(vars.get(1)));
@@ -160,8 +182,13 @@ public class ListEqualityExample extends CommandLineInputBase {
         }
         vars.get(1).setType(new LetterType());
         vars.get(2).setType(new WordType());
+
+        vars.get(0).setTag("_v0 in 6");
         vars.get(1).setTag("_z in 6");
         vars.get(2).setTag("_t in 6");
+        vars.get(3).setTag("_v1 in 6");
+        vars.get(4).setTag("_v1 in 6");
+
         args = new ArrayList<>();
         args.add(new Polynomial(vars.get(0)));
         poly = new Polynomial();
@@ -286,7 +313,8 @@ public class ListEqualityExample extends CommandLineInputBase {
 
         /* ***************** ADD ONS **********************/
 
-        // <star(a), λ> -> λ
+        // Star 1
+        // <star(_a), λ> -> λ
         vars = new ArrayList<Variable>();
         varSet = new VariableSet();
         for (int i = 0; i <= 1; i++) {
@@ -294,6 +322,10 @@ public class ListEqualityExample extends CommandLineInputBase {
             vars.add(i, v);
             varSet.put(v);
         }
+
+        vars.get(0).setTag("_v0 in Star 1");
+        vars.get(1).setTag("_a in Star 1");
+
         args = new ArrayList<Polynomial>();
         args.add(new Polynomial(vars.get(0)));	// star
         args.add(new Polynomial(vars.get(1)));	// a
@@ -301,6 +333,7 @@ public class ListEqualityExample extends CommandLineInputBase {
         c.add(new Answer(AnswerIdentifier.Lambda()));
         g.addRule(id_star, new Rule(c, varSet, new Polynomial(new Answer(AnswerIdentifier.Lambda())), args));
 
+        // Star 2
         // <star(_a), _v1_v2> -> <a, _v1> <star(_a), _v2>
         vars = new ArrayList<Variable>();
         varSet = new VariableSet();
@@ -309,6 +342,12 @@ public class ListEqualityExample extends CommandLineInputBase {
             vars.add(i, v);
             varSet.put(v);
         }
+
+        vars.get(0).setTag("_v0 in Star 2");
+        vars.get(1).setTag("_a in Star 2");
+        vars.get(2).setTag("_v1 in Star 2");
+        vars.get(3).setTag("_v2 in Star 2");
+
         args = new ArrayList<Polynomial>();
         args.add(new Polynomial(vars.get(0)));	// star
         args.add(new Polynomial(vars.get(1)));	// a
@@ -324,7 +363,8 @@ public class ListEqualityExample extends CommandLineInputBase {
         poly.add(vars.get(3));
         g.addRule(id_star, new Rule(c, varSet, poly, args));
 
-        // _z: LETTER; <letter, #> -> <_z, _v2>
+        // Letter
+        // _z: LETTER; <letter, #> -> <_z, _v1>
         vars = new ArrayList<Variable>();
         varSet = new VariableSet();
         for (int i = 0; i <= 2; i++) {
@@ -332,15 +372,21 @@ public class ListEqualityExample extends CommandLineInputBase {
             vars.add(i, v);
             varSet.put(v);
         }
+
+        vars.get(0).setTag("_v0 in Letter");
+        vars.get(1).setTag("_z in Letter");
+        vars.get(2).setTag("_v1 in Letter");
+
         vars.get(1).setType(new LetterType());
         args = new ArrayList<Polynomial>();
-        args.add(new Polynomial(vars.get(0)));	// star
-        args.add(new Polynomial(vars.get(1)));	// a
+        args.add(new Polynomial(vars.get(0)));	// v0
+        args.add(new Polynomial(vars.get(1)));	// z
         c = new Configuration();
         c.add(new Pair(new Polynomial(vars.get(1)), vars.get(2)));
         g.addRule(letter, new Rule(c, varSet, new Polynomial(new Answer(AnswerIdentifier.Lambda())), args));
 
-        // _z: LETTER; <echo, _v2> -> <_z, _v2>
+        // Echo
+        // _z: LETTER; <echo, _v1> -> <_z, _v1>
         vars = new ArrayList<Variable>();
         varSet = new VariableSet();
         for (int i = 0; i <= 2; i++) {
@@ -348,6 +394,11 @@ public class ListEqualityExample extends CommandLineInputBase {
             vars.add(i, v);
             varSet.put(v);
         }
+
+        vars.get(0).setTag("_v0 in Echo");
+        vars.get(1).setTag("_z in Echo");
+        vars.get(2).setTag("_v1 in Echo");
+
         vars.get(1).setType(new LetterType());
         args = new ArrayList<Polynomial>();
         args.add(new Polynomial(vars.get(0)));	// star

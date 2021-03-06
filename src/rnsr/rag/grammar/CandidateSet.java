@@ -213,11 +213,21 @@ public	class		CandidateSet
 				}
 			} else if (headTerm instanceof Pair && discardNonMatching) {
 
+				System.out.println(" + " + headTerm);
+
 				Variable unbound = (Variable) ((Pair) headTerm).Left().get(0);
+
 				try {
+
 					unbound.resolveForConstraints(input.Identifier().Identifier(), current, this);
-					this.remove(current);
-					this.advance(input, true);
+					try {
+						current.consumeToken(input);
+					} catch (AnswerMismatchException e) {
+						throw new Error(e);
+					}
+					//this.remove(current);
+					//this.advance(input, true);
+
 				} catch (CloneException e) {
 					throw new Error(e);
 				}

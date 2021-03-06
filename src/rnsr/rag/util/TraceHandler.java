@@ -25,11 +25,14 @@ public class TraceHandler {
             out.close();
         } catch (IOException e) {
             e.printStackTrace();
-        }    }
+        }
+    }
 
     public void printTraceToFile(String trace) {
         try {
+            openFile();
             out.write(trace);
+            out.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
