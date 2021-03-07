@@ -87,7 +87,7 @@ public	class		Rule
 	 * Creates an instance of this rule form
 	 * @param answer - the answer to instantiate the rule with
 	 */
-	public InstantiatedRule instantiate(Answer answer) throws	CloneException,
+	public InstantiatedRule instantiate(Answer answer, VariableSet sfBindings) throws	CloneException,
 																VariableNotFoundException
 	{
 		// Create a new variable set and context mapping
@@ -125,6 +125,8 @@ public	class		Rule
 				//answer - the polynomial holding the answer to match the variable(s) to
 				//m_args.get(i+1) - the polynomial holding the variable(s) in arg i
 				System.out.println("Unifying: [" + m_arguments.get(i+1) + "] and [" + answer.Arguments().get(i) + "]");
+
+				
 				newVars.putAll(m_arguments.get(i+1).unify(answer.Arguments().get(i)));
 
 			} catch (PolynomialUnificationException e) {

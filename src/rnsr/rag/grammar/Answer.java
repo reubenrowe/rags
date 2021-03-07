@@ -342,4 +342,17 @@ public	class		Answer
 
 	}
 
+	public Polynomial resolveInnerVariables(VariableSet sfBindings) {
+		Answer newAns = new Answer();
+		newAns.m_identifier = this.m_identifier;
+		if (this.m_arguments != null) {
+			newAns.m_arguments = new ArrayList<>();
+			for (Polynomial p: this.m_arguments) {
+				p.resolveVariablesInPolynomial(sfBindings);
+				newAns.m_arguments.add(p);
+			}
+		}
+		return new Polynomial(newAns);
+	}
+
 }

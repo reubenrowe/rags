@@ -215,7 +215,7 @@ public	class		SententialForm
 			throw new InvalidTermException("Polynomial term contained in the head pair is not an Answer!");
 		}
 		
-		InstantiatedRule ruleInstance = rule.instantiate((Answer) t);
+		InstantiatedRule ruleInstance = rule.instantiate(((Answer) t), this.m_variables);
 		clone.applyRule(ruleInstance);
 		
 		return clone;

@@ -236,5 +236,16 @@ public	class		Polynomial
 		}
 		return newBindings;
 	}
+
+	public Polynomial resolveVariablesInPolynomial(VariableSet sfBindings) {
+		Polynomial p = new Polynomial();
+
+		for (int i = 0; i < this.size(); i++) {
+			IPolynomialTerm pt = this.get(i);
+			p.add(pt.resolveInnerVariables(sfBindings));
+		}
+
+		return p;
+	}
 	
 }

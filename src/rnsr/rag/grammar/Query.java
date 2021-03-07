@@ -131,5 +131,9 @@ public	class		Query
 		return null;
 	}
 
+	public Polynomial resolveInnerVariables(VariableSet sfBindings) {
+		return null;
+	}
+
 
 }

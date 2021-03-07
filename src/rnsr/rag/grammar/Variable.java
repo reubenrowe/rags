@@ -180,4 +180,10 @@ public	class		Variable
 		return new UnificationSetting(bindings, rest);
 	}
 
+	public Polynomial resolveInnerVariables(VariableSet sfBindings) {
+
+		return sfBindings.get(this);
+
+	}
+
 }
