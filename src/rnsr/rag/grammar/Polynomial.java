@@ -33,8 +33,7 @@ public	class		Polynomial
 	/**
 	 * IContextClonable method - clones this polynomial
 	 */
-	public Polynomial clone(ContextMapping context) throws CloneException
-	{
+	public Polynomial clone(ContextMapping context) throws CloneException {
 		Polynomial clone = new Polynomial();
 		for (IPolynomialTerm t : this) {
 			clone.add((IPolynomialTerm) ((IContextClonable) t).clone(context));
@@ -213,11 +212,13 @@ public	class		Polynomial
 		VariableSet newBindings = new VariableSet();
 		Polynomial remainder = null;
 
-		try {
-			remainder = other.clone(new ContextMapping());
-		} catch (CloneException e) {
-			e.printStackTrace();
-		}
+		//try {
+		//	System.out.println("Trying to clone [" + other + "]");
+			remainder = other;
+		//	System.out.println(" - Done with cloning");
+		//} catch (CloneException e) {
+		//	e.printStackTrace();
+		//}
 
 		for (IPolynomialTerm pt: this) {
 			if (remainder.Empty())

@@ -89,31 +89,32 @@ public	class		Variable
 			String aID = a.Identifier().Identifier();		// Assuming a is terminal
 			if (aID.startsWith(input)) {
 
-				ContextMapping cloneContext = new ContextMapping();
-				SententialForm clonedForm = currentForm.cloneObject(cloneContext);
+				//ContextMapping cloneContext = new ContextMapping();
+				//SententialForm clonedForm = currentForm.cloneObject(cloneContext);
+				SententialForm clonedForm = currentForm;
 
 				if (!type.isConcat()) {
-					clonedForm.m_variables.put(cloneContext.get(this), new Polynomial(a));
-					clonedForm.m_variables.put(cloneContext.get(originalRHS), new Polynomial(cloneContext.get(this)));
+					clonedForm.m_variables.put(this, new Polynomial(a));
+					clonedForm.m_variables.put(originalRHS, new Polynomial(this));
 					clonedForm.m_configuration.add(0, new Answer(new AnswerIdentifier(aID)));
-					candidates.add(clonedForm);
+					//candidates.add(clonedForm);
 				} else {
 
 					Polynomial currentPolyForVar;
 					if (currentForm.m_variables.get(this) != null) {
-						currentPolyForVar = currentForm.m_variables.get(this).clone(cloneContext);
+						currentPolyForVar = currentForm.m_variables.get(this);
 					} else currentPolyForVar = new Polynomial();
 					currentPolyForVar.add(a);
 
-					clonedForm.m_variables.put(cloneContext.get(this), currentPolyForVar);
-					clonedForm.m_variables.put(cloneContext.get(originalRHS), new Polynomial(cloneContext.get(this)));
+					clonedForm.m_variables.put(this, currentPolyForVar);
+					clonedForm.m_variables.put(originalRHS, new Polynomial(this));
 
 					clonedForm.m_configuration.add(0, new Answer(new AnswerIdentifier(aID)));
-					candidates.add(clonedForm);
+					//candidates.add(clonedForm);
 
 					ContextMapping cloneContext2 = new ContextMapping();
 					SententialForm clonedForm2 = clonedForm.cloneObject(cloneContext2);
-					clonedForm2.m_configuration.add(1, new Pair(new Polynomial(cloneContext2.get(cloneContext.get(this))), cloneContext2.get(cloneContext.get(originalRHS))));
+					clonedForm2.m_configuration.add(1, new Pair(new Polynomial(cloneContext2.get(this)), cloneContext2.get(originalRHS)));
 					candidates.add(clonedForm2);
 
 				}

@@ -116,14 +116,6 @@ public	class		Rule
 			}
 		}
 
-		// Construct the instantiated rule
-		InstantiatedRule r = new InstantiatedRule(clonedDerivative, newVars, clonedResult, newConds);
-
-
-		// Binding v_0 to answer
-		r.bind(cloneContext.get(m_arguments.get(0).get(0)), new Polynomial(answer));
-
-
 		// Unification of polynomial parameters to Polynomial arguments
 		for (int i = 0; i < answer.Identifier().Arity(); i++) {
 
@@ -132,6 +124,7 @@ public	class		Rule
 			try {
 				//answer - the polynomial holding the answer to match the variable(s) to
 				//m_args.get(i+1) - the polynomial holding the variable(s) in arg i
+				System.out.println("Unifying: [" + m_arguments.get(i+1) + "] and [" + answer.Arguments().get(i) + "]");
 				newVars.putAll(m_arguments.get(i+1).unify(answer.Arguments().get(i)));
 
 			} catch (PolynomialUnificationException e) {
@@ -139,6 +132,13 @@ public	class		Rule
 			}
 
 		}
+
+		// Construct the instantiated rule
+		InstantiatedRule r = new InstantiatedRule(clonedDerivative, newVars, clonedResult, newConds);
+
+
+		// Binding v_0 to answer
+		r.bind(cloneContext.get(m_arguments.get(0).get(0)), new Polynomial(answer));
 		
 		return r;
 	}
