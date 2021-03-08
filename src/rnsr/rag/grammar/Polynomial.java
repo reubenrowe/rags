@@ -238,13 +238,19 @@ public	class		Polynomial
 	}
 
 	public Polynomial resolveVariablesInPolynomial(VariableSet sfBindings) {
-		Polynomial p = new Polynomial();
 
+		System.out.println(" -- Attempting to resolve inner variables in Polynomial : [ " + this + "]");
+
+		Polynomial p = new Polynomial();
 		for (int i = 0; i < this.size(); i++) {
 			IPolynomialTerm pt = this.get(i);
-			p.add(pt.resolveInnerVariables(sfBindings));
-		}
 
+			System.out.println("\t > " + pt);
+
+			Polynomial p2 = pt.resolveInnerVariables(sfBindings);
+			p.addAll(p2);
+		}
+		System.out.println(" -- Done resolving inner variables");
 		return p;
 	}
 	

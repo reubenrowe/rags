@@ -150,7 +150,16 @@ public	class		Variable
 		VariableSet bindings = new VariableSet();
 		Answer polyAnswer = (Answer) poly.get(0);
 		String polyAnswerID = polyAnswer.Identifier().Identifier();
+
+
+
+		if (type == null) { // If no type, we simply take the entire polynomial
+			bindings.put(this, poly);
+			return new UnificationSetting(bindings, new Polynomial());
+		}
+
 		HashSet<Answer> typePossibilities = (HashSet<Answer>) type.getPool();
+
 		if (!type.isConcat()) { // atomic Havetype, e.g. LETTER.
 			for (Answer a: typePossibilities) {
 				String aID = a.Identifier().Identifier();

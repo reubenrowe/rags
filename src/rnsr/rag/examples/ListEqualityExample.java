@@ -187,7 +187,7 @@ public class ListEqualityExample extends CommandLineInputBase {
         vars.get(1).setTag("_z in 6");
         vars.get(2).setTag("_t in 6");
         vars.get(3).setTag("_v1 in 6");
-        vars.get(4).setTag("_v1 in 6");
+        vars.get(4).setTag("_v2 in 6");
 
         args = new ArrayList<>();
         args.add(new Polynomial(vars.get(0)));

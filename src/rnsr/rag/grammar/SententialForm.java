@@ -191,7 +191,8 @@ public	class		SententialForm
 														VariableNotFoundException
 	{
 		// Clone the sentential form
-		SententialForm clone = this.cloneObject();
+		ContextMapping ct = new ContextMapping();
+		SententialForm clone = this.cloneObject(ct);
 
 		// Get the head term
 		IConfigurationTerm head = clone.Head();
@@ -215,7 +216,7 @@ public	class		SententialForm
 			throw new InvalidTermException("Polynomial term contained in the head pair is not an Answer!");
 		}
 		
-		InstantiatedRule ruleInstance = rule.instantiate(((Answer) t), this.m_variables);
+		InstantiatedRule ruleInstance = rule.instantiate(((Answer) t), clone.m_variables);
 		clone.applyRule(ruleInstance);
 		
 		return clone;
