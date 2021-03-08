@@ -16,6 +16,7 @@ public class WordType implements IVariableType {
             pool.add(new Answer(new AnswerIdentifier(String.valueOf(c))));
             pool.add(new Answer(new AnswerIdentifier(String.valueOf(Character.toUpperCase(c)))));
         }
+        pool.add(new Answer(AnswerIdentifier.Lambda()));
     }
 
     public boolean match(String token) {

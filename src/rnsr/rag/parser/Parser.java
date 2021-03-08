@@ -225,6 +225,7 @@ public class Parser
 
 		// discard any non-empty forms that are left - they cannot match the input at this point!
 		candidate.removeNonEmptyForms();
+		printCSRemoveNonEmpty(candidate);
 
 		// Return result set
 		Set<ExtendedAnswer> resultSet = null;
@@ -299,6 +300,13 @@ public class Parser
 		StringBuilder trace = new StringBuilder();
 		String buf = formatTraceBuffer();
 		trace.append(getCSFormatted(buf, "fork", cs));
+		traceHandler.printTraceToFile(trace.toString());
+	}
+
+	private void printCSRemoveNonEmpty(CandidateSet cs) {
+		StringBuilder trace = new StringBuilder();
+		String buf = formatTraceBuffer();
+		trace.append(getCSFormatted(buf, "remove non-empty", cs));
 		traceHandler.printTraceToFile(trace.toString());
 	}
 
