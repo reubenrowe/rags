@@ -16,7 +16,6 @@ public class ListEqualityExample extends CommandLineInputBase {
         // Construct Answer Identifier set
         AnswerIdentifier not = new AnswerIdentifier("not", 1);
         AnswerIdentifier eq_1 = new AnswerIdentifier("eq", 1);
-        AnswerIdentifier eq_2 = new AnswerIdentifier("eq", 2);
         AnswerIdentifier id_star = new AnswerIdentifier("star", 1);
         AnswerIdentifier letter = new AnswerIdentifier("letter", 0);
         AnswerIdentifier echo = new AnswerIdentifier("echo", 0);
@@ -168,7 +167,7 @@ public class ListEqualityExample extends CommandLineInputBase {
         answerArgs = new ArrayList<>();
         answerArgs.add(new Polynomial(new Answer(letter)));
         c.add(new Pair(new Polynomial(new Answer(id_star, answerArgs)), vars.get(4)));
-        g.addRule(eq_2, new Rule(c, varSet, new Polynomial(new Answer(false_terminal)), args));
+        g.addRule(eq_1, new Rule(c, varSet, new Polynomial(new Answer(false_terminal)), args));
 
 
         // 6
