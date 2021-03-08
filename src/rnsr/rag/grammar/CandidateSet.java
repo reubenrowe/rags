@@ -120,8 +120,16 @@ public	class		CandidateSet
 				// as we expect the sentential form normalise() operation to resolve the variable for us
 				if (t instanceof Variable)
 				{
+
+					Variable currentVar = (Variable) t;
+					if (currentForm.m_variables.get(currentVar) != null) {
+
+						// Some mechanism for replacing the pair of <v1, v2> with the polynomial v1 is bound to
+
+					} else if (((Variable) t).isConstrained()) {
+						tempSet.add(currentForm);
+					}
 					// throw an error here as this is a problem with the algorithm, not the parse
-					if (((Variable) t).isConstrained()) tempSet.add(currentForm);
 					else throw new Error("Polynomial Term type different than expected: found Variable!");
 				}
 
@@ -221,6 +229,7 @@ public	class		CandidateSet
 
 					unbound.resolveForConstraints(input.Identifier().Identifier(), current, this);
 					try {
+						System.out.println(current);
 						current.consumeToken(input);
 					} catch (AnswerMismatchException e) {
 						throw new Error(e);

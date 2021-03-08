@@ -2,6 +2,7 @@ package rnsr.rag.grammar;
 
 import rnsr.rag.grammar.exception.CloneException;
 import rnsr.rag.grammar.exception.PolynomialUnificationException;
+import rnsr.rag.grammar.interfaces.IConfigurationTerm;
 import rnsr.rag.grammar.interfaces.IContextClonable;
 import rnsr.rag.grammar.interfaces.IPolynomialTerm;
 import rnsr.rag.grammar.interfaces.IVariableType;
@@ -85,6 +86,16 @@ public	class		Variable
 
 		Pair p = (Pair) currentForm.m_configuration.remove(0);
 		Variable originalRHS = p.Right();
+
+		if (currentForm.m_variables.get(this) != null) { // Variable already bound to something
+			Polynomial varPoly = currentForm.m_variables.get(this);
+			Configuration front = new Configuration();
+			currentForm.m_variables.put(p.Right(), varPoly);
+			for (IPolynomialTerm pt: varPoly) front.add((IConfigurationTerm) pt);
+			currentForm.m_configuration.addAll(0, front);
+			return;
+		}
+
 		for (Answer a: (HashSet<Answer>) type.getPool()) {
 			String aID = a.Identifier().Identifier();		// Assuming a is terminal
 			if (aID.startsWith(input)) {

@@ -42,6 +42,9 @@ public class UnifyTestExample extends CommandLineInputBase {
             varSet.put(v);
         }
 
+        vars.get(0).setTag("_v0 in Test");
+        vars.get(1).setTag("_v1 in Test");
+
         args = new ArrayList<>();
         args.add(new Polynomial(vars.get(0)));
 
@@ -65,6 +68,12 @@ public class UnifyTestExample extends CommandLineInputBase {
 
         vars.get(1).setType(new LetterType());
         vars.get(2).setType(new WordType());
+
+        vars.get(0).setTag("_v0 in Test");
+        vars.get(1).setTag("_z in Test");
+        vars.get(2).setTag("_t in Test");
+        vars.get(3).setTag("_v1 in Test");
+        vars.get(4).setTag("_v2 in Test");
 
         args = new ArrayList<>();
         args.add(new Polynomial(vars.get(0)));
