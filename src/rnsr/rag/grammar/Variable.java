@@ -87,7 +87,7 @@ public	class		Variable
 		Pair p = (Pair) currentForm.m_configuration.remove(0);
 		Variable originalRHS = p.Right();
 
-		if (currentForm.m_variables.get(this) != null) { // Variable already bound to something
+		if (currentForm.m_variables.get(this) != null && !currentForm.m_variables.get(this).Empty()) { // Variable already bound to something
 			Polynomial varPoly = currentForm.m_variables.get(this);
 			Configuration front = new Configuration();
 			currentForm.m_variables.put(p.Right(), varPoly);

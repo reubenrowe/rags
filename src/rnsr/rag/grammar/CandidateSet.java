@@ -227,9 +227,11 @@ public	class		CandidateSet
 
 				try {
 
+					System.out.println("+b - " + unbound);
 					unbound.resolveForConstraints(input.Identifier().Identifier(), current, this);
+					System.out.println("+a - " + current);
+
 					try {
-						System.out.println(current);
 						current.consumeToken(input);
 					} catch (AnswerMismatchException e) {
 						throw new Error(e);
