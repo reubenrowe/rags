@@ -158,8 +158,11 @@ public class ListEqualityExample extends CommandLineInputBase {
 
         args = new ArrayList<>();
         args.add(new Polynomial(vars.get(0)));
-        args.add(new Polynomial(vars.get(1)));
-        args.add(new Polynomial(vars.get(2)));
+        poly = new Polynomial();
+        poly.add(vars.get(1));
+        poly.add(vars.get(2));
+        args.add(poly);
+
         c = new Configuration();
         answerArgs = new ArrayList<>();
         answerArgs.add(new Polynomial(vars.get(1)));
@@ -405,6 +408,36 @@ public class ListEqualityExample extends CommandLineInputBase {
         c = new Configuration();
         c.add(new Pair(new Polynomial(vars.get(1)), vars.get(2)));
         g.addRule(echo, new Rule(c, varSet, new Polynomial(vars.get(2)), args));
+
+
+        // Not
+        // _z1: LETTER, _z2: LETTER; <not(_z1) #> -> <_z2, _v1>
+        vars = new ArrayList<Variable>();
+        varSet = new VariableSet();
+        for (int i = 0; i <= 3; i++) {
+            Variable v = new Variable();
+            vars.add(i, v);
+            varSet.put(v);
+        }
+
+        vars.get(0).setTag("_v0 in Not");
+        vars.get(1).setTag("_z1 in Not");
+        vars.get(2).setTag("_z2 in Not");
+        vars.get(3).setTag("_v1 in Not");
+
+        vars.get(2).setType(new LetterType());
+        vars.get(2).setType(new LetterType());
+
+        conditions = new ArrayList<>();
+        conditions.add(new VariableCondition(vars.get(1), vars.get(2), VariableCondition.VariableConditionType.NE));
+
+        args = new ArrayList<Polynomial>();
+        args.add(new Polynomial(vars.get(0))); // _v0
+        args.add(new Polynomial(vars.get(1))); // _z1
+
+        c = new Configuration();
+        c.add(new Pair(new Polynomial(vars.get(2)), vars.get(3)));
+        g.addRule(not, new Rule(c, varSet, new Polynomial(new Answer(AnswerIdentifier.Lambda())), args, conditions));
 
         /* ****************************************/
 

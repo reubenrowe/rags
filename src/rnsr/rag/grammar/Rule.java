@@ -90,6 +90,7 @@ public	class		Rule
 	public InstantiatedRule instantiate(Answer answer, VariableSet sfBindings) throws	CloneException,
 																VariableNotFoundException
 	{
+
 		// Create a new variable set and context mapping
 		VariableSet newVars = new VariableSet();
 		ContextMapping cloneContext = new ContextMapping();

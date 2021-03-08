@@ -221,8 +221,12 @@ public	class		Polynomial
 		//}
 
 		for (IPolynomialTerm pt: this) {
+
+
 			if (remainder.Empty())
 				throw new PolynomialUnificationException("Ran out of polynomial terms to unify!");
+
+
 			IPolynomialTerm currentTerm = pt;
 
 			UnificationSetting u = currentTerm.unify(remainder);

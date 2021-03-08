@@ -201,9 +201,7 @@ public	class		Variable
 	}
 
 	public Polynomial resolveInnerVariables(VariableSet sfBindings) {
-
 		return sfBindings.get(this);
-
 	}
 
 }
