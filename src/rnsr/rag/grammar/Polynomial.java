@@ -216,8 +216,13 @@ public	class		Polynomial
 		VariableSet newBindings = new VariableSet();
 		Polynomial remainder = null;
 
+		System.out.println("\n\n");
+		System.out.println("Unifying: ");
+		System.out.println(" - 1. " + this);
+		System.out.println(" - 2. " + other);
+
 		if (this.onlyLambda()) { // Argument of Lambda/# - as in '<eq(#), T> -> #' and others
-			if (!other.onlyLambda()) { throw new UnificationLambdaException(); }
+			if (!other.onlyLambda()) { System.out.println("Can't unify non-empty with lambda.");throw new UnificationLambdaException(); }
 			else return new VariableSet();
 		}
 
@@ -245,6 +250,8 @@ public	class		Polynomial
 			//throw new PolynomialUnificationException("Ran out of terms to unify!");
 			//return new VariableSet(); // Return empty bindings since none have been made
 		}
+		System.out.println("Out:");
+		for (Variable v: newBindings.keySet()) System.out.println(" > " + v + "  -->  " + newBindings.get(v));
 		return newBindings;
 	}
 

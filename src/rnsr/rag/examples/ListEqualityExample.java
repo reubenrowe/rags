@@ -24,8 +24,8 @@ public class ListEqualityExample extends CommandLineInputBase {
 
         AnswerIdentifier start = new AnswerIdentifier("start", 0);
 
-        AnswerIdentifier true_terminal = new AnswerIdentifier("t");
-        AnswerIdentifier false_terminal = new AnswerIdentifier("f");
+        AnswerIdentifier true_terminal = new AnswerIdentifier("TRUE");
+        AnswerIdentifier false_terminal = new AnswerIdentifier("FALSE");
         AnswerIdentifier nil_terminal = new AnswerIdentifier("nil");
 
         Grammar g = new Grammar(start);
@@ -174,7 +174,7 @@ public class ListEqualityExample extends CommandLineInputBase {
 
 
         // 6
-        // _z: LETTER, _t: WORD; <eq(_z_t), _v1> -> <_z, _v1> <eq(_t), _v2>
+        // _z: LETTER, _t: WORD; <eq(_z_t), _v2> -> <_z, _v1> <eq(_t), _v2>
         vars = new ArrayList<>();
         varSet = new VariableSet();
         for (int i = 0; i <= 4; i++) {
@@ -202,7 +202,7 @@ public class ListEqualityExample extends CommandLineInputBase {
         answerArgs = new ArrayList<>();
         answerArgs.add(new Polynomial(vars.get(2)));
         c.add(new Pair(new Polynomial(new Answer(eq_1, answerArgs)), vars.get(4)));
-        g.addRule(eq_1, new Rule(c, varSet, new Polynomial(vars.get(1)), args));
+        g.addRule(eq_1, new Rule(c, varSet, new Polynomial(vars.get(4)), args));
 
 
         // <or, F> -> F F
