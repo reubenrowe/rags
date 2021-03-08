@@ -175,9 +175,14 @@ public	class		CandidateSet
 					// Loop through each rule returned and apply it.
 					for (Rule r : ruleSet)
 					{
-						tempSet.add(currentForm.applyRule(r));
-					}
 
+						try {
+							tempSet.add(currentForm.applyRule(r));
+						} catch (UnificationLambdaException e) {
+							continue; // Rule arg requires lambda, but non-empty arg given
+						}
+
+					}
 				}
 			}
 		}

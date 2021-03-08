@@ -325,7 +325,7 @@ public	class		Answer
 				for (int i = 0; i < this.m_arguments.size(); i++) {
 					try {
 						newBindings.putAll(this.m_arguments.get(i).unify(otherAns.m_arguments.get(i)));
-					} catch (PolynomialUnificationException e) {
+					} catch (PolynomialUnificationException | UnificationLambdaException e) {
 						e.printStackTrace();
 					}
 				}

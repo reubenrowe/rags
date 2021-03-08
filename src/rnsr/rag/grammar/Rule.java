@@ -2,6 +2,7 @@ package rnsr.rag.grammar;
 
 import rnsr.rag.grammar.exception.CloneException;
 import rnsr.rag.grammar.exception.PolynomialUnificationException;
+import rnsr.rag.grammar.exception.UnificationLambdaException;
 import rnsr.rag.grammar.exception.VariableNotFoundException;
 import rnsr.rag.grammar.interfaces.IPolynomialTerm;
 
@@ -87,9 +88,7 @@ public	class		Rule
 	 * Creates an instance of this rule form
 	 * @param answer - the answer to instantiate the rule with
 	 */
-	public InstantiatedRule instantiate(Answer answer, VariableSet sfBindings) throws	CloneException,
-																VariableNotFoundException
-	{
+	public InstantiatedRule instantiate(Answer answer, VariableSet sfBindings) throws CloneException, VariableNotFoundException, UnificationLambdaException {
 
 		// Create a new variable set and context mapping
 		VariableSet newVars = new VariableSet();
@@ -136,6 +135,7 @@ public	class		Rule
 
 			} catch (PolynomialUnificationException e) {
 				e.printStackTrace();	// Temporary lazy exception handling
+				System.exit(-1);
 			}
 
 		}

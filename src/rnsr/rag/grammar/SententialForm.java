@@ -186,10 +186,10 @@ public	class		SententialForm
 	 * Instantiates the given rule using a clone of this sentential form and then
 	 * applies the rule to the cloned form, returning the result
 	 */
-	public SententialForm applyRule(Rule rule) throws	CloneException,
-														InvalidTermException,
-														VariableNotFoundException
-	{
+	public SententialForm applyRule(Rule rule) throws CloneException,
+			InvalidTermException,
+			VariableNotFoundException,
+			UnificationLambdaException {
 		// Clone the sentential form
 		ContextMapping ct = new ContextMapping();
 		SententialForm clone = this.cloneObject(ct);

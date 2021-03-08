@@ -136,6 +136,10 @@ public	class		Polynomial
 	{
 		return (this.size() == 0);
 	}
+
+	public boolean onlyLambda() {
+		return this.size() == 1 && this.get(0) instanceof Answer && ((Answer)this.get(0)).Identifier().Identifier().equals("");
+	}
 	
 	/**
 	 * Overload method to check the equality of polynomials.
@@ -207,10 +211,15 @@ public	class		Polynomial
 		return sb.toString();
 	}
 
-	public VariableSet unify(Polynomial other) throws PolynomialUnificationException, CloneException {
+	public VariableSet unify(Polynomial other) throws PolynomialUnificationException, CloneException, UnificationLambdaException {
 		// Currently assuming only variables in this polynomial, string in other
 		VariableSet newBindings = new VariableSet();
 		Polynomial remainder = null;
+
+		if (this.onlyLambda()) { // Argument of Lambda/# - as in '<eq(#), T> -> #' and others
+			if (!other.onlyLambda()) { throw new UnificationLambdaException(); }
+			else return new VariableSet();
+		}
 
 		//try {
 		//	System.out.println("Trying to clone [" + other + "]");
@@ -221,22 +230,18 @@ public	class		Polynomial
 		//}
 
 		for (IPolynomialTerm pt: this) {
-
-
 			if (remainder.Empty())
 				throw new PolynomialUnificationException("Ran out of polynomial terms to unify!");
-
-
 			IPolynomialTerm currentTerm = pt;
-
 			UnificationSetting u = currentTerm.unify(remainder);
 			remainder = u.getRemainder();
 			newBindings.putAll(u.getVariables());
 		}
 		if (!remainder.Empty()) {
-			//System.out.println("Oh no, ran out of terms to unify!");
+			System.out.println("Oh no, ran out of terms to unify!");
+			System.exit(-1);
 			//throw new PolynomialUnificationException("Ran out of terms to unify!");
-			return new VariableSet(); // Return empty bindings since none have been made
+			//return new VariableSet(); // Return empty bindings since none have been made
 		}
 		return newBindings;
 	}
