@@ -82,7 +82,6 @@ public	class		CandidateSet
 			SententialForm currentForm;
 			try {
 				currentForm = i.next();
-				System.out.println("====== DOING : " + currentForm);
 			} catch (ConcurrentModificationException e) {
 				e.printStackTrace();
 				System.exit(-1);
@@ -181,7 +180,6 @@ public	class		CandidateSet
 
 				}
 			}
-			System.out.println("====== DONE WITH : " + currentForm + "\n\n");
 		}
 		this.addAll(tempSet);
 	}
@@ -220,17 +218,9 @@ public	class		CandidateSet
 					throw new Error(e);
 				}
 			} else if (headTerm instanceof Pair && discardNonMatching) {
-
-				System.out.println(" + " + headTerm);
-
 				Variable unbound = (Variable) ((Pair) headTerm).Left().get(0);
-
 				try {
-
-					System.out.println("+b - " + unbound);
 					unbound.resolveForConstraints(input.Identifier().Identifier(), current, this);
-					System.out.println("+a - " + current);
-
 					try {
 						current.consumeToken(input);
 					} catch (AnswerMismatchException e) {

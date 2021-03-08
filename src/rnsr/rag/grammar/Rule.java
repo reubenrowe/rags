@@ -116,16 +116,6 @@ public	class		Rule
 			}
 		}
 
-		System.out.println("++++++  IN ");
-		for (Variable k: newVars.keySet()) System.out.println("\t + " + k + "  -->  " + newVars.get(k));
-		if (answer.Arguments() != null) {
-			System.out.println("\t---");
-			for (Polynomial p : answer.Arguments()) System.out.println("\t + [ " + p + " ]");
-		}
-		System.out.println("\t---");
-		for (Variable k: sfBindings.keySet()) System.out.println("\t + " + k + "  -->  " + sfBindings.get(k));
-		System.out.println("++++++");
-
 		// Unification of polynomial parameters to Polynomial arguments
 		for (int i = 0; i < answer.Identifier().Arity(); i++) {
 
@@ -135,7 +125,6 @@ public	class		Rule
 				//m_args.get(i+1) - the polynomial holding the variable(s) in arg i
 
 				Polynomial newAnswerArgs = answer.Arguments().get(i).resolveVariablesInPolynomial(sfBindings);
-				System.out.println("Unifying: [" + m_arguments.get(i+1) + "] and [" + newAnswerArgs + "]");
 				VariableSet unifyBindings = m_arguments.get(i+1).unify(newAnswerArgs);
 
 				for (Variable v: unifyBindings.keySet()) { // Because variables inside of arguments aren't their cloned partners
@@ -150,13 +139,8 @@ public	class		Rule
 
 		}
 
-		System.out.println("++++++  OUT ");
-		for (Variable k: newVars.keySet()) System.out.println("\t + " + k + "  -->  " + newVars.get(k));
-		System.out.println("++++++\n\n\n\n");
-
 		// Construct the instantiated rule
 		InstantiatedRule r = new InstantiatedRule(clonedDerivative, newVars, clonedResult, newConds);
-
 
 		// Binding v_0 to answer
 		r.bind(cloneContext.get(m_arguments.get(0).get(0)), new Polynomial(answer));
