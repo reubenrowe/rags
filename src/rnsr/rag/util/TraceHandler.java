@@ -30,9 +30,7 @@ public class TraceHandler {
 
     public void printTraceToFile(String trace) {
         try {
-            openFile();
-            out.write(trace);
-            out.close();
+            out.append(trace);
         } catch (IOException e) {
             e.printStackTrace();
         }
