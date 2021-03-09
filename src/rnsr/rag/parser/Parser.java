@@ -115,8 +115,11 @@ public class Parser
 		
 		Configuration c = new Configuration();
 		c.add(startPair);
-		
-		CandidateSet candidate = new CandidateSet(new SententialForm(c, varSet, result, new ArrayList<>()));
+
+		SententialForm firstSF = new SententialForm(c, varSet, result, new ArrayList<>());
+		firstSF.setTag();
+		CandidateSet candidate = new CandidateSet(firstSF);
+
 		
 		// Get input
 		ExtendedAnswer input = null;

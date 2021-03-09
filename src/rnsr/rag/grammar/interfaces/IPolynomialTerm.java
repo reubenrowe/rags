@@ -3,6 +3,7 @@ package rnsr.rag.grammar.interfaces;
 import rnsr.rag.grammar.*;
 import rnsr.rag.grammar.exception.CloneException;
 import rnsr.rag.grammar.exception.PolynomialUnificationException;
+import rnsr.rag.grammar.exception.UnificationLambdaException;
 import rnsr.rag.parser.Parser;
 
 import java.util.Set;
@@ -30,7 +31,7 @@ public interface IPolynomialTerm
 	 * @param poly The Polynomial to unify with the current polynomial term.
 	 * @return UnificationSetting object containing the binding and polynomial information from the unification
 	 */
-	public UnificationSetting unify(Polynomial poly) throws PolynomialUnificationException, CloneException;
+	public UnificationSetting unify(Polynomial poly) throws PolynomialUnificationException, CloneException, UnificationLambdaException;
 
 	public Polynomial resolveInnerVariables(VariableSet sfBindings);
 

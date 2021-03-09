@@ -169,13 +169,13 @@ public	class		CandidateSet
 				// If the term is an answer, get and apply the appropriate rules
 				else if (t instanceof Answer)
 				{
+
 					// Get the applicable rules
 					RuleSet ruleSet = parser.Grammar().lookupRuleSet(((Answer) t).Identifier());
 
 					// Loop through each rule returned and apply it.
 					for (Rule r : ruleSet)
 					{
-
 						try {
 							tempSet.add(currentForm.applyRule(r));
 						} catch (UnificationLambdaException e) {
@@ -183,6 +183,7 @@ public	class		CandidateSet
 						}
 
 					}
+
 				}
 			}
 		}

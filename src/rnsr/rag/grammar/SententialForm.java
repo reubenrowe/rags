@@ -17,6 +17,9 @@ public	class		SententialForm
 		implements	IClonable<SententialForm>, IConsumable
 {
 
+	private static int count = 0;
+	private int childCount = 0;
+	private String tag = "";
 
 	/**
 	 * Default Constructor
@@ -270,7 +273,9 @@ public	class		SententialForm
 		}
 		
 		// Create and return a new Sentential form using the cloned components
-		return new SententialForm(clonedConfiguration, newVars, clonedResult, newConditions);
+		SententialForm cloneSF = new SententialForm(clonedConfiguration, newVars, clonedResult, newConditions);
+		cloneSF.setTag(this.tag + "." + ++childCount);
+		return cloneSF;
 	}
 
 	public boolean checkVariableConditions() {
@@ -298,7 +303,7 @@ public	class		SententialForm
 	}
 
 	public String toString() {
-		String s = "\"";
+		String s = this.tag + " : \"";
 		for (IConfigurationTerm c: m_configuration) {
 			s += c;
 		}
@@ -307,6 +312,18 @@ public	class		SententialForm
 		//s+= m_variables + ", ";
 		s += ("\"" + m_result + "\"");
 		return s;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
+	}
+
+	public void setTag() {
+		this.tag = String.valueOf(++count);
+	}
+
+	public String getTag() {
+		return this.tag;
 	}
 	
 }

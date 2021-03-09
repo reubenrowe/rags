@@ -120,8 +120,6 @@ public class ListEqualityExample extends CommandLineInputBase {
         }
         vars.get(1).setType(new LetterType());
         vars.get(2).setType(new WordType());
-        vars.get(1).setTag("_z in 4");
-        vars.get(2).setTag("_t in 4");
 
         vars.get(0).setTag("_v0 in 4");
         vars.get(1).setTag("_z in 4");

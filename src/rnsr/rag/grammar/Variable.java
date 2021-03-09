@@ -2,10 +2,12 @@ package rnsr.rag.grammar;
 
 import rnsr.rag.grammar.exception.CloneException;
 import rnsr.rag.grammar.exception.PolynomialUnificationException;
+import rnsr.rag.grammar.exception.UnificationLambdaException;
 import rnsr.rag.grammar.interfaces.IConfigurationTerm;
 import rnsr.rag.grammar.interfaces.IContextClonable;
 import rnsr.rag.grammar.interfaces.IPolynomialTerm;
 import rnsr.rag.grammar.interfaces.IVariableType;
+import rnsr.rag.grammar.types.WordType;
 import rnsr.rag.parser.Parser;
 
 import java.util.ArrayList;
@@ -156,13 +158,22 @@ public	class		Variable
 		return true;
 	}
 
-	public UnificationSetting unify(Polynomial poly) throws PolynomialUnificationException {
+	public UnificationSetting unify(Polynomial poly) throws PolynomialUnificationException, UnificationLambdaException {
 		Polynomial rest = new Polynomial();
 		VariableSet bindings = new VariableSet();
+
+		if (poly.onlyLambda() || poly.Empty()) {
+			if (this.type instanceof WordType) {
+				bindings.put(this, new Polynomial(new Answer(AnswerIdentifier.Lambda())));
+				return new UnificationSetting(bindings, rest);
+			} else {
+				throw new UnificationLambdaException();
+			}
+		}
+
 		Answer polyAnswer = (Answer) poly.get(0);
+
 		String polyAnswerID = polyAnswer.Identifier().Identifier();
-
-
 
 		if (type == null) { // If no type, we simply take the entire polynomial
 			bindings.put(this, poly);
@@ -175,10 +186,8 @@ public	class		Variable
 			for (Answer a: typePossibilities) {
 				String aID = a.Identifier().Identifier();
 				if (polyAnswerID.startsWith(aID)) {
-					if (polyAnswerID.length() > aID.length()) // If equal, no need to fill the new Polynomial since no remainder
+					if (polyAnswerID.length() > aID.length())
 						rest.add(new Answer(new AnswerIdentifier(polyAnswerID.substring(aID.length()))));
-					else
-						rest = poly;	// Used all of poly
 					bindings.put(this, new Polynomial(a));
 					break;
 				}
