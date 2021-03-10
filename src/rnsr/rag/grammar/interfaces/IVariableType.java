@@ -1,19 +1,16 @@
 package rnsr.rag.grammar.interfaces;
 
 import rnsr.rag.grammar.Answer;
-
-import java.util.HashSet;
+import rnsr.rag.grammar.Polynomial;
+import rnsr.rag.grammar.exception.UnificationLambdaException;
 
 /**
- * Indicates that an object can clone (make a deep copy) of itself
+ * Interface for enforcing type classes of Variables
  */
-public interface IVariableType<T>
-{
+public interface IVariableType {
 
-	public boolean match(String token);
+	Polynomial consumeFromAnswer(Answer other) throws UnificationLambdaException;
 
-	public HashSet<Answer> getPool();
-
-	public boolean isConcat();
+	boolean match(Answer token);
 	
 }

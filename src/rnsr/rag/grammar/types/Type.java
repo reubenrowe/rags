@@ -1,13 +1,16 @@
 package rnsr.rag.grammar.types;
 
 import rnsr.rag.grammar.Answer;
+import rnsr.rag.grammar.Polynomial;
+import rnsr.rag.grammar.exception.UnificationLambdaException;
+import rnsr.rag.grammar.interfaces.IVariableType;
 
 import java.util.HashSet;
 
-public abstract class Type {
+public abstract class Type implements IVariableType {
 
-    public static final Type LETTER_TYPE = new LetterType();
-    public static final Type WORD_TYPE = new WordType();
+    public static final LetterType LETTER_TYPE = new LetterType();
+    public static final WordType WORD_TYPE = new WordType();
 
     protected HashSet<Answer> alphabet;
     protected boolean isConcatenable;
@@ -33,5 +36,7 @@ public abstract class Type {
     public boolean match(Answer a) {
         return false;
     }
+
+    public Polynomial consumeFromAnswer(Answer other) throws UnificationLambdaException { return null; }
 
 }

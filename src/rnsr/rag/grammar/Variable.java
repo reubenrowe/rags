@@ -209,6 +209,16 @@ public	class		Variable
 		return new UnificationSetting(bindings, rest);
 	}
 
+	public UnificationSetting unifySecond(Polynomial other) {
+		VariableSet newBindings = new VariableSet();
+		Polynomial rest = new Polynomial();
+
+		// For now: assuming that Polynomial 'other' is a list of length 1 containing a single terminal.
+
+
+		return new UnificationSetting(newBindings, rest);
+	}
+
 	public Polynomial resolveInnerVariables(VariableSet sfBindings) {
 		return sfBindings.get(this);
 	}

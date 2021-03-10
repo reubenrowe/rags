@@ -2,10 +2,13 @@ package rnsr.rag.grammar.types;
 
 import rnsr.rag.grammar.Answer;
 import rnsr.rag.grammar.AnswerIdentifier;
+import rnsr.rag.grammar.Polynomial;
+import rnsr.rag.grammar.exception.UnificationLambdaException;
+import rnsr.rag.grammar.interfaces.IVariableType;
 
 import java.util.HashSet;
 
-public class LetterType extends Type {
+public class LetterType extends Type implements IVariableType {
 
     private static HashSet<Answer> typeAlphabet = makeAlphabet();
 
@@ -26,6 +29,13 @@ public class LetterType extends Type {
     public boolean match(Answer token) {
         return (token.Identifier().Identifier().length() == 1)
                 && this.alphabet.contains(token);
+    }
+
+    public Polynomial consumeFromAnswer(Answer other) throws UnificationLambdaException {
+        String answerID = other.Identifier().Identifier();
+        char c = answerID.charAt(0);
+        if (!this.alphabet.contains(new Answer(new AnswerIdentifier(String.valueOf(c))))) throw new UnificationLambdaException();
+        return new Polynomial(new Answer(new AnswerIdentifier(answerID.substring(1))));
     }
 
 }

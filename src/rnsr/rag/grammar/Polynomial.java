@@ -246,6 +246,17 @@ public	class		Polynomial
 		return newBindings;
 	}
 
+	public VariableSet unifySecond(Polynomial other) throws PolynomialUnificationException, UnificationLambdaException, CloneException {
+		VariableSet newBindings = new VariableSet();
+		Polynomial remainder = other;
+		for (IPolynomialTerm pt: this) {
+			UnificationSetting settings = pt.unify(remainder);
+			remainder = settings.getRemainder();
+			newBindings.putAll(settings.getVariables());
+		}
+		return newBindings;
+	}
+
 	public Polynomial resolveVariablesInPolynomial(VariableSet sfBindings) {
 		Polynomial p = new Polynomial();
 		for (int i = 0; i < this.size(); i++) {
