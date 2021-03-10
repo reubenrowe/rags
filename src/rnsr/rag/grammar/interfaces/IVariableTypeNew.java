@@ -3,12 +3,10 @@ package rnsr.rag.grammar.interfaces;
 import rnsr.rag.grammar.Answer;
 
 /**
- * Indicates that an object can clone (make a deep copy) of itself
+ * Enforcees the functionality of Type classes
  */
-public interface IVariableTypeNew<T>
-{
+public interface IVariableTypeNew<T> {
 
-	public boolean match(Answer token);
+	boolean match(Answer token);
 
-	
 }

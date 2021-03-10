@@ -6,6 +6,9 @@ import java.util.HashSet;
 
 public abstract class Type {
 
+    public static final Type LETTER_TYPE = new Letter();
+    public static final Type WORD_TYPE = new Word();
+
     protected HashSet<Answer> alphabet;
     protected boolean isConcatenable;
     protected boolean isLambdaAllowing;
@@ -15,15 +18,15 @@ public abstract class Type {
         this.isLambdaAllowing = isLambdaAllowing;
     }
 
-    protected HashSet<Answer> getAlphabet() {
+    public HashSet<Answer> getAlphabet() {
         return this.alphabet;
     }
 
-    protected boolean isConcatenable() {
+    public boolean isConcatenable() {
         return this.isConcatenable;
     }
 
-    protected boolean isLambdaAllowing() {
+    public boolean isLambdaAllowing() {
         return this.isLambdaAllowing;
     }
 
