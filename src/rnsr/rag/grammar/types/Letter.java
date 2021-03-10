@@ -2,11 +2,10 @@ package rnsr.rag.grammar.types;
 
 import rnsr.rag.grammar.Answer;
 import rnsr.rag.grammar.AnswerIdentifier;
-import rnsr.rag.grammar.interfaces.IVariableTypeNew;
 
 import java.util.HashSet;
 
-public class Letter extends Type implements IVariableTypeNew {
+public class Letter extends Type {
 
     private static HashSet<Answer> typeAlphabet = makeAlphabet();
 

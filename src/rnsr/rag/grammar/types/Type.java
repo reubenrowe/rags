@@ -30,4 +30,8 @@ public abstract class Type {
         return this.isLambdaAllowing;
     }
 
+    public boolean match(Answer a) {
+        return false;
+    }
+
 }
