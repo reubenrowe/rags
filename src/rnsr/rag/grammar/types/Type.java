@@ -6,8 +6,8 @@ import java.util.HashSet;
 
 public abstract class Type {
 
-    public static final Type LETTER_TYPE = new Letter();
-    public static final Type WORD_TYPE = new Word();
+    public static final Type LETTER_TYPE = new LetterType();
+    public static final Type WORD_TYPE = new WordType();
 
     protected HashSet<Answer> alphabet;
     protected boolean isConcatenable;

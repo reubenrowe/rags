@@ -4,8 +4,7 @@ import rnsr.rag.grammar.*;
 import rnsr.rag.grammar.exception.ArgumentMismatchException;
 import rnsr.rag.grammar.exception.RuleFunctionException;
 import rnsr.rag.grammar.exception.VariableNotFoundException;
-import rnsr.rag.grammar.types.LetterType;
-import rnsr.rag.grammar.types.WordType;
+import rnsr.rag.grammar.types.Type;
 
 import java.util.ArrayList;
 
@@ -118,8 +117,8 @@ public class ListEqualityExample extends CommandLineInputBase {
             vars.add(i, v);
             varSet.put(v);
         }
-        vars.get(1).setType(new LetterType());
-        vars.get(2).setType(new WordType());
+        vars.get(1).setType(Type.LETTER_TYPE);
+        vars.get(2).setType(Type.WORD_TYPE);
 
         vars.get(0).setTag("_v0 in 4");
         vars.get(1).setTag("_z in 4");
@@ -145,8 +144,9 @@ public class ListEqualityExample extends CommandLineInputBase {
             vars.add(i, v);
             varSet.put(v);
         }
-        vars.get(1).setType(new LetterType());
-        vars.get(2).setType(new WordType());
+
+        vars.get(1).setType(Type.LETTER_TYPE);
+        vars.get(2).setType(Type.WORD_TYPE);
 
         vars.get(0).setTag("_v0 in 5");
         vars.get(1).setTag("_z in 5");
@@ -180,8 +180,9 @@ public class ListEqualityExample extends CommandLineInputBase {
             vars.add(i, v);
             varSet.put(v);
         }
-        vars.get(1).setType(new LetterType());
-        vars.get(2).setType(new WordType());
+
+        vars.get(1).setType(Type.LETTER_TYPE);
+        vars.get(2).setType(Type.WORD_TYPE);
 
         vars.get(0).setTag("_v0 in 6");
         vars.get(1).setTag("_z in 6");
@@ -363,7 +364,7 @@ public class ListEqualityExample extends CommandLineInputBase {
         poly.add(vars.get(3));
         g.addRule(id_star, new Rule(c, varSet, poly, args));
 
-        // Letter
+        // LetterType
         // _z: LETTER; <letter, #> -> <_z, _v1>
         vars = new ArrayList<Variable>();
         varSet = new VariableSet();
@@ -373,11 +374,11 @@ public class ListEqualityExample extends CommandLineInputBase {
             varSet.put(v);
         }
 
-        vars.get(0).setTag("_v0 in Letter");
-        vars.get(1).setTag("_z in Letter");
-        vars.get(2).setTag("_v1 in Letter");
+        vars.get(0).setTag("_v0 in LetterType");
+        vars.get(1).setTag("_z in LetterType");
+        vars.get(2).setTag("_v1 in LetterType");
 
-        vars.get(1).setType(new LetterType());
+        vars.get(1).setType(Type.LETTER_TYPE);
         args = new ArrayList<Polynomial>();
         args.add(new Polynomial(vars.get(0)));	// v0
         args.add(new Polynomial(vars.get(1)));	// z
@@ -399,7 +400,7 @@ public class ListEqualityExample extends CommandLineInputBase {
         vars.get(1).setTag("_z in Echo");
         vars.get(2).setTag("_v1 in Echo");
 
-        vars.get(1).setType(new LetterType());
+        vars.get(1).setType(Type.LETTER_TYPE);
         args = new ArrayList<Polynomial>();
         args.add(new Polynomial(vars.get(0)));	// star
         args.add(new Polynomial(vars.get(1)));	// a
@@ -423,8 +424,8 @@ public class ListEqualityExample extends CommandLineInputBase {
         vars.get(2).setTag("_z2 in Not");
         vars.get(3).setTag("_v1 in Not");
 
-        vars.get(2).setType(new LetterType());
-        vars.get(2).setType(new LetterType());
+        vars.get(2).setType(Type.LETTER_TYPE);
+        vars.get(2).setType(Type.LETTER_TYPE);
 
         conditions = new ArrayList<>();
         conditions.add(new VariableCondition(vars.get(1), vars.get(2), VariableCondition.VariableConditionType.NE));

@@ -6,7 +6,7 @@ import rnsr.rag.grammar.exception.UnificationLambdaException;
 import rnsr.rag.grammar.interfaces.IConfigurationTerm;
 import rnsr.rag.grammar.interfaces.IContextClonable;
 import rnsr.rag.grammar.interfaces.IPolynomialTerm;
-import rnsr.rag.grammar.interfaces.IVariableType;
+import rnsr.rag.grammar.types.Type;
 import rnsr.rag.grammar.types.WordType;
 import rnsr.rag.parser.Parser;
 
@@ -21,9 +21,9 @@ public	class		Variable
 {
 
 	private int index;
-	private IVariableType type;
+	private Type type;
 
-	public Variable(IVariableType type) {
+	public Variable(Type type) {
 		this.type = type;
 	}
 
@@ -35,11 +35,11 @@ public	class		Variable
 		return type != null;
 	}
 
-	public void setType(IVariableType type) {
+	public void setType(Type type) {
 		this.type = type;
 	}
 
-	public IVariableType getType() {
+	public Type getType() {
 		return type;
 	}
 
@@ -98,7 +98,7 @@ public	class		Variable
 			return;
 		}
 
-		for (Answer a: (HashSet<Answer>) type.getPool()) {
+		for (Answer a: type.getAlphabet()) {
 			String aID = a.Identifier().Identifier();		// Assuming a is terminal
 			if (aID.startsWith(input)) {
 
@@ -106,7 +106,7 @@ public	class		Variable
 				//SententialForm clonedForm = currentForm.cloneObject(cloneContext);
 				SententialForm clonedForm = currentForm;
 
-				if (!type.isConcat()) {
+				if (!type.isConcatenable()) {
 					clonedForm.m_variables.put(this, new Polynomial(a));
 					clonedForm.m_variables.put(originalRHS, new Polynomial(this));
 					clonedForm.m_configuration.add(0, new Answer(new AnswerIdentifier(aID)));
@@ -180,9 +180,9 @@ public	class		Variable
 			return new UnificationSetting(bindings, new Polynomial());
 		}
 
-		HashSet<Answer> typePossibilities = (HashSet<Answer>) type.getPool();
+		HashSet<Answer> typePossibilities = type.getAlphabet();
 
-		if (!type.isConcat()) { // atomic Havetype, e.g. LETTER.
+		if (!type.isConcatenable()) { // atomic Havetype, e.g. LETTER.
 			for (Answer a: typePossibilities) {
 				String aID = a.Identifier().Identifier();
 				if (polyAnswerID.startsWith(aID)) {

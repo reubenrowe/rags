@@ -4,8 +4,7 @@ import rnsr.rag.grammar.*;
 import rnsr.rag.grammar.exception.ArgumentMismatchException;
 import rnsr.rag.grammar.exception.RuleFunctionException;
 import rnsr.rag.grammar.exception.VariableNotFoundException;
-import rnsr.rag.grammar.types.LetterType;
-import rnsr.rag.grammar.types.WordType;
+import rnsr.rag.grammar.types.Type;
 
 import java.util.ArrayList;
 
@@ -20,9 +19,7 @@ public class UnifyTestExample extends CommandLineInputBase {
         Grammar g = new Grammar(start);
 
 
-
         /* ********** RULE PRODUCTIONS ********** */
-
 
 
         ArrayList<Variable> vars;
@@ -30,7 +27,6 @@ public class UnifyTestExample extends CommandLineInputBase {
         VariableSet varSet;
         Configuration c;
         Polynomial poly;
-
 
 
         // <Start, _v1> -> <Test("testing"), _v1>
@@ -56,7 +52,6 @@ public class UnifyTestExample extends CommandLineInputBase {
         g.addRule(start, new Rule(c, varSet, new Polynomial(vars.get(1)), args));
 
 
-
         // <Test(_z_t), _v1> -> <_z, _v1> <_t, _v2>
         vars = new ArrayList<>();
         varSet = new VariableSet();
@@ -66,8 +61,8 @@ public class UnifyTestExample extends CommandLineInputBase {
             varSet.put(v);
         }
 
-        vars.get(1).setType(new LetterType());
-        vars.get(2).setType(new WordType());
+        vars.get(1).setType(Type.LETTER_TYPE);
+        vars.get(2).setType(Type.WORD_TYPE);
 
         vars.get(0).setTag("_v0 in Test");
         vars.get(1).setTag("_z in Test");
@@ -88,11 +83,7 @@ public class UnifyTestExample extends CommandLineInputBase {
 
         g.addRule(test, new Rule(c, varSet, new Polynomial(vars.get(3)), args));
 
-
-
         /* ****************************************/
-
-
 
         return g;
 
