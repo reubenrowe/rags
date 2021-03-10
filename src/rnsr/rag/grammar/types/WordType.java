@@ -10,6 +10,7 @@ public class WordType implements IVariableType {
 
     private HashSet<Answer> pool = new HashSet<>();
     private boolean isConcat = true;
+    private boolean lambdaAllowing = true;
 
     public WordType() {
         for (char c: "abcdefghijklmnopqrstuvwxyz".toCharArray()) {

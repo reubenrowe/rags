@@ -10,6 +10,7 @@ public class LetterType implements IVariableType {
 
     private HashSet<Answer> pool = new HashSet<>();
     private boolean isConcat = false;
+    private boolean lambdaAllowing = false;
 
     public LetterType() {
         for (char c: "abcdefghijklmnopqrstuvwxyz".toCharArray()) {

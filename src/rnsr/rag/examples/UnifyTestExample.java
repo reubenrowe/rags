@@ -4,7 +4,9 @@ import rnsr.rag.grammar.*;
 import rnsr.rag.grammar.exception.ArgumentMismatchException;
 import rnsr.rag.grammar.exception.RuleFunctionException;
 import rnsr.rag.grammar.exception.VariableNotFoundException;
+import rnsr.rag.grammar.interfaces.IVariableTypeNew;
 import rnsr.rag.grammar.types.LetterType;
+import rnsr.rag.grammar.types.Word;
 import rnsr.rag.grammar.types.WordType;
 
 import java.util.ArrayList;
@@ -104,6 +106,13 @@ public class UnifyTestExample extends CommandLineInputBase {
             System.err.println("Expecting some input to parse!");
             System.exit(0);
         }
+
+        System.out.println("///////");
+        Answer a = new Answer(new AnswerIdentifier("owo"));
+        IVariableTypeNew t = new Word();
+        System.out.println(t.match(a));
+        System.out.println("///////");
+
         performTest(new UnifyTestExample(), args[0]);
     }
 

@@ -309,6 +309,25 @@ public	class		Answer
 		}
 	}
 
+	/**
+	 * Equals method over objects to comply with HashSet contains method.
+	 * @param o The object to check equality with
+	 * @return Boolean indicating equality
+	 */
+	@Override
+	public boolean equals(Object o) {
+		return o != null && o instanceof Answer && ((Answer) o).equals(this);
+	}
+
+	/**
+	 * Equals method over objects to comply with HashSet contains method.
+	 * @return Integer hash code
+	 */
+	@Override
+	public int hashCode() {
+		return this.m_identifier.Identifier().hashCode() + ((this.m_arguments != null) ? this.m_arguments.size() : 0);
+	}
+
 	public UnificationSetting unify(Polynomial poly) throws CloneException {
 		VariableSet newBindings = new VariableSet();
 
