@@ -5,6 +5,7 @@ import rnsr.rag.grammar.AnswerIdentifier;
 import rnsr.rag.grammar.Polynomial;
 import rnsr.rag.grammar.exception.UnificationLambdaException;
 import rnsr.rag.grammar.interfaces.IVariableType;
+import rnsr.rag.util.ConsumeSetting;
 
 import java.util.HashSet;
 
@@ -38,14 +39,15 @@ public class WordType extends Type implements IVariableType {
         return true;
     }
 
-    public Polynomial consumeFromAnswer(Answer other) throws UnificationLambdaException {
+    public ConsumeSetting consumeFromAnswer(Answer other) throws UnificationLambdaException {
         String answerID = other.Identifier().Identifier();
         String consumed = "";
         for (char c: answerID.toCharArray()) {
             if (!this.alphabet.contains(new Answer(new AnswerIdentifier(String.valueOf(c))))) break;
             consumed += String.valueOf(c);
         }
-        return new Polynomial(new Answer(new AnswerIdentifier(answerID.substring(consumed.length()))));
+        return new ConsumeSetting(new Polynomial(new Answer(new AnswerIdentifier(consumed))),
+                new Polynomial(new Answer(new AnswerIdentifier(answerID.substring(consumed.length())))));
     }
 
 }

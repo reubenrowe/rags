@@ -9,6 +9,8 @@ import rnsr.rag.grammar.interfaces.IPolynomialTerm;
 import rnsr.rag.grammar.types.Type;
 import rnsr.rag.grammar.types.WordType;
 import rnsr.rag.parser.Parser;
+import rnsr.rag.util.ConsumeSetting;
+import rnsr.rag.util.UnificationSetting;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -209,12 +211,14 @@ public	class		Variable
 		return new UnificationSetting(bindings, rest);
 	}
 
-	public UnificationSetting unifySecond(Polynomial other) {
+	public UnificationSetting unifySecond(Polynomial other) throws UnificationLambdaException {
 		VariableSet newBindings = new VariableSet();
-		Polynomial rest = new Polynomial();
 
 		// For now: assuming that Polynomial 'other' is a list of length 1 containing a single terminal.
-
+		Answer polyAns = (Answer) other.get(0);
+		ConsumeSetting consumeSetting = this.type.consumeFromAnswer(polyAns);
+		Polynomial rest = consumeSetting.getRemainder();
+		newBindings.put(this, consumeSetting.getConsumed());
 
 		return new UnificationSetting(newBindings, rest);
 	}

@@ -1,9 +1,9 @@
 package rnsr.rag.grammar.types;
 
 import rnsr.rag.grammar.Answer;
-import rnsr.rag.grammar.Polynomial;
 import rnsr.rag.grammar.exception.UnificationLambdaException;
 import rnsr.rag.grammar.interfaces.IVariableType;
+import rnsr.rag.util.ConsumeSetting;
 
 import java.util.HashSet;
 
@@ -37,6 +37,6 @@ public abstract class Type implements IVariableType {
         return false;
     }
 
-    public Polynomial consumeFromAnswer(Answer other) throws UnificationLambdaException { return null; }
+    public ConsumeSetting consumeFromAnswer(Answer other) throws UnificationLambdaException { return null; }
 
 }

@@ -5,6 +5,7 @@ import rnsr.rag.grammar.AnswerIdentifier;
 import rnsr.rag.grammar.Polynomial;
 import rnsr.rag.grammar.exception.UnificationLambdaException;
 import rnsr.rag.grammar.interfaces.IVariableType;
+import rnsr.rag.util.ConsumeSetting;
 
 import java.util.HashSet;
 
@@ -31,11 +32,14 @@ public class LetterType extends Type implements IVariableType {
                 && this.alphabet.contains(token);
     }
 
-    public Polynomial consumeFromAnswer(Answer other) throws UnificationLambdaException {
+    public ConsumeSetting consumeFromAnswer(Answer other) throws UnificationLambdaException {
         String answerID = other.Identifier().Identifier();
+        if (answerID.equals(AnswerIdentifier.Lambda().Identifier())) throw new UnificationLambdaException(); // Not lambda-allowing
         char c = answerID.charAt(0);
         if (!this.alphabet.contains(new Answer(new AnswerIdentifier(String.valueOf(c))))) throw new UnificationLambdaException();
-        return new Polynomial(new Answer(new AnswerIdentifier(answerID.substring(1))));
+        return new ConsumeSetting(new Polynomial(new Answer(new AnswerIdentifier(String.valueOf(c)))), // Consumed
+                new Polynomial(new Answer(new AnswerIdentifier(answerID.substring(1))))); // Remainder
+
     }
 
 }

@@ -1,4 +1,7 @@
-package rnsr.rag.grammar;
+package rnsr.rag.util;
+
+import rnsr.rag.grammar.Polynomial;
+import rnsr.rag.grammar.VariableSet;
 
 public class UnificationSetting {
 

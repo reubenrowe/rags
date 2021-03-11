@@ -5,6 +5,7 @@ import rnsr.rag.grammar.exception.CloneException;
 import rnsr.rag.grammar.exception.PolynomialUnificationException;
 import rnsr.rag.grammar.exception.UnificationLambdaException;
 import rnsr.rag.parser.Parser;
+import rnsr.rag.util.UnificationSetting;
 
 import java.util.Set;
 

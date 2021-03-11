@@ -4,6 +4,7 @@ import rnsr.rag.grammar.exception.*;
 import rnsr.rag.grammar.interfaces.IContextClonable;
 import rnsr.rag.grammar.interfaces.IPolynomialTerm;
 import rnsr.rag.grammar.interfaces.IResolvable;
+import rnsr.rag.util.UnificationSetting;
 
 import java.util.ArrayList;
 
