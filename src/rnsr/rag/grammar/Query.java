@@ -128,7 +128,7 @@ public	class		Query
 		return queriesReturnSet;
 	}
 
-	public UnificationSetting unify(Polynomial poly) {
+	public UnificationSetting unify(Polynomial other) {
 		return null;
 	}
 

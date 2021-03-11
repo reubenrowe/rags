@@ -3,10 +3,8 @@ package rnsr.rag.examples;
 import rnsr.rag.grammar.*;
 import rnsr.rag.grammar.exception.ArgumentMismatchException;
 import rnsr.rag.grammar.exception.RuleFunctionException;
-import rnsr.rag.grammar.exception.UnificationLambdaException;
 import rnsr.rag.grammar.exception.VariableNotFoundException;
 import rnsr.rag.grammar.types.Type;
-import rnsr.rag.util.ConsumeSetting;
 
 import java.util.ArrayList;
 
@@ -97,28 +95,6 @@ public class UnifyTestExample extends CommandLineInputBase {
             System.err.println("Expecting some input to parse!");
             System.exit(0);
         }
-
-        System.out.println("/////");
-        Answer a = new Answer(new AnswerIdentifier("owoef"));
-        try {
-
-            ConsumeSetting consumeSetting = Type.WORD_TYPE.consumeFromAnswer(a);
-            Polynomial rem = consumeSetting.getRemainder();
-            System.out.println("'" + rem + "'");
-            a = (Answer) rem.get(0);
-            consumeSetting = Type.WORD_TYPE.consumeFromAnswer(a);
-            System.out.println("'" + consumeSetting.getRemainder() + "'");
-            a = (Answer) rem.get(0);
-            consumeSetting = Type.WORD_TYPE.consumeFromAnswer(a);
-            System.out.println("'" + consumeSetting.getRemainder() + "'");
-
-        } catch (UnificationLambdaException e) {
-            System.out.println("Empty poly for letter type!");
-            System.out.println("/////");
-            System.exit(-1);
-        }
-        System.out.println("/////");
-
         performTest(new UnifyTestExample(), args[0]);
     }
 

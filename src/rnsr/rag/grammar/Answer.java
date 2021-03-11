@@ -329,35 +329,20 @@ public	class		Answer
 		return this.m_identifier.Identifier().hashCode() + ((this.m_arguments != null) ? this.m_arguments.size() : 0);
 	}
 
-	public UnificationSetting unify(Polynomial poly) throws CloneException {
+	public UnificationSetting unify(Polynomial other) throws UnificationLambdaException {
 		VariableSet newBindings = new VariableSet();
 
-		IPolynomialTerm firstTerm = poly.get(0);
-		if (!(firstTerm instanceof Answer)) return new UnificationSetting(newBindings, poly);
+		IPolynomialTerm firstTerm = other.get(0);
+		if (!(firstTerm instanceof Answer)) throw new UnificationLambdaException(); // Can only unify answer with answer
 		Answer otherAns = (Answer) firstTerm;
 
-		if (otherAns.equals(this)) {
-			if (otherAns.m_identifier.Terminal() || (this.m_arguments == null && otherAns.m_arguments == null)) {
-				Polynomial newRemainder = poly.clone(new ContextMapping());
-				newRemainder.remove(0);
-				return new UnificationSetting(newBindings, newRemainder);
-			} else if (this.m_arguments.size() == otherAns.m_arguments.size()) {
-				for (int i = 0; i < this.m_arguments.size(); i++) {
-					try {
-						newBindings.putAll(this.m_arguments.get(i).unify(otherAns.m_arguments.get(i)));
-					} catch (PolynomialUnificationException | UnificationLambdaException e) {
-						e.printStackTrace();
-					}
-				}
-				Polynomial newRemainder = poly.clone(new ContextMapping());
-				newRemainder.remove(0);
-				return new UnificationSetting(newBindings, newRemainder);
-			} else {
-				// Not equal number of arguments
-				return new UnificationSetting(newBindings, poly);
-			}
+		// For now: assuming other poly is lambda - later need to consider matching non-nullary answers
+		if (this.Identifier().equals(otherAns.Identifier())
+				&& ((this.Arguments() == null && otherAns.Arguments() == null)
+				|| (this.Arguments().size() == otherAns.Arguments().size()))) {
+			return new UnificationSetting(newBindings, other);
 		} else {
-			return new UnificationSetting(newBindings, poly);
+			throw new UnificationLambdaException();
 		}
 
 	}

@@ -29,10 +29,10 @@ public interface IPolynomialTerm
 
 	/**
 	 * Method used to unify a polynomial term with a polynomial in a pattern matching operation.
-	 * @param poly The Polynomial to unify with the current polynomial term.
+	 * @param other The Polynomial to unify with the current polynomial term.
 	 * @return UnificationSetting object containing the binding and polynomial information from the unification
 	 */
-	public UnificationSetting unify(Polynomial poly) throws PolynomialUnificationException, CloneException, UnificationLambdaException;
+	public UnificationSetting unify(Polynomial other) throws PolynomialUnificationException, CloneException, UnificationLambdaException;
 
 	public Polynomial resolveInnerVariables(VariableSet sfBindings);
 

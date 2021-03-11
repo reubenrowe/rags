@@ -212,42 +212,7 @@ public	class		Polynomial
 		return sb.toString();
 	}
 
-	public VariableSet unify(Polynomial other) throws PolynomialUnificationException, CloneException, UnificationLambdaException {
-		// Currently assuming only variables in this polynomial, string in other
-		VariableSet newBindings = new VariableSet();
-		Polynomial remainder = null;
-
-		if (this.onlyLambda()) { // Argument of Lambda/# - as in '<eq(#), T> -> #' and others
-			if (!other.onlyLambda()) throw new UnificationLambdaException();
-			else return new VariableSet();
-		}
-
-		//try {
-		//	System.out.println("Trying to clone [" + other + "]");
-			remainder = other;
-		//	System.out.println(" - Done with cloning");
-		//} catch (CloneException e) {
-		//	e.printStackTrace();
-		//}
-
-		for (IPolynomialTerm pt: this) {
-
-			//if (remainder.Empty()) throw new PolynomialUnificationException("Ran out of polynomial terms to unify!");
-
-			IPolynomialTerm currentTerm = pt;
-			UnificationSetting u = currentTerm.unify(remainder);
-			remainder = u.getRemainder();
-			newBindings.putAll(u.getVariables());
-
-		}
-
-		if (!remainder.Empty())
-			throw new PolynomialUnificationException("Ran out of terms to unify!");
-
-		return newBindings;
-	}
-
-	public VariableSet unifySecond(Polynomial other) throws PolynomialUnificationException, UnificationLambdaException, CloneException {
+	public VariableSet unify(Polynomial other) throws PolynomialUnificationException, UnificationLambdaException, CloneException {
 		VariableSet newBindings = new VariableSet();
 		Polynomial remainder = other;
 		for (IPolynomialTerm pt: this) {
@@ -262,7 +227,6 @@ public	class		Polynomial
 		Polynomial p = new Polynomial();
 		for (int i = 0; i < this.size(); i++) {
 			IPolynomialTerm pt = this.get(i);
-
 			Polynomial p2 = pt.resolveInnerVariables(sfBindings);
 			p.addAll(p2);
 		}
