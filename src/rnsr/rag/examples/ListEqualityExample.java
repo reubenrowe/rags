@@ -20,6 +20,7 @@ public class ListEqualityExample extends CommandLineInputBase {
         AnswerIdentifier echo = new AnswerIdentifier("echo", 0);
         AnswerIdentifier or = new AnswerIdentifier("or", 0);
         AnswerIdentifier memOf = new AnswerIdentifier("memOf", 1);
+        AnswerIdentifier cons = new AnswerIdentifier("cons", 0);
 
         AnswerIdentifier start = new AnswerIdentifier("start", 0);
 
@@ -41,7 +42,7 @@ public class ListEqualityExample extends CommandLineInputBase {
         ArrayList<VariableCondition> conditions;
         ArrayList<Polynomial> answerArgs;
 
-
+        /*
         // 1
         // <start, _v1> -> <eq("test"), _v1>
         vars = new ArrayList<>();
@@ -51,10 +52,8 @@ public class ListEqualityExample extends CommandLineInputBase {
             vars.add(i, v);
             varSet.put(v);
         }
-
         vars.get(0).setTag("_v0 in 1");
         vars.get(1).setTag("_v1 in 1");
-
         args = new ArrayList<>();
         args.add(new Polynomial(vars.get(0)));
         c = new Configuration();
@@ -62,7 +61,42 @@ public class ListEqualityExample extends CommandLineInputBase {
         answerArgs.add(new Polynomial(new Answer(new AnswerIdentifier("test"))));
         c.add(new Pair(new Polynomial(new Answer(eq_1, answerArgs)), vars.get(1)));
         g.addRule(start, new Rule(c, varSet, new Polynomial(vars.get(1)), args));
+        */
 
+        // 1
+        // <start, _v1> -> < ( [memOf(cons("one", cons("two", cons("three", nil))))] ? ["three"] ), _v1>
+        vars = new ArrayList<>();
+        varSet = new VariableSet();
+        for (int i = 0; i <= 1; i++) {
+            Variable v = new Variable();
+            vars.add(i, v);
+            varSet.put(v);
+        }
+        vars.get(0).setTag("_v0 in 1");
+        vars.get(1).setTag("_v1 in 1");
+
+        args = new ArrayList<>();
+        args.add(new Polynomial(vars.get(0)));
+        c = new Configuration();
+
+        answerArgs = new ArrayList<>();
+        answerArgs.add(new Polynomial(new Answer(new AnswerIdentifier("three"))));
+        answerArgs.add(new Polynomial(new Answer(nil_terminal)));
+        Answer a1 = new Answer(cons, answerArgs);
+
+        answerArgs = new ArrayList<>();
+        answerArgs.add(new Polynomial(new Answer(new AnswerIdentifier("two"))));
+        answerArgs.add(new Polynomial(a1));
+        Answer a2 = new Answer(cons, answerArgs);
+
+        answerArgs = new ArrayList<>();
+        answerArgs.add(new Polynomial(new Answer(new AnswerIdentifier("one"))));
+        answerArgs.add(new Polynomial(a2));
+        Answer a3 = new Answer(cons, answerArgs);
+
+        c.add(new Pair(new Polynomial(new Query(new Polynomial(a3), new Polynomial(new Answer(new AnswerIdentifier("three"))))), vars.get(1)));
+
+        g.addRule(start, new Rule(c, varSet, new Polynomial(vars.get(1)), args));
 
         // 2
         // <eq(#), T> -> #
