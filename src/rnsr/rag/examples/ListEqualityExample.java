@@ -268,6 +268,8 @@ public class ListEqualityExample extends CommandLineInputBase {
         g.addRule(or, new Rule(c, varSet, new Polynomial(new Answer(true_terminal)), args));
 
 
+
+
         // <memOf(nil), F> -> <star(letter), _v1>
         vars = new ArrayList<>();
         varSet = new VariableSet();
@@ -286,8 +288,7 @@ public class ListEqualityExample extends CommandLineInputBase {
         g.addRule(memOf, new Rule(c, varSet, new Polynomial(new Answer(false_terminal)), args));
 
 
-        // <memOf(cons(_x, _xs)), (or ? (eq(_x) ? _v1) (memOf(_xs) ? _v1))> -> <star(echo), _v1>
-        /*
+        // <memOf(cons(_x, _xs)), (or ? (eq(_x) ? _v1) (memOf(_xs) ? _v1))> -> <star(echo), _v1>   0:v1, 1:x, 2:x2, 3:v1
         vars = new ArrayList<>();
         varSet = new VariableSet();
         for (int i = 0; i <= 1; i++) {
@@ -298,11 +299,20 @@ public class ListEqualityExample extends CommandLineInputBase {
         args = new ArrayList<>();
         args.add(new Polynomial(vars.get(0)));
 
-        Query q1 = new Query();
-        Query q2 = new Query();
-        Query q3 = new Query();
+        answerArgs = new ArrayList<>();
+        answerArgs.add(new Polynomial(vars.get(1)));
+        Query q1 = new Query(new Polynomial(new Answer(eq_1, answerArgs)), new Polynomial(vars.get(3))); // (eq(_x) ? _v1)
 
-        args.add(new Polynomial());
+        answerArgs = new ArrayList<>();
+        answerArgs.add(new Polynomial(vars.get(2)));
+        Query q2 = new Query(new Polynomial(new Answer(memOf, answerArgs)), new Polynomial(vars.get(3))); // (memOf(_xs) ? _v1)
+
+        poly = new Polynomial();
+        poly.add(q1);
+        poly.add(q2);
+        Query q3 = new Query(new Polynomial(new Answer(or)), poly); // (or ? (eq(_x) ? _v1) (memOf(_xs) ? _v1))
+
+        args.add(new Polynomial(q3));
 
         c = new Configuration();
         answerArgs = new ArrayList<>();
@@ -310,7 +320,9 @@ public class ListEqualityExample extends CommandLineInputBase {
         c.add(new Pair(new Polynomial(new Answer(id_star, answerArgs)), vars.get(1)));
 
         g.addRule(memOf, new Rule(c, varSet, new Polynomial(new Answer(false_terminal)), args));
-        */
+
+
+
 
         /* ***************** ADD ONS **********************/
 
