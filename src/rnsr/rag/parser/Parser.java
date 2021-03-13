@@ -49,7 +49,7 @@ public class Parser
 	 * @return a set containing the (possibly multiple) sematic values computed by the parsing process
 	 * @throws ParseException
 	 */
-	public Set<ExtendedAnswer> parse(String input) throws ParseException
+	public Set<ParseResult> parse(String input) throws ParseException
 	{
 		// Check that we have a grammar to work from
 		if (this.m_grammar == null)
@@ -75,7 +75,7 @@ public class Parser
 		Query initialQuery = new Query(metaSyntax, parseInput);
 		
 		// Parse the query
-		Set<ExtendedAnswer> resultSet = this.parse(initialQuery);
+		Set<ParseResult> resultSet = this.parse(initialQuery);
 
 		// Close trace file
 		traceHandler.closeFile();
@@ -95,7 +95,7 @@ public class Parser
 		return resultSet;
 	}
 	
-	public Set<ExtendedAnswer> parse(Query q) throws ParseException
+	public Set<ParseResult> parse(Query q) throws ParseException
 	{
 
 		// Query begin trace
@@ -116,7 +116,7 @@ public class Parser
 		Configuration c = new Configuration();
 		c.add(startPair);
 
-		SententialForm firstSF = new SententialForm(c, varSet, result, new ArrayList<>());
+		SententialForm firstSF = new SententialForm(c, varSet, result, new ArrayList<>(), null);
 		firstSF.setTag();
 		CandidateSet candidate = new CandidateSet(firstSF);
 
@@ -231,7 +231,7 @@ public class Parser
 		printCSRemoveNonEmpty(candidate);
 
 		// Return result set
-		Set<ExtendedAnswer> resultSet = null;
+		Set<ParseResult> resultSet = null;
 		try
 		{
 			resultSet = candidate.ResultSet();
@@ -264,13 +264,20 @@ public class Parser
 		}
 		*/
 
-		Set<ExtendedAnswer> realResults = new HashSet<>();
-		for (ExtendedAnswer ea: resultSet)
-			realResults.addAll(ea.getEASetFromInnerQueryResolution(this));
+		Set<ParseResult> realResults = new HashSet<>();
+		Set<ExtendedAnswer> eaSet = new HashSet<>();
+		for (ParseResult res: resultSet) {
+			Set<ExtendedAnswer> eas = res.getResult().getEASetFromInnerQueryResolution(this);
+			for (ExtendedAnswer ea: eas) {
+				realResults.add(new ParseResult(ea, res.getDerivation()));
+				eaSet.add(ea);
+			}
+		}
 
 		depth--;
-		printCSFinished(q, realResults);
+		printCSFinished(q, eaSet);
 		return realResults;
+
 	}
 
 	private void printCSQueryBegin(Query q) {

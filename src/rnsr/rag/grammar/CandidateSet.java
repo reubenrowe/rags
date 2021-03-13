@@ -141,7 +141,9 @@ public	class		CandidateSet
 					}
 
 					// Parse the query
-					Set<ExtendedAnswer> results = parser.parse(resolvedQuery);
+					Set<ParseResult> realResults = parser.parse(resolvedQuery);
+					Set<ExtendedAnswer> results = new HashSet<>();
+					for (ParseResult pr: realResults) results.add(pr.getResult());
 
 					// For each result in the parse, create a rule and apply it to the current sentential form
 					for (ExtendedAnswer result : results)
@@ -240,17 +242,16 @@ public	class		CandidateSet
 	/**
 	 * Returns the result from each sentential form contained in this set
 	 */
-	public HashSet<ExtendedAnswer> ResultSet() throws	VariableNotBoundException,
+	public HashSet<ParseResult> ResultSet() throws	VariableNotBoundException,
 														VariableNotFoundException,
 														InvalidTermException
 	{
-		HashSet<ExtendedAnswer> resultSet = new HashSet<>();
+		HashSet<ParseResult> resultSet = new HashSet<>();
 
 		for (SententialForm form : this) {
-
 			if (!form.checkVariableConditions()) continue;
-			resultSet.add(form.Result().resolve(form.Variables()).toExtendedAnswer());
-
+			//System.out.println("DERIV: \n" + form.buildDerivation());
+			resultSet.add(new ParseResult(form.Result().resolve(form.Variables()).toExtendedAnswer(), form.buildDerivation()));
 		}
 
 		return resultSet;

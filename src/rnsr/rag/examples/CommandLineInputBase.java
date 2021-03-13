@@ -1,7 +1,7 @@
 package rnsr.rag.examples;
 
-import rnsr.rag.grammar.ExtendedAnswer;
 import rnsr.rag.grammar.Grammar;
+import rnsr.rag.grammar.ParseResult;
 import rnsr.rag.grammar.exception.ArgumentMismatchException;
 import rnsr.rag.grammar.exception.RuleFunctionException;
 import rnsr.rag.grammar.exception.VariableNotFoundException;
@@ -39,14 +39,13 @@ public abstract class CommandLineInputBase
 		// Parse user input
 		try
 		{
-			Set<ExtendedAnswer> results = p.parse(input);
+			Set<ParseResult> results = p.parse(input);
 			System.out.println("Input parsed OK");
 			
 			int counter = 1;
-			for (ExtendedAnswer result : results)
-			{
+			for (ParseResult result : results) {
 				System.out.print(counter);
-				System.out.print(": ");
+				System.out.print(": \n");
 				System.out.print(result.toString());
 				counter++;
 			}

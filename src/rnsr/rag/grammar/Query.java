@@ -124,7 +124,11 @@ public	class		Query
 		for (Polynomial p1: possiblePolynomialsMetaSyntax) {
 			for (Polynomial p2: possiblePolynomialsSyntax) {
 				try {
-					Set<ExtendedAnswer> results = parser.parse(new Query(p1, p2));
+
+					Set<ParseResult> realResults = parser.parse(new Query(p1, p2));
+					Set<ExtendedAnswer> results = new HashSet<>();
+					for (ParseResult pr: realResults) results.add(pr.getResult());
+
 					for (ExtendedAnswer ea: results)
 						queriesReturnSet.addAll(ea.getEASetFromInnerQueryResolution(parser));
 				} catch (ParseException e) {

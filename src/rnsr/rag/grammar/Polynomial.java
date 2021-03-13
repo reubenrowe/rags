@@ -85,40 +85,22 @@ public	class		Polynomial
 	/**
 	 * IResolvable method - resolves any variables in the Polynomial to their bound terms
 	 */
-	public Polynomial resolve(VariableSet vars) throws VariableNotBoundException, VariableNotFoundException
-	{
+	public Polynomial resolve(VariableSet vars) throws VariableNotBoundException, VariableNotFoundException {
 		Polynomial resolvedPolynomial = new Polynomial();
 		
-		for (IPolynomialTerm t : this)
-		{
-			if (t instanceof Variable)
-			{
-				if (!vars.containsKey(t))
-				{
+		for (IPolynomialTerm t : this) {
+			if (t instanceof Variable) {
+				if (!vars.containsKey(t)) {
 					throw new VariableNotFoundException();
-				}
-				else
-				{
-
+				} else {
 					Polynomial p = vars.get(t);
-
-					if (p.Empty())
-					{
-
-
-						System.out.println(t + " not bound!");
-
-
+					if (p.Empty()) {
 						throw new VariableNotBoundException();
-					}
-					else
-					{
+					} else {
 						resolvedPolynomial.addAll(p.resolve(vars));
 					}
 				}
-			}
-			else
-			{
+			} else {
 				resolvedPolynomial.add((IPolynomialTerm) ((IResolvable) t).resolve(vars));
 			}
 		}

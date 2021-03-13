@@ -21,23 +21,21 @@ public	class		SententialForm
 	private int childCount = 0;
 	private String tag = "";
 
-	/**
-	 * Default Constructor
-	 */
-	public SententialForm() { }
-	
+	private SententialForm previous;
+	private SententialForm thisFirst;
+
 	/**
 	 * Constructs a new Sentential Form object
 	 * @param configuration - The configuration of terms represented by this sentential form
 	 * @param variables - the variable map used by this sentential form
 	 * @param result - the sematic value of this sentential form
 	 */
-	public SententialForm(Configuration configuration, VariableSet variables, Polynomial result, ArrayList<VariableCondition> conditions)
-	{
+	public SententialForm(Configuration configuration, VariableSet variables, Polynomial result, ArrayList<VariableCondition> conditions, SententialForm previous) {
 		this.m_configuration = configuration;
 		this.m_variables = variables;
 		this.m_result = result;
 		this.m_conditions = conditions;
+		this.previous = previous;
 	}
 	
 	/**
@@ -232,12 +230,10 @@ public	class		SententialForm
 	/**
 	 * IClonable method - clones this sentential form
 	 */
-	public SententialForm cloneObject(ContextMapping cloneContext) throws CloneException
-	{
+	public SententialForm cloneObject(ContextMapping cloneContext) throws CloneException {
 
 		// Create a new variable set and context mapping
-		for (Variable v : this.m_variables.keySet())
-		{
+		for (Variable v : this.m_variables.keySet()) {
 			Variable vNew = new Variable(v.getType());
 			vNew.setTag(v.getTag());    // FOR DEBUGGING
 			cloneContext.put(v, vNew);
@@ -252,14 +248,7 @@ public	class		SententialForm
 
 		for (Variable v : this.m_variables.keySet()) {
 			Polynomial p = this.m_variables.get(v);
-			// If the source variable is not bound, then neither will the destination be
-			//if (p.Empty()) {
-			//	newVars.put(cloneContext.get(v));
-			//}
-			// If the source variable is bound, bind destination variable to a clone of the bound polynomial
-			//else {
-				newVars.put(cloneContext.get(v), p.clone(cloneContext));
-			//}
+			newVars.put(cloneContext.get(v), p.clone(cloneContext));
 		}
 
 		ArrayList<VariableCondition> newConditions = new ArrayList<>();
@@ -273,7 +262,7 @@ public	class		SententialForm
 		}
 		
 		// Create and return a new Sentential form using the cloned components
-		SententialForm cloneSF = new SententialForm(clonedConfiguration, newVars, clonedResult, newConditions);
+		SententialForm cloneSF = new SententialForm(clonedConfiguration, newVars, clonedResult, newConditions, this);
 		cloneSF.setTag(this.tag + "." + ++childCount);
 		return cloneSF;
 	}
@@ -302,6 +291,10 @@ public	class		SententialForm
 		this.m_configuration.consumeToken(answer);
 	}
 
+	public String buildDerivation() {
+		return (this.previous == null) ? this.toString() : this.previous.buildDerivation() + "\n" + this;
+	}
+
 	public String toString() {
 		String s = this.tag + " : " + m_configuration + ", ";
 		s += ("Variable count: " + m_variables.size() + ", ");
@@ -317,10 +310,6 @@ public	class		SententialForm
 
 	public void setTag() {
 		this.tag = String.valueOf(++count);
-	}
-
-	public String getTag() {
-		return this.tag;
 	}
 	
 }
