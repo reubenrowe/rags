@@ -284,9 +284,8 @@ public class Parser
 		StringBuilder trace = new StringBuilder();
 		String buf = formatTraceBuffer();
 		trace.append(buf + "Return:\n");
-		//trace.append(getCSFormatted(buf, "done " + q, cs));
 		for (ExtendedAnswer ea: results)
-			trace.append(buf + "\t'" + ea + "'\n");
+			trace.append(buf + "\t" + ea + "\n");
 		if (results.size() <= 0) trace.append(buf + "\tEMPTY\n");
 		traceHandler.printTraceToFile(trace.toString());
 	}
@@ -294,8 +293,9 @@ public class Parser
 	private void printCSAdvance(ExtendedAnswer input, Answer a, CandidateSet cs) {
 		StringBuilder trace = new StringBuilder();
 		String buf = formatTraceBuffer();
-		trace.append(buf + "New input: '" + input + "' (removed '" + a + "')\n");
-		trace.append(getCSFormatted(buf, "advance", cs));
+		//trace.append(buf + "New input: '" + input + "' (removed '" + a + "')\n");
+		trace.append(buf + "Removed: " + a + " from input - New input: " + input + "\n");
+		trace.append(getCSFormatted(buf, "pruning", cs));
 		traceHandler.printTraceToFile(trace.toString());
 	}
 
@@ -317,7 +317,7 @@ public class Parser
 		StringBuilder trace = new StringBuilder();
 		trace.append(buf + "After " + action + " CS:\n");
 		for (SententialForm sf: cs)
-			trace.append(buf + "\t(" + sf + ")\n");
+			trace.append(buf + "\t" + sf + "\n");
 		if (cs.size() <= 0) trace.append(buf + "\tEMPTY\n");
 		return trace.toString();
 	}

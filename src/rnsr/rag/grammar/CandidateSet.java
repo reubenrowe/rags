@@ -6,7 +6,6 @@ import rnsr.rag.grammar.interfaces.IPolynomialTerm;
 import rnsr.rag.parser.Parser;
 import rnsr.rag.parser.exception.ParseException;
 
-import java.util.ConcurrentModificationException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -77,17 +76,8 @@ public	class		CandidateSet
 		Iterator<SententialForm> i = this.iterator();
 		while (i.hasNext()) {
 
-
 			// Get the next sentential form in the candidate set
-			SententialForm currentForm;
-			try {
-				currentForm = i.next();
-			} catch (ConcurrentModificationException e) {
-				e.printStackTrace();
-				System.exit(-1);
-				currentForm = null;
-			}
-
+			SententialForm currentForm = i.next();
 
 			// Remove it from the original list
 			i.remove();

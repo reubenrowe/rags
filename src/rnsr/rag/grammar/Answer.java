@@ -176,11 +176,10 @@ public	class		Answer
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder();
-		
-		sb.append(this.m_identifier.Identifier());
-		
+
 		if (!this.m_identifier.Terminal())
 		{
+			sb.append(this.m_identifier.Identifier());
 			if (this.m_arguments.size() > 0)
 			{
 				sb.append("(");
@@ -200,6 +199,9 @@ public	class		Answer
 				
 				sb.append(")");
 			}
+		} else {
+			if (this.m_identifier.equals(AnswerIdentifier.Lambda())) sb.append("#");
+			else sb.append("\"" + this.m_identifier.Identifier() + "\"");
 		}
 		
 		return sb.toString();

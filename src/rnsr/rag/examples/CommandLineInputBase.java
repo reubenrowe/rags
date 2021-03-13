@@ -46,9 +46,8 @@ public abstract class CommandLineInputBase
 			for (ExtendedAnswer result : results)
 			{
 				System.out.print(counter);
-				System.out.print(": '");
+				System.out.print(": ");
 				System.out.print(result.toString());
-				System.out.println("'");
 				counter++;
 			}
 		}

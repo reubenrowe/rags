@@ -86,11 +86,19 @@ public	class		Query
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder();
-		
+
+		/*
 		sb.append("Query(");
 		sb.append(this.m_metaSyntax.toString());
 		sb.append(", ");
 		sb.append(this.m_syntax.toString());
+		sb.append(")");
+		 */
+
+		sb.append("(");
+		sb.append(this.m_metaSyntax);
+		sb.append(" ? ");
+		sb.append(this.m_syntax);
 		sb.append(")");
 		
 		return sb.toString();

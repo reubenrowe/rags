@@ -306,7 +306,8 @@ public	class		SententialForm
 		String s = this.tag + " : " + m_configuration + ", ";
 		s += ("Variable count: " + m_variables.size() + ", ");
 		//s+= m_variables + ", ";
-		s += ("\"" + m_result + "\"");
+		s += "Result \"" + m_result + "\", ";
+		s += "Bindings: " + m_variables;
 		return s;
 	}
 

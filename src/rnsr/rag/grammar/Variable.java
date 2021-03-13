@@ -19,7 +19,7 @@ public	class		Variable
 		implements	IPolynomialTerm, IContextClonable<Variable>
 {
 
-	private int index;
+	private int id;
 	private Type type;
 
 	public Variable(Type type) {
@@ -40,6 +40,14 @@ public	class		Variable
 
 	public Type getType() {
 		return type;
+	}
+
+	public void setID(int id) {
+		this.id = id;
+	}
+
+	public int getID() {
+		return this.id;
 	}
 
 	/**
@@ -70,7 +78,7 @@ public	class		Variable
 	public String toString()
 	{
 		// TODO : Implement a better naming scheme for variables
-		return "_v" + this.hashCode();
+		return "_v" + this.id;
 	}
 
 	public HashSet<ExtendedAnswer> resolveQueries(Parser parser) {
