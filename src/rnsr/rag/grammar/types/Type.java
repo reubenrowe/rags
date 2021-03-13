@@ -11,6 +11,7 @@ public abstract class Type implements IVariableType {
 
     public static final LetterType LETTER_TYPE = new LetterType();
     public static final WordType WORD_TYPE = new WordType();
+    public static final AnswerType ANSWER_TYPE = new AnswerType();
 
     protected HashSet<Answer> alphabet;
     protected boolean isConcatenable;

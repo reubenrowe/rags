@@ -20,7 +20,8 @@ public class ListEqualityExample extends CommandLineInputBase {
         AnswerIdentifier echo = new AnswerIdentifier("echo", 0);
         AnswerIdentifier or = new AnswerIdentifier("or", 0);
         AnswerIdentifier memOf = new AnswerIdentifier("memOf", 1);
-        AnswerIdentifier cons = new AnswerIdentifier("cons", 0);
+
+        AnswerIdentifier cons = new AnswerIdentifier("cons", 2);
 
         AnswerIdentifier start = new AnswerIdentifier("start", 0);
 
@@ -63,8 +64,9 @@ public class ListEqualityExample extends CommandLineInputBase {
         g.addRule(start, new Rule(c, varSet, new Polynomial(vars.get(1)), args));
         */
 
+
         // 1
-        // <start, _v1> -> < ( [memOf(cons("one", cons("two", cons("three", nil))))] ? ["three"] ), _v1>
+        // <start, ([memOf(cons("one", cons("two", cons("three", nil))))] ? ["three"]) > -> <star(echo), _v1>
         vars = new ArrayList<>();
         varSet = new VariableSet();
         for (int i = 0; i <= 1; i++) {
@@ -94,9 +96,18 @@ public class ListEqualityExample extends CommandLineInputBase {
         answerArgs.add(new Polynomial(a2));
         Answer a3 = new Answer(cons, answerArgs);
 
-        c.add(new Pair(new Polynomial(new Query(new Polynomial(a3), new Polynomial(new Answer(new AnswerIdentifier("three"))))), vars.get(1)));
+        answerArgs = new ArrayList<>();
+        answerArgs.add(new Polynomial(a3));
+        Answer a4 = new Answer(memOf, answerArgs);
 
-        g.addRule(start, new Rule(c, varSet, new Polynomial(vars.get(1)), args));
+        Query q = new Query(new Polynomial(a4), new Polynomial(vars.get(1)));
+
+        answerArgs = new ArrayList<>();
+        answerArgs.add(new Polynomial(new Answer(echo)));
+        c.add(new Pair(new Polynomial(new Answer(id_star, answerArgs)), vars.get(1)));
+
+        g.addRule(start, new Rule(c, varSet, new Polynomial(q), args));
+
 
         // 2
         // <eq(#), T> -> #
@@ -312,9 +323,14 @@ public class ListEqualityExample extends CommandLineInputBase {
             vars.add(i, v);
             varSet.put(v);
         }
+
+        vars.get(0).setTag("_v0 in memOf 1");
+        vars.get(1).setTag("_v1 in memOf 1");
+
         args = new ArrayList<>();
         args.add(new Polynomial(vars.get(0)));
         args.add(new Polynomial(new Answer(nil_terminal)));
+
         c = new Configuration();
         answerArgs = new ArrayList<>();
         answerArgs.add(new Polynomial(new Answer(letter)));
@@ -325,13 +341,27 @@ public class ListEqualityExample extends CommandLineInputBase {
         // <memOf(cons(_x, _xs)), (or ? (eq(_x) ? _v1) (memOf(_xs) ? _v1))> -> <star(echo), _v1>   0:v1, 1:x, 2:x2, 3:v1
         vars = new ArrayList<>();
         varSet = new VariableSet();
-        for (int i = 0; i <= 1; i++) {
+        for (int i = 0; i <= 3; i++) {
             Variable v = new Variable();
             vars.add(i, v);
             varSet.put(v);
         }
+
+        vars.get(0).setTag("_v0 in memOf 2");
+        vars.get(1).setTag("_x in memOf 2");
+        vars.get(2).setTag("_xs in memOf 2");
+        vars.get(3).setTag("_v1 in memOf 2");
+
         args = new ArrayList<>();
         args.add(new Polynomial(vars.get(0)));
+
+        answerArgs = new ArrayList<>();
+        answerArgs.add(new Polynomial(vars.get(1)));
+        answerArgs.add(new Polynomial(vars.get(2)));
+        args.add(new Polynomial(new Answer(cons, answerArgs)));
+
+        vars.get(1).setType(Type.WORD_TYPE);
+        vars.get(2).setType(Type.ANSWER_TYPE);
 
         answerArgs = new ArrayList<>();
         answerArgs.add(new Polynomial(vars.get(1)));
@@ -346,14 +376,12 @@ public class ListEqualityExample extends CommandLineInputBase {
         poly.add(q2);
         Query q3 = new Query(new Polynomial(new Answer(or)), poly); // (or ? (eq(_x) ? _v1) (memOf(_xs) ? _v1))
 
-        args.add(new Polynomial(q3));
-
         c = new Configuration();
         answerArgs = new ArrayList<>();
         answerArgs.add(new Polynomial(new Answer(echo)));
-        c.add(new Pair(new Polynomial(new Answer(id_star, answerArgs)), vars.get(1)));
+        c.add(new Pair(new Polynomial(new Answer(id_star, answerArgs)), vars.get(3)));
 
-        g.addRule(memOf, new Rule(c, varSet, new Polynomial(new Answer(false_terminal)), args));
+        g.addRule(memOf, new Rule(c, varSet, new Polynomial(q3), args));
 
 
 
@@ -410,7 +438,7 @@ public class ListEqualityExample extends CommandLineInputBase {
         poly.add(vars.get(3));
         g.addRule(id_star, new Rule(c, varSet, poly, args));
 
-        // LetterType
+        // Letter
         // _z: LETTER; <letter, #> -> <_z, _v1>
         vars = new ArrayList<Variable>();
         varSet = new VariableSet();
@@ -427,7 +455,6 @@ public class ListEqualityExample extends CommandLineInputBase {
         vars.get(1).setType(Type.LETTER_TYPE);
         args = new ArrayList<Polynomial>();
         args.add(new Polynomial(vars.get(0)));	// v0
-        args.add(new Polynomial(vars.get(1)));	// z
         c = new Configuration();
         c.add(new Pair(new Polynomial(vars.get(1)), vars.get(2)));
         g.addRule(letter, new Rule(c, varSet, new Polynomial(new Answer(AnswerIdentifier.Lambda())), args));
@@ -448,8 +475,7 @@ public class ListEqualityExample extends CommandLineInputBase {
 
         vars.get(1).setType(Type.LETTER_TYPE);
         args = new ArrayList<Polynomial>();
-        args.add(new Polynomial(vars.get(0)));	// star
-        args.add(new Polynomial(vars.get(1)));	// a
+        args.add(new Polynomial(vars.get(0)));	// v0
         c = new Configuration();
         c.add(new Pair(new Polynomial(vars.get(1)), vars.get(2)));
         g.addRule(echo, new Rule(c, varSet, new Polynomial(vars.get(2)), args));

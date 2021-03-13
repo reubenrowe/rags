@@ -30,7 +30,7 @@ public	class		Answer
 	/**
 	 * The arguments of this answer
 	 */
-	private ArrayList<Polynomial> m_arguments = null;
+	private ArrayList<Polynomial> m_arguments = new ArrayList<>();
 
 	/**
 	 * Default Constructor
@@ -329,22 +329,28 @@ public	class		Answer
 		return this.m_identifier.Identifier().hashCode() + ((this.m_arguments != null) ? this.m_arguments.size() : 0);
 	}
 
-	public UnificationSetting unify(Polynomial other) throws UnificationLambdaException {
+	public UnificationSetting unify(Polynomial other) throws UnificationLambdaException, PolynomialUnificationException, CloneException {
 		VariableSet newBindings = new VariableSet();
 
 		IPolynomialTerm firstTerm = other.get(0);
 		if (!(firstTerm instanceof Answer)) throw new UnificationLambdaException(); // Can only unify answer with answer
 		Answer otherAns = (Answer) firstTerm;
 
-		// For now: assuming other poly is lambda - later need to consider matching non-nullary answers
-		if (this.Identifier().equals(otherAns.Identifier())
-				&& ((this.Arguments() == null && otherAns.Arguments() == null)
-				|| (this.Arguments().size() == otherAns.Arguments().size()))) {
-			return new UnificationSetting(newBindings, other);
-		} else {
-			throw new UnificationLambdaException();
-		}
+		if (!this.m_identifier.equals(otherAns.Identifier()) || (this.Arguments().size() != otherAns.Arguments().size()))
+			throw new UnificationLambdaException(); // Not equal answer IDs or args counts, cannot unify
 
+		newBindings = this.matchTo(otherAns);
+		return new UnificationSetting(newBindings, other);
+
+	}
+
+	public VariableSet matchTo(Answer other) throws PolynomialUnificationException, UnificationLambdaException, CloneException {
+		VariableSet newBindings = new VariableSet();
+		if (this.Arguments() == null) return newBindings;
+		for (int i = 0; i < this.Arguments().size(); i++) {
+			newBindings.putAll(this.Arguments().get(i).unify(other.Arguments().get(i)));
+		}
+		return newBindings;
 	}
 
 	public Polynomial resolveInnerVariables(VariableSet sfBindings) {
