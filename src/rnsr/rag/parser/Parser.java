@@ -20,7 +20,9 @@ public class Parser
 	private Grammar m_grammar = null;
 
 	private TraceHandler traceHandler = new TraceHandler();
-	
+
+	private Query originalQuery = null;
+
 	/**
 	 * Default Constructor
 	 */
@@ -51,6 +53,7 @@ public class Parser
 	 */
 	public Set<ParseResult> parse(String input) throws ParseException
 	{
+
 		// Check that we have a grammar to work from
 		if (this.m_grammar == null)
 		{
@@ -73,6 +76,7 @@ public class Parser
 		Polynomial metaSyntax = new Polynomial();
 		metaSyntax.add(startSymbol);
 		Query initialQuery = new Query(metaSyntax, parseInput);
+		originalQuery = initialQuery;
 		
 		// Parse the query
 		Set<ParseResult> resultSet = this.parse(initialQuery);
@@ -269,7 +273,7 @@ public class Parser
 		for (ParseResult res: resultSet) {
 			Set<ExtendedAnswer> eas = res.getResult().getEASetFromInnerQueryResolution(this);
 			for (ExtendedAnswer ea: eas) {
-				realResults.add(new ParseResult(ea, res.getDerivation()));
+				realResults.add(new ParseResult(ea, res.getDerivation(), originalQuery));
 				eaSet.add(ea);
 			}
 		}

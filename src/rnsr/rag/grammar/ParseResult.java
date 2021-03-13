@@ -4,10 +4,12 @@ public class ParseResult {
 
     private String derivation;
     private ExtendedAnswer result;
+    private Query original;
 
-    public ParseResult(ExtendedAnswer result, String derivation) {
+    public ParseResult(ExtendedAnswer result, String derivation, Query original) {
         this.result = result;
         this.derivation = derivation;
+        this.original = original;
     }
 
     public String getDerivation() {
@@ -27,7 +29,8 @@ public class ParseResult {
     }
 
     public String toString() {
-        String s = "- RESULT: " + this.result + "\n";
+        String s = "- QUERY: " + this.original + "\n";
+        s += "- RESULT: " + this.result + "\n";
         s += "- DERIVATION: \n";
         s += derivation;
         return s + "\n";

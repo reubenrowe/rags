@@ -251,7 +251,7 @@ public	class		CandidateSet
 		for (SententialForm form : this) {
 			if (!form.checkVariableConditions()) continue;
 			//System.out.println("DERIV: \n" + form.buildDerivation());
-			resultSet.add(new ParseResult(form.Result().resolve(form.Variables()).toExtendedAnswer(), form.buildDerivation()));
+			resultSet.add(new ParseResult(form.Result().resolve(form.Variables()).toExtendedAnswer(), form.buildDerivation(), null));
 		}
 
 		return resultSet;
