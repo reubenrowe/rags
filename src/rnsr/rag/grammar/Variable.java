@@ -10,7 +10,6 @@ import rnsr.rag.parser.Parser;
 import rnsr.rag.util.ConsumeSetting;
 import rnsr.rag.util.UnificationSetting;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
@@ -71,7 +70,7 @@ public	class		Variable
 	public String toString()
 	{
 		// TODO : Implement a better naming scheme for variables
-		return "v" + this.hashCode() + " [" + tag + "]";
+		return "_v" + this.hashCode();
 	}
 
 	public HashSet<ExtendedAnswer> resolveQueries(Parser parser) {
@@ -135,27 +134,6 @@ public	class		Variable
 			}
 		}
 
-	}
-
-	public boolean checkConditions(SententialForm currentForm, Answer possibleAnswer) {
-		ArrayList<VariableCondition> conditions = currentForm.m_conditions;
-		for (VariableCondition vc: conditions) {
-			 if (vc.getFirstVariable().equals(this) || vc.getSecondVariable().equals(this)) {
-			 	Variable other = (this.equals(vc.getFirstVariable())) ? vc.getSecondVariable() : vc.getFirstVariable();
-				 Polynomial otherP = currentForm.m_variables.get(other);
-				 Polynomial thisP = new Polynomial(possibleAnswer);
-			 	switch (vc.getConditionType()) {
-
-			 		case NE: {
-						if (thisP.equals(otherP)) {
-							return false;
-						}
-					}
-
-				}
-			 }
-		}
-		return true;
 	}
 
 	public UnificationSetting unify(Polynomial other) throws UnificationLambdaException {

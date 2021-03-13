@@ -181,7 +181,7 @@ public	class		Answer
 		
 		if (!this.m_identifier.Terminal())
 		{
-			if (this.m_arguments != null)
+			if (this.m_arguments.size() > 0)
 			{
 				sb.append("(");
 			

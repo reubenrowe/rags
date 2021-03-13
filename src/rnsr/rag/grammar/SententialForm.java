@@ -303,11 +303,7 @@ public	class		SententialForm
 	}
 
 	public String toString() {
-		String s = this.tag + " : \"";
-		for (IConfigurationTerm c: m_configuration) {
-			s += c;
-		}
-		s += "\", ";
+		String s = this.tag + " : " + m_configuration + ", ";
 		s += ("Variable count: " + m_variables.size() + ", ");
 		//s+= m_variables + ", ";
 		s += ("\"" + m_result + "\"");

@@ -199,16 +199,7 @@ public	class		Polynomial
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder();
-		
-		for (IPolynomialTerm t : this)
-		{
-			if ((sb.length() > 0) && !(t instanceof Answer && ((Answer) t).Identifier().Terminal()))
-			{
-				sb.append(",");
-			}
-			sb.append(t.toString());
-		}
-		
+		for (int i = 0; i < this.size(); i++) sb.append(this.get(i));
 		return sb.toString();
 	}
 
