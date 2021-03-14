@@ -368,4 +368,10 @@ public	class		Answer
 		return new Polynomial(newAns);
 	}
 
+	public VariableSet usedVariables() {
+		VariableSet vs = new VariableSet();
+		for (Polynomial p: this.m_arguments) vs.putAll(p.usedVariables());
+		return vs;
+	}
+
 }

@@ -205,5 +205,17 @@ public	class		Polynomial
 		}
 		return p;
 	}
+
+	public VariableSet usedVariables() {
+		VariableSet vs = new VariableSet();
+		for (IPolynomialTerm pt: this) {
+			vs.putAll(pt.usedVariables());
+		}
+		return vs;
+	}
+
+	public boolean onlyVariable() {
+		return this.size() == 1 && this.get(0) instanceof Variable;
+	}
 	
 }

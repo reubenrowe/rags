@@ -148,5 +148,12 @@ public	class		Query
 		return null;
 	}
 
+	public VariableSet usedVariables() {
+		VariableSet vs = new VariableSet();
+		vs.putAll(this.m_metaSyntax.usedVariables());
+		vs.putAll(this.m_syntax.usedVariables());
+		return vs;
+	}
+
 
 }

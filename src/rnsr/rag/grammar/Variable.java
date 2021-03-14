@@ -166,4 +166,10 @@ public	class		Variable
 		return sfBindings.get(this);
 	}
 
+	public VariableSet usedVariables() {
+		VariableSet vs = new VariableSet();
+		vs.put(this);
+		return vs;
+	}
+
 }

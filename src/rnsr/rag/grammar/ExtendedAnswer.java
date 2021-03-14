@@ -80,8 +80,6 @@ public	class		ExtendedAnswer
 	 * @return the set of all permutations of extended answers
 	 */
 	public static Set<ExtendedAnswer> extendedAnswerPermutations(ArrayList<Set<ExtendedAnswer>> polyAnswers) {
-
-
 		ArrayList<ExtendedAnswer> permutations = new ArrayList<>();
 
 		// Creating a list of lists of extended answers from a list of sets of extended answers
@@ -91,7 +89,6 @@ public	class		ExtendedAnswer
 		for (Set<ExtendedAnswer> eaSet: polyAnswers) {
 			eaListList.add(new ArrayList<>(eaSet));
 		}
-
 
 		// Creating an empty list for every permutation of the Answers possible
 		int sum = 1;

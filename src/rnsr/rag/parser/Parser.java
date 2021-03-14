@@ -123,7 +123,6 @@ public class Parser
 		SententialForm firstSF = new SententialForm(c, varSet, result, new ArrayList<>(), null);
 		firstSF.setTag();
 		CandidateSet candidate = new CandidateSet(firstSF);
-
 		
 		// Get input
 		ExtendedAnswer input = null;
@@ -179,22 +178,7 @@ public class Parser
 				candidate.advance(a, true);
 				printCSAdvance(input, a, candidate);
 			}
-			
-			/* We are not throwing an exception, in case the query not 
-			 * succeeding is a valid operation of the grammar
-			 
-			// Check that we still have candidate forms left - if there are none, this is an error
-			if (candidate.isEmpty())
-			{
-				StringBuilder sb = new StringBuilder();
-				
-				sb.append("No candidate forms left! Remaining input: ");
-				sb.append(input.toString());
-				
-				throw new ParseException(sb.toString());
-			h
-			
-			*/
+
 		}
 		while (!input.isEmpty() && !candidate.isEmpty());
 
@@ -229,7 +213,6 @@ public class Parser
 			candidate.advance(new Answer(AnswerIdentifier.Lambda()));
 		}
 
-
 		// discard any non-empty forms that are left - they cannot match the input at this point!
 		candidate.removeNonEmptyForms();
 		printCSRemoveNonEmpty(candidate);
@@ -252,21 +235,6 @@ public class Parser
 		{
 			throw new ParseException(e);
 		}
-		
-		/* We are not throwing an exception, in case the query not 
-		 * succeeding is a valid operation of the grammar
-		 
-		// If result set is empty, this is an error
-		if (resultSet.size() == 0)
-		{
-			StringBuilder sb = new StringBuilder();
-			sb.append("Error parsing ");
-			sb.append(q.toString());
-			sb.append("\n");
-			sb.append("The result set is empty!");
-			throw new ParseException(sb.toString());
-		}
-		*/
 
 		Set<ParseResult> realResults = new HashSet<>();
 		Set<ExtendedAnswer> eaSet = new HashSet<>();

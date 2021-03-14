@@ -59,4 +59,11 @@ public	class		Pair
 		return "<" + m_left + ", " + m_right + ">";
 	}
 
+	public VariableSet usedVariables() {
+		VariableSet vs = new VariableSet();
+		vs.put(this.m_right);
+		vs.putAll(this.m_left.usedVariables());
+		return vs;
+	}
+
 }

@@ -65,6 +65,14 @@ public	class		Configuration
 		}
 	}
 
+	public VariableSet usedVariables() {
+		VariableSet vs = new VariableSet();
+		for (IConfigurationTerm ct: this) {
+			vs.putAll(ct.usedVariables());
+		}
+		return vs;
+	}
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("[");

@@ -292,11 +292,38 @@ public	class		SententialForm
 	}
 
 	public String buildDerivation() {
+		this.removeRedundantVariables();
 		return (this.previous == null) ? this.toString() : this.previous.buildDerivation() + "\n" + this;
 	}
 
+
+
+	public void removeRedundantVariables() {
+		VariableSet usedVariables = this.m_configuration.usedVariables();
+		usedVariables.putAll(this.m_result.usedVariables());
+		this.flattenVariables(usedVariables);
+		VariableSet newVars = new VariableSet();
+		for (Variable v: this.m_variables.keySet()) {
+			if (usedVariables.containsKey(v)) newVars.put(v, this.m_variables.get(v));
+		}
+		this.m_variables = newVars;
+	}
+
+	public void flattenVariables(VariableSet usedVariables) {
+		for (Variable v: usedVariables.keySet()) {
+			Polynomial p = this.m_variables.get(v);
+			if (!p.onlyVariable()) continue;
+			Variable boundTo = (Variable) p.get(0);
+			while (this.m_variables.get(boundTo).onlyVariable())
+				boundTo = (Variable) this.m_variables.get(boundTo).get(0);
+			this.m_variables.put(v, this.m_variables.get(boundTo));
+		}
+	}
+
+
+
 	public String toString() {
-		String s = this.tag + " : " + m_configuration + ", ";
+		String s = /*this.tag + " : " + */ m_configuration + ", ";
 		s += ("Variable count: " + m_variables.size() + ", ");
 		//s+= m_variables + ", ";
 		s += "Result \"" + m_result + "\", ";
