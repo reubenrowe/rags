@@ -20,14 +20,13 @@ public class ListEqualityExample extends CommandLineInputBase {
         AnswerIdentifier echo = new AnswerIdentifier("echo", 0);
         AnswerIdentifier or = new AnswerIdentifier("or", 0);
         AnswerIdentifier memOf = new AnswerIdentifier("memOf", 1);
-
         AnswerIdentifier cons = new AnswerIdentifier("cons", 2);
-
         AnswerIdentifier start = new AnswerIdentifier("start", 0);
+        AnswerIdentifier nil = new AnswerIdentifier("nil", 0);
+
 
         AnswerIdentifier true_terminal = new AnswerIdentifier("TRUE");
         AnswerIdentifier false_terminal = new AnswerIdentifier("FALSE");
-        AnswerIdentifier nil_terminal = new AnswerIdentifier("nil");
 
         Answer a = new Answer(start);
         Grammar g = new Grammar(a);
@@ -84,7 +83,7 @@ public class ListEqualityExample extends CommandLineInputBase {
 
         answerArgs = new ArrayList<>();
         answerArgs.add(new Polynomial(new Answer(new AnswerIdentifier("three"))));
-        answerArgs.add(new Polynomial(new Answer(nil_terminal)));
+        answerArgs.add(new Polynomial(new Answer(nil)));
         Answer a1 = new Answer(cons, answerArgs);
 
         answerArgs = new ArrayList<>();
@@ -330,7 +329,7 @@ public class ListEqualityExample extends CommandLineInputBase {
 
         args = new ArrayList<>();
         args.add(new Polynomial(vars.get(0)));
-        args.add(new Polynomial(new Answer(nil_terminal)));
+        args.add(new Polynomial(new Answer(nil)));
 
         c = new Configuration();
         answerArgs = new ArrayList<>();
