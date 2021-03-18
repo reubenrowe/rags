@@ -28,8 +28,7 @@ public class ListEqualityExample extends CommandLineInputBase {
         AnswerIdentifier true_terminal = new AnswerIdentifier("TRUE");
         AnswerIdentifier false_terminal = new AnswerIdentifier("FALSE");
 
-        Answer a = new Answer(start);
-        Grammar g = new Grammar(a);
+
 
 
         /* ********** RULE PRODUCTIONS ********** */
@@ -41,73 +40,27 @@ public class ListEqualityExample extends CommandLineInputBase {
         Configuration c;
         Polynomial poly;
         ArrayList<VariableCondition> conditions;
-        ArrayList<Polynomial> answerArgs;
-
-        /*
-        // 1
-        // <start, _v1> -> <eq("test"), _v1>
-        vars = new ArrayList<>();
-        varSet = new VariableSet();
-        for (int i = 0; i <= 1; i++) {
-            Variable v = new Variable();
-            vars.add(i, v);
-            varSet.put(v);
-        }
-        vars.get(0).setTag("_v0 in 1");
-        vars.get(1).setTag("_v1 in 1");
-        args = new ArrayList<>();
-        args.add(new Polynomial(vars.get(0)));
-        c = new Configuration();
-        answerArgs = new ArrayList<>();
-        answerArgs.add(new Polynomial(new Answer(new AnswerIdentifier("test"))));
-        c.add(new Pair(new Polynomial(new Answer(eq_1, answerArgs)), vars.get(1)));
-        g.addRule(start, new Rule(c, varSet, new Polynomial(vars.get(1)), args));
-        */
-
-
-        // 1
-        // <start, ([memOf(cons("one", cons("two", cons("three", nil))))] ? _v1) > -> <star(echo), _v1>
-        vars = new ArrayList<>();
-        varSet = new VariableSet();
-        for (int i = 0; i <= 1; i++) {
-            Variable v = new Variable();
-            vars.add(i, v);
-            varSet.put(v);
-        }
-        vars.get(0).setTag("_v0 in 1");
-        vars.get(1).setTag("_v1 in 1");
-
-        args = new ArrayList<>();
-        args.add(new Polynomial(vars.get(0)));
-        c = new Configuration();
-
-        answerArgs = new ArrayList<>();
+        ArrayList<Polynomial> answerArgs = new ArrayList<>();
         answerArgs.add(new Polynomial(new Answer(new AnswerIdentifier("three"))));
         answerArgs.add(new Polynomial(new Answer(nil)));
-        Answer a1 = new Answer(cons, answerArgs);
+        Answer a11 = new Answer(cons, answerArgs);
 
         answerArgs = new ArrayList<>();
         answerArgs.add(new Polynomial(new Answer(new AnswerIdentifier("two"))));
-        answerArgs.add(new Polynomial(a1));
-        Answer a2 = new Answer(cons, answerArgs);
+        answerArgs.add(new Polynomial(a11));
+        Answer a21 = new Answer(cons, answerArgs);
 
         answerArgs = new ArrayList<>();
         answerArgs.add(new Polynomial(new Answer(new AnswerIdentifier("one"))));
-        answerArgs.add(new Polynomial(a2));
-        Answer a3 = new Answer(cons, answerArgs);
+        answerArgs.add(new Polynomial(a21));
+        Answer a31 = new Answer(cons, answerArgs);
 
         answerArgs = new ArrayList<>();
-        answerArgs.add(new Polynomial(a3));
-        Answer a4 = new Answer(memOf, answerArgs);
+        answerArgs.add(new Polynomial(a31));
+        Answer a41 = new Answer(memOf, answerArgs);
 
-        Query q = new Query(new Polynomial(a4), new Polynomial(vars.get(1)));
-
-        answerArgs = new ArrayList<>();
-        answerArgs.add(new Polynomial(new Answer(echo)));
-        c.add(new Pair(new Polynomial(new Answer(id_star, answerArgs)), vars.get(1)));
-
-        g.addRule(start, new Rule(c, varSet, new Polynomial(q), args));
-
+        Grammar g = new Grammar(a41);
+        
 
         // 2
         // <eq(#), T> -> #
