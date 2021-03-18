@@ -29,7 +29,8 @@ public class ListEqualityExample extends CommandLineInputBase {
         AnswerIdentifier false_terminal = new AnswerIdentifier("FALSE");
         AnswerIdentifier nil_terminal = new AnswerIdentifier("nil");
 
-        Grammar g = new Grammar(start);
+        Answer a = new Answer(start);
+        Grammar g = new Grammar(a);
 
 
         /* ********** RULE PRODUCTIONS ********** */
@@ -66,7 +67,7 @@ public class ListEqualityExample extends CommandLineInputBase {
 
 
         // 1
-        // <start, ([memOf(cons("one", cons("two", cons("three", nil))))] ? ["three"]) > -> <star(echo), _v1>
+        // <start, ([memOf(cons("one", cons("two", cons("three", nil))))] ? _v1) > -> <star(echo), _v1>
         vars = new ArrayList<>();
         varSet = new VariableSet();
         for (int i = 0; i <= 1; i++) {

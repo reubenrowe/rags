@@ -21,7 +21,7 @@ public class Grammar
 	/**
 	 * The start symbol of this grammar
 	 */
-	private AnswerIdentifier m_startSymbol = null;
+	private Answer m_startSymbol = null;
 	
 	/**
 	 * Whether this grammar will accept Rule productions bound to Answers not already in the rule map
@@ -37,7 +37,7 @@ public class Grammar
 	 * Constructs a new Recursive Adaptive Grammar with the specified start symbol
 	 * @param startSymbol - the start symbol the grammar
 	 */
-	public Grammar(AnswerIdentifier startSymbol)
+	public Grammar(Answer startSymbol)
 	{
 		this.m_startSymbol = startSymbol;
 	}
@@ -47,7 +47,7 @@ public class Grammar
 	 * @param identifierList - The list of Answers which this RAG supports
 	 * @param startSymbol - the start symbol the grammar
 	 */
-	public Grammar(HashSet<AnswerIdentifier> identifierList, AnswerIdentifier startSymbol)
+	public Grammar(HashSet<AnswerIdentifier> identifierList, Answer startSymbol)
 	{
 		Iterator<AnswerIdentifier> i = identifierList.iterator();
 		while (i.hasNext())
@@ -70,14 +70,7 @@ public class Grammar
 	 */
 	public Answer StartSymbol()
 	{
-		if (this.m_startSymbol == null)
-		{
-			return null;
-		}
-		else
-		{
-			return new Answer(this.m_startSymbol);
-		}
+		return this.m_startSymbol;
 	}
 	
 	/**

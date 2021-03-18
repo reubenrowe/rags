@@ -24,11 +24,6 @@ public class Parser
 	private Query originalQuery = null;
 
 	/**
-	 * Default Constructor
-	 */
-	public Parser() { }
-	
-	/**
 	 * Constructs a new parser based on the specified recursive adaptive grammar
 	 * @param g - The grammar which this parser will use
 	 */

@@ -16,7 +16,8 @@ public class UnifyTestExample extends CommandLineInputBase {
         AnswerIdentifier start = new AnswerIdentifier("Start", 0);
         AnswerIdentifier test = new AnswerIdentifier("Test", 1);
 
-        Grammar g = new Grammar(start);
+        Answer a = new Answer(start);
+        Grammar g = new Grammar(a);
 
 
         /* ********** RULE PRODUCTIONS ********** */
