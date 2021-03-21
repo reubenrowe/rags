@@ -1,0 +1,41 @@
+Name: DeclarationExample
+Start: Prog 
+
+<And[&a, &b], (&a ? &v1) (&b ? &v1)> -> <Star[Echo], &v1>
+
+<Combine[&a, &b], And[(&a ? Undef), (&b ? Undef)]> -> Undef
+<Combine[&a, &b], Union[(&a ? Def), (&b ? Def)]> -> Def
+
+<DeclList[&e], &e> -> #
+<DeclList[&e], &v2> -> <Decl[&e], &v1> <DeclList[&v1], &v2>
+
+<Decl[&e], Combine[&e, (MakeEnv ? &v1)]> -> 'int ' <Echo Star[Echo], &v1> <((&e ? Undef) ? &v1), &v2> ';'
+
+<Stmt[&e], #> -> <(&e ? Def), &v1> ' = ' <(&e ? Def), &v2> ';'
+
+<Prog, #> -> '{' <DeclList[Union[Map[Undef, Star[Letter]], Map[Def, EmptySet]]], &v1> <Star[Stmt[&v1]], &v2> '}'
+
+<MakeEnv, Union[Map[Undef, (Not ? &v1)], Map[Def, &v1]]> -> <Star[Echo], &v1>
+
+<Undef, #> -> Undef
+
+<Def, #> -> Def
+
+<Star[&a], #> -> #
+<Star[&a], &v1&v2> -> <&a, &v1> <Star[&a], &v2>
+
+&z : &LETTER; <Letter, #> -> <&z, &v1>
+
+&z : &LETTER; <Echo, &v1> -> <&z, &v1>
+
+&z : &LETTER; &zP : &LETTER; &z != &zP; <Notlet[&z], #> -> <&zP, &v1>
+
+<Not, Letter Star[letter]> -> #
+<Not, Union[#, Union[Notlet[&v1] Star[Letter], &v1 (Not ? &v2)]]> -> <Echo, &v1> <Star[Echo], &v2>
+
+<Union[&a, &b], &v1> -> <&a, &v1>
+<Union[&a, &b], &v1> -> <&b, &v1>
+
+<Map[&a, &b], &b> -> <&a, &v1>
+
+<EmptySet, #> -> {}

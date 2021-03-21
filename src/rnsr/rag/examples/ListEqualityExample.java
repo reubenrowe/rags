@@ -1,5 +1,4 @@
 package rnsr.rag.examples;
-
 import rnsr.rag.grammar.*;
 import rnsr.rag.grammar.exception.ArgumentMismatchException;
 import rnsr.rag.grammar.exception.RuleFunctionException;
@@ -7,476 +6,542 @@ import rnsr.rag.grammar.exception.VariableNotFoundException;
 import rnsr.rag.grammar.types.Type;
 
 import java.util.ArrayList;
-
 public class ListEqualityExample extends CommandLineInputBase {
-
     public Grammar CreateRAG() throws ArgumentMismatchException, RuleFunctionException, VariableNotFoundException {
-
-        // Construct Answer Identifier set
-        AnswerIdentifier not = new AnswerIdentifier("not", 1);
-        AnswerIdentifier eq_1 = new AnswerIdentifier("eq", 1);
-        AnswerIdentifier id_star = new AnswerIdentifier("star", 1);
-        AnswerIdentifier letter = new AnswerIdentifier("letter", 0);
-        AnswerIdentifier echo = new AnswerIdentifier("echo", 0);
-        AnswerIdentifier or = new AnswerIdentifier("or", 0);
-        AnswerIdentifier memOf = new AnswerIdentifier("memOf", 1);
-        AnswerIdentifier cons = new AnswerIdentifier("cons", 2);
-        AnswerIdentifier nil = new AnswerIdentifier("nil", 0);
-
-
-        AnswerIdentifier true_terminal = new AnswerIdentifier("TRUE");
-        AnswerIdentifier false_terminal = new AnswerIdentifier("FALSE");
-
-
-
-
-        /* ********** RULE PRODUCTIONS ********** */
-
-
+        AnswerIdentifier nt_answer_Cons_2 = new AnswerIdentifier("Cons", 2);
+        AnswerIdentifier nt_answer_MemOf_1 = new AnswerIdentifier("MemOf", 1);
+        AnswerIdentifier nt_answer_Or_0 = new AnswerIdentifier("Or", 0);
+        AnswerIdentifier nt_answer_Letter_0 = new AnswerIdentifier("Letter", 0);
+        AnswerIdentifier nt_answer_Echo_0 = new AnswerIdentifier("Echo", 0);
+        AnswerIdentifier nt_answer_Star_1 = new AnswerIdentifier("Star", 1);
+        AnswerIdentifier nt_answer_Not_1 = new AnswerIdentifier("Not", 1);
+        AnswerIdentifier nt_answer_Nil_0 = new AnswerIdentifier("Nil", 0);
+        AnswerIdentifier nt_answer_Eq_1 = new AnswerIdentifier("Eq", 1);
+        AnswerIdentifier tl_answer_3 = new AnswerIdentifier("T");
+        AnswerIdentifier tl_answer_0 = new AnswerIdentifier("One");
+        AnswerIdentifier tl_answer_4 = new AnswerIdentifier("F");
+        AnswerIdentifier tl_answer_1 = new AnswerIdentifier("Two");
+        AnswerIdentifier tl_answer_2 = new AnswerIdentifier("Three");
         ArrayList<Variable> vars;
-        ArrayList<Polynomial> args;
+        ArrayList<VariableCondition> conditions;
         VariableSet varSet;
         Configuration c;
-        Polynomial poly;
-        ArrayList<VariableCondition> conditions;
-        ArrayList<Polynomial> answerArgs = new ArrayList<>();
-        answerArgs.add(new Polynomial(new Answer(new AnswerIdentifier("three"))));
-        answerArgs.add(new Polynomial(new Answer(nil)));
-        Answer a11 = new Answer(cons, answerArgs);
-
-        answerArgs = new ArrayList<>();
-        answerArgs.add(new Polynomial(new Answer(new AnswerIdentifier("two"))));
-        answerArgs.add(new Polynomial(a11));
-        Answer a21 = new Answer(cons, answerArgs);
-
-        answerArgs = new ArrayList<>();
-        answerArgs.add(new Polynomial(new Answer(new AnswerIdentifier("one"))));
-        answerArgs.add(new Polynomial(a21));
-        Answer a31 = new Answer(cons, answerArgs);
-
-        answerArgs = new ArrayList<>();
-        answerArgs.add(new Polynomial(a31));
-        Answer a41 = new Answer(memOf, answerArgs);
-
-        Grammar g = new Grammar(a41);
-
-
-        // 2
-        // <eq(#), T> -> #
+        ////////////////////////////////////////////////////
+        ArrayList<Polynomial> args1 = new ArrayList<>();
+        Polynomial poly1 = new Polynomial();
+        ArrayList<Polynomial> args2 = new ArrayList<>();
+        Polynomial poly2 = new Polynomial();
+        poly2.add(new Answer(tl_answer_0));
+        args2.add(poly2);
+        Polynomial poly3 = new Polynomial();
+        ArrayList<Polynomial> args3 = new ArrayList<>();
+        Polynomial poly4 = new Polynomial();
+        poly4.add(new Answer(tl_answer_1));
+        args3.add(poly4);
+        Polynomial poly5 = new Polynomial();
+        ArrayList<Polynomial> args4 = new ArrayList<>();
+        Polynomial poly6 = new Polynomial();
+        poly6.add(new Answer(tl_answer_2));
+        args4.add(poly6);
+        Polynomial poly7 = new Polynomial();
+        poly7.add(new Answer(nt_answer_Nil_0));
+        args4.add(poly7);
+        poly5.add(new Answer(nt_answer_Cons_2, args4));
+        args3.add(poly5);
+        poly3.add(new Answer(nt_answer_Cons_2, args3));
+        args2.add(poly3);
+        poly1.add(new Answer(nt_answer_Cons_2, args2));
+        args1.add(poly1);
+        Grammar g = new Grammar(new Answer(nt_answer_MemOf_1, args1));
+        ////////////////////////////////////////////////////
         vars = new ArrayList<>();
         varSet = new VariableSet();
-        for (int i = 0; i <= 0; i++) {
+        args1 = new ArrayList<>();
+        conditions = new ArrayList<>();
+        for (int i = 0; i < 1; i++) {
             Variable v = new Variable();
-            vars.add(i, v);
+            vars.add(v);
             varSet.put(v);
         }
 
-        vars.get(0).setTag("_v0 in 2");
+        args1.add(new Polynomial(vars.get(0)));
+        poly1 = new Polynomial();
+        poly1.add(new Answer(AnswerIdentifier.Lambda()));
+        args1.add(poly1);
 
-        args = new ArrayList<>();
-        args.add(new Polynomial(vars.get(0)));
-        args.add(new Polynomial(new Answer(AnswerIdentifier.Lambda())));
         c = new Configuration();
+
         c.add(new Answer(AnswerIdentifier.Lambda()));
-        g.addRule(eq_1, new Rule(c, varSet, new Polynomial(new Answer(true_terminal)), args));
 
-        // 3
-        // <eq(#), F> -> <letter, _v1> <star(letter), _v2>
+        poly2 = new Polynomial();
+        poly2.add(new Answer(tl_answer_3));
+
+        g.addRule(nt_answer_Eq_1, new Rule(c, varSet, poly2, args1, conditions));
+        //////////////////////////////////////////////////
         vars = new ArrayList<>();
         varSet = new VariableSet();
-        for (int i = 0; i <= 2; i++) {
+        args1 = new ArrayList<>();
+        conditions = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
             Variable v = new Variable();
-            vars.add(i, v);
+            vars.add(v);
             varSet.put(v);
         }
 
-        vars.get(0).setTag("_v0 in 3");
-        vars.get(1).setTag("_v1 in 3");
-        vars.get(2).setTag("_v2 in 3");
+        args1.add(new Polynomial(vars.get(0)));
+        poly1 = new Polynomial();
+        poly1.add(new Answer(AnswerIdentifier.Lambda()));
+        args1.add(poly1);
 
-        args = new ArrayList<>();
-        args.add(new Polynomial(vars.get(0)));
-        args.add(new Polynomial(new Answer(AnswerIdentifier.Lambda())));
         c = new Configuration();
-        c.add(new Pair(new Polynomial(new Answer(letter)), vars.get(1)));
-        answerArgs = new ArrayList<>();
-        answerArgs.add(new Polynomial(new Answer(letter)));
-        c.add(new Pair(new Polynomial(new Answer(id_star, answerArgs)), vars.get(2)));
-        g.addRule(eq_1, new Rule(c, varSet, new Polynomial(new Answer(false_terminal)), args));
 
+        poly2 = new Polynomial();
+        poly2.add(new Answer(nt_answer_Letter_0));
+        c.add(new Pair(poly2, vars.get(1)));
 
-        // 4
-        // _z: LETTER, _t: WORD; <eq(_z_t), F> -> #
+        poly3 = new Polynomial();
+        args2 = new ArrayList<>();
+        poly4 = new Polynomial();
+        poly4.add(new Answer(nt_answer_Letter_0));
+        args2.add(poly4);
+        poly3.add(new Answer(nt_answer_Star_1, args2));
+        c.add(new Pair(poly3, vars.get(2)));
+
+        poly5 = new Polynomial();
+        poly5.add(new Answer(tl_answer_4));
+
+        g.addRule(nt_answer_Eq_1, new Rule(c, varSet, poly5, args1, conditions));
+        //////////////////////////////////////////////////
         vars = new ArrayList<>();
         varSet = new VariableSet();
-        for (int i = 0; i <= 2; i++) {
+        args1 = new ArrayList<>();
+        conditions = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
             Variable v = new Variable();
-            vars.add(i, v);
+            vars.add(v);
             varSet.put(v);
         }
+
+        args1.add(new Polynomial(vars.get(0)));
+        poly1 = new Polynomial();
+        poly1.add(vars.get(1));
+        poly1.add(vars.get(2));
+        args1.add(poly1);
         vars.get(1).setType(Type.LETTER_TYPE);
         vars.get(2).setType(Type.WORD_TYPE);
 
-        vars.get(0).setTag("_v0 in 4");
-        vars.get(1).setTag("_z in 4");
-        vars.get(2).setTag("_t in 4");
-
-        args = new ArrayList<>();
-        args.add(new Polynomial(vars.get(0)));
-        poly = new Polynomial();
-        poly.add(vars.get(1));
-        poly.add(vars.get(2));
-        args.add(poly);
         c = new Configuration();
+
         c.add(new Answer(AnswerIdentifier.Lambda()));
-        g.addRule(eq_1, new Rule(c, varSet, new Polynomial(new Answer(false_terminal)), args));
 
+        poly2 = new Polynomial();
+        poly2.add(new Answer(tl_answer_4));
 
-        // 5
-        // _z: LETTER, _t: WORD; <eq(_z_t), F> -> <not(_z), _v1> <star(letter), _v2>
+        g.addRule(nt_answer_Eq_1, new Rule(c, varSet, poly2, args1, conditions));
+        //////////////////////////////////////////////////
         vars = new ArrayList<>();
         varSet = new VariableSet();
-        for (int i = 0; i <= 4; i++) {
+        args1 = new ArrayList<>();
+        conditions = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
             Variable v = new Variable();
-            vars.add(i, v);
+            vars.add(v);
             varSet.put(v);
         }
 
+        args1.add(new Polynomial(vars.get(0)));
+        poly1 = new Polynomial();
+        poly1.add(vars.get(1));
+        poly1.add(vars.get(2));
+        args1.add(poly1);
         vars.get(1).setType(Type.LETTER_TYPE);
         vars.get(2).setType(Type.WORD_TYPE);
 
-        vars.get(0).setTag("_v0 in 5");
-        vars.get(1).setTag("_z in 5");
-        vars.get(2).setTag("_t in 5");
-        vars.get(3).setTag("_v1 in 5");
-        vars.get(4).setTag("_v1 in 5");
-
-        args = new ArrayList<>();
-        args.add(new Polynomial(vars.get(0)));
-        poly = new Polynomial();
-        poly.add(vars.get(1));
-        poly.add(vars.get(2));
-        args.add(poly);
-
         c = new Configuration();
-        answerArgs = new ArrayList<>();
-        answerArgs.add(new Polynomial(vars.get(1)));
-        c.add(new Pair(new Polynomial(new Answer(not, answerArgs)), vars.get(3)));
-        answerArgs = new ArrayList<>();
-        answerArgs.add(new Polynomial(new Answer(letter)));
-        c.add(new Pair(new Polynomial(new Answer(id_star, answerArgs)), vars.get(4)));
-        g.addRule(eq_1, new Rule(c, varSet, new Polynomial(new Answer(false_terminal)), args));
 
+        poly2 = new Polynomial();
+        args2 = new ArrayList<>();
+        poly3 = new Polynomial();
+        poly3.add(vars.get(1));
+        args2.add(poly3);
+        poly2.add(new Answer(nt_answer_Not_1, args2));
+        c.add(new Pair(poly2, vars.get(3)));
 
-        // 6
-        // _z: LETTER, _t: WORD; <eq(_z_t), _v2> -> <_z, _v1> <eq(_t), _v2>
+        poly4 = new Polynomial();
+        args3 = new ArrayList<>();
+        poly5 = new Polynomial();
+        poly5.add(new Answer(nt_answer_Letter_0));
+        args3.add(poly5);
+        poly4.add(new Answer(nt_answer_Star_1, args3));
+        c.add(new Pair(poly4, vars.get(4)));
+
+        poly6 = new Polynomial();
+        poly6.add(new Answer(tl_answer_4));
+
+        g.addRule(nt_answer_Eq_1, new Rule(c, varSet, poly6, args1, conditions));
+        //////////////////////////////////////////////////
         vars = new ArrayList<>();
         varSet = new VariableSet();
-        for (int i = 0; i <= 4; i++) {
+        args1 = new ArrayList<>();
+        conditions = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
             Variable v = new Variable();
-            vars.add(i, v);
+            vars.add(v);
             varSet.put(v);
         }
 
+        args1.add(new Polynomial(vars.get(0)));
+        poly1 = new Polynomial();
+        poly1.add(vars.get(1));
+        poly1.add(vars.get(2));
+        args1.add(poly1);
         vars.get(1).setType(Type.LETTER_TYPE);
         vars.get(2).setType(Type.WORD_TYPE);
 
-        vars.get(0).setTag("_v0 in 6");
-        vars.get(1).setTag("_z in 6");
-        vars.get(2).setTag("_t in 6");
-        vars.get(3).setTag("_v1 in 6");
-        vars.get(4).setTag("_v2 in 6");
-
-        args = new ArrayList<>();
-        args.add(new Polynomial(vars.get(0)));
-        poly = new Polynomial();
-        poly.add(vars.get(1));
-        poly.add(vars.get(2));
-        args.add(poly);
         c = new Configuration();
-        c.add(new Pair(new Polynomial(vars.get(1)), vars.get(3)));
-        answerArgs = new ArrayList<>();
-        answerArgs.add(new Polynomial(vars.get(2)));
-        c.add(new Pair(new Polynomial(new Answer(eq_1, answerArgs)), vars.get(4)));
-        g.addRule(eq_1, new Rule(c, varSet, new Polynomial(vars.get(4)), args));
 
+        poly2 = new Polynomial();
+        poly2.add(vars.get(1));
+        c.add(new Pair(poly2, vars.get(3)));
 
-        // <or, F> -> F F
+        poly3 = new Polynomial();
+        args2 = new ArrayList<>();
+        poly4 = new Polynomial();
+        poly4.add(vars.get(2));
+        args2.add(poly4);
+        poly3.add(new Answer(nt_answer_Eq_1, args2));
+        c.add(new Pair(poly3, vars.get(4)));
+
+        poly5 = new Polynomial();
+        poly5.add(vars.get(4));
+
+        g.addRule(nt_answer_Eq_1, new Rule(c, varSet, poly5, args1, conditions));
+        //////////////////////////////////////////////////
         vars = new ArrayList<>();
         varSet = new VariableSet();
-        for (int i = 0; i <= 0; i++) {
+        args1 = new ArrayList<>();
+        conditions = new ArrayList<>();
+        for (int i = 0; i < 1; i++) {
             Variable v = new Variable();
-            vars.add(i, v);
-            varSet.put(v);
-        }
-        args = new ArrayList<>();
-        args.add(new Polynomial(vars.get(0)));
-        c = new Configuration();
-        c.add(new Answer(false_terminal));
-        c.add(new Answer(false_terminal));
-        g.addRule(or, new Rule(c, varSet, new Polynomial(new Answer(false_terminal)), args));
-
-
-        // <or, T> -> F T
-        vars = new ArrayList<>();
-        varSet = new VariableSet();
-        for (int i = 0; i <= 0; i++) {
-            Variable v = new Variable();
-            vars.add(i, v);
-            varSet.put(v);
-        }
-        args = new ArrayList<>();
-        args.add(new Polynomial(vars.get(0)));
-        c = new Configuration();
-        c.add(new Answer(false_terminal));
-        c.add(new Answer(true_terminal));
-        g.addRule(or, new Rule(c, varSet, new Polynomial(new Answer(true_terminal)), args));
-
-
-        // <or, T> -> T F
-        vars = new ArrayList<>();
-        varSet = new VariableSet();
-        for (int i = 0; i <= 0; i++) {
-            Variable v = new Variable();
-            vars.add(i, v);
-            varSet.put(v);
-        }
-        args = new ArrayList<>();
-        args.add(new Polynomial(vars.get(0)));
-        c = new Configuration();
-        c.add(new Answer(true_terminal));
-        c.add(new Answer(false_terminal));
-        g.addRule(or, new Rule(c, varSet, new Polynomial(new Answer(true_terminal)), args));
-
-
-        // <or, T> -> T T
-        vars = new ArrayList<>();
-        varSet = new VariableSet();
-        for (int i = 0; i <= 0; i++) {
-            Variable v = new Variable();
-            vars.add(i, v);
-            varSet.put(v);
-        }
-        args = new ArrayList<>();
-        args.add(new Polynomial(vars.get(0)));
-        c = new Configuration();
-        c.add(new Answer(true_terminal));
-        c.add(new Answer(true_terminal));
-        g.addRule(or, new Rule(c, varSet, new Polynomial(new Answer(true_terminal)), args));
-
-
-
-
-        // <memOf(nil), F> -> <star(letter), _v1>
-        vars = new ArrayList<>();
-        varSet = new VariableSet();
-        for (int i = 0; i <= 1; i++) {
-            Variable v = new Variable();
-            vars.add(i, v);
+            vars.add(v);
             varSet.put(v);
         }
 
-        vars.get(0).setTag("_v0 in memOf 1");
-        vars.get(1).setTag("_v1 in memOf 1");
-
-        args = new ArrayList<>();
-        args.add(new Polynomial(vars.get(0)));
-        args.add(new Polynomial(new Answer(nil)));
+        args1.add(new Polynomial(vars.get(0)));
 
         c = new Configuration();
-        answerArgs = new ArrayList<>();
-        answerArgs.add(new Polynomial(new Answer(letter)));
-        c.add(new Pair(new Polynomial(new Answer(id_star, answerArgs)), vars.get(1)));
-        g.addRule(memOf, new Rule(c, varSet, new Polynomial(new Answer(false_terminal)), args));
 
+        c.add(new Answer(tl_answer_4));
 
-        // <memOf(cons(_x, _xs)), (or ? (eq(_x) ? _v1) (memOf(_xs) ? _v1))> -> <star(echo), _v1>   0:v1, 1:x, 2:x2, 3:v1
+        c.add(new Answer(tl_answer_4));
+
+        poly1 = new Polynomial();
+        poly1.add(new Answer(tl_answer_4));
+
+        g.addRule(nt_answer_Or_0, new Rule(c, varSet, poly1, args1, conditions));
+        //////////////////////////////////////////////////
         vars = new ArrayList<>();
         varSet = new VariableSet();
-        for (int i = 0; i <= 3; i++) {
+        args1 = new ArrayList<>();
+        conditions = new ArrayList<>();
+        for (int i = 0; i < 1; i++) {
             Variable v = new Variable();
-            vars.add(i, v);
+            vars.add(v);
             varSet.put(v);
         }
 
-        vars.get(0).setTag("_v0 in memOf 2");
-        vars.get(1).setTag("_x in memOf 2");
-        vars.get(2).setTag("_xs in memOf 2");
-        vars.get(3).setTag("_v1 in memOf 2");
+        args1.add(new Polynomial(vars.get(0)));
 
-        args = new ArrayList<>();
-        args.add(new Polynomial(vars.get(0)));
+        c = new Configuration();
 
-        answerArgs = new ArrayList<>();
-        answerArgs.add(new Polynomial(vars.get(1)));
-        answerArgs.add(new Polynomial(vars.get(2)));
-        args.add(new Polynomial(new Answer(cons, answerArgs)));
+        c.add(new Answer(tl_answer_3));
 
+        c.add(new Answer(tl_answer_4));
+
+        poly1 = new Polynomial();
+        poly1.add(new Answer(tl_answer_3));
+
+        g.addRule(nt_answer_Or_0, new Rule(c, varSet, poly1, args1, conditions));
+        //////////////////////////////////////////////////
+        vars = new ArrayList<>();
+        varSet = new VariableSet();
+        args1 = new ArrayList<>();
+        conditions = new ArrayList<>();
+        for (int i = 0; i < 1; i++) {
+            Variable v = new Variable();
+            vars.add(v);
+            varSet.put(v);
+        }
+
+        args1.add(new Polynomial(vars.get(0)));
+
+        c = new Configuration();
+
+        c.add(new Answer(tl_answer_4));
+
+        c.add(new Answer(tl_answer_3));
+
+        poly1 = new Polynomial();
+        poly1.add(new Answer(tl_answer_3));
+
+        g.addRule(nt_answer_Or_0, new Rule(c, varSet, poly1, args1, conditions));
+        //////////////////////////////////////////////////
+        vars = new ArrayList<>();
+        varSet = new VariableSet();
+        args1 = new ArrayList<>();
+        conditions = new ArrayList<>();
+        for (int i = 0; i < 1; i++) {
+            Variable v = new Variable();
+            vars.add(v);
+            varSet.put(v);
+        }
+
+        args1.add(new Polynomial(vars.get(0)));
+
+        c = new Configuration();
+
+        c.add(new Answer(tl_answer_3));
+
+        c.add(new Answer(tl_answer_3));
+
+        poly1 = new Polynomial();
+        poly1.add(new Answer(tl_answer_3));
+
+        g.addRule(nt_answer_Or_0, new Rule(c, varSet, poly1, args1, conditions));
+        //////////////////////////////////////////////////
+        vars = new ArrayList<>();
+        varSet = new VariableSet();
+        args1 = new ArrayList<>();
+        conditions = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            Variable v = new Variable();
+            vars.add(v);
+            varSet.put(v);
+        }
+
+        args1.add(new Polynomial(vars.get(0)));
+        poly1 = new Polynomial();
+        poly1.add(new Answer(nt_answer_Nil_0));
+        args1.add(poly1);
+
+        c = new Configuration();
+
+        poly2 = new Polynomial();
+        args2 = new ArrayList<>();
+        poly3 = new Polynomial();
+        poly3.add(new Answer(nt_answer_Letter_0));
+        args2.add(poly3);
+        poly2.add(new Answer(nt_answer_Star_1, args2));
+        c.add(new Pair(poly2, vars.get(1)));
+
+        poly4 = new Polynomial();
+        poly4.add(new Answer(tl_answer_4));
+
+        g.addRule(nt_answer_MemOf_1, new Rule(c, varSet, poly4, args1, conditions));
+        //////////////////////////////////////////////////
+        vars = new ArrayList<>();
+        varSet = new VariableSet();
+        args1 = new ArrayList<>();
+        conditions = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            Variable v = new Variable();
+            vars.add(v);
+            varSet.put(v);
+        }
+
+        args1.add(new Polynomial(vars.get(0)));
+        poly1 = new Polynomial();
+        args2 = new ArrayList<>();
+        poly2 = new Polynomial();
+        poly2.add(vars.get(1));
+        args2.add(poly2);
+        poly3 = new Polynomial();
+        poly3.add(vars.get(2));
+        args2.add(poly3);
+        poly1.add(new Answer(nt_answer_Cons_2, args2));
+        args1.add(poly1);
         vars.get(1).setType(Type.WORD_TYPE);
         vars.get(2).setType(Type.ANSWER_TYPE);
 
-        answerArgs = new ArrayList<>();
-        answerArgs.add(new Polynomial(vars.get(1)));
-        Query q1 = new Query(new Polynomial(new Answer(eq_1, answerArgs)), new Polynomial(vars.get(3))); // (eq(_x) ? _v1)
-
-        answerArgs = new ArrayList<>();
-        answerArgs.add(new Polynomial(vars.get(2)));
-        Query q2 = new Query(new Polynomial(new Answer(memOf, answerArgs)), new Polynomial(vars.get(3))); // (memOf(_xs) ? _v1)
-
-        poly = new Polynomial();
-        poly.add(q1);
-        poly.add(q2);
-        Query q3 = new Query(new Polynomial(new Answer(or)), poly); // (or ? (eq(_x) ? _v1) (memOf(_xs) ? _v1))
-
         c = new Configuration();
-        answerArgs = new ArrayList<>();
-        answerArgs.add(new Polynomial(new Answer(echo)));
-        c.add(new Pair(new Polynomial(new Answer(id_star, answerArgs)), vars.get(3)));
 
-        g.addRule(memOf, new Rule(c, varSet, new Polynomial(q3), args));
+        poly4 = new Polynomial();
+        args2 = new ArrayList<>();
+        poly5 = new Polynomial();
+        poly5.add(new Answer(nt_answer_Echo_0));
+        args2.add(poly5);
+        poly4.add(new Answer(nt_answer_Star_1, args2));
+        c.add(new Pair(poly4, vars.get(3)));
 
+        poly6 = new Polynomial();
+        poly7 = new Polynomial();
+        poly7.add(new Answer(nt_answer_Or_0));
+        Polynomial poly8 = new Polynomial();
+        Polynomial poly9 = new Polynomial();
+        args3 = new ArrayList<>();
+        Polynomial poly10 = new Polynomial();
+        poly10.add(vars.get(1));
+        args3.add(poly10);
+        poly9.add(new Answer(nt_answer_Eq_1, args3));
+        Polynomial poly11 = new Polynomial();
+        poly11.add(vars.get(3));
+        poly8.add(new Query(poly9, poly11));
+        Polynomial poly12 = new Polynomial();
+        args4 = new ArrayList<>();
+        Polynomial poly13 = new Polynomial();
+        poly13.add(vars.get(2));
+        args4.add(poly13);
+        poly12.add(new Answer(nt_answer_MemOf_1, args4));
+        Polynomial poly14 = new Polynomial();
+        poly14.add(vars.get(3));
+        poly8.add(new Query(poly12, poly14));
+        poly6.add(new Query(poly7, poly8));
 
-
-
-        /* ***************** ADD ONS **********************/
-
-        // Star 1
-        // <star(_a), λ> -> λ
-        vars = new ArrayList<Variable>();
+        g.addRule(nt_answer_MemOf_1, new Rule(c, varSet, poly6, args1, conditions));
+        //////////////////////////////////////////////////
+        vars = new ArrayList<>();
         varSet = new VariableSet();
-        for (int i = 0; i <= 1; i++) {
-            Variable v = new Variable();
-            vars.add(i, v);
-            varSet.put(v);
-        }
-
-        vars.get(0).setTag("_v0 in Star 1");
-        vars.get(1).setTag("_a in Star 1");
-
-        args = new ArrayList<Polynomial>();
-        args.add(new Polynomial(vars.get(0)));	// star
-        args.add(new Polynomial(vars.get(1)));	// a
-        c = new Configuration();
-        c.add(new Answer(AnswerIdentifier.Lambda()));
-        g.addRule(id_star, new Rule(c, varSet, new Polynomial(new Answer(AnswerIdentifier.Lambda())), args));
-
-        // Star 2
-        // <star(_a), _v1_v2> -> <a, _v1> <star(_a), _v2>
-        vars = new ArrayList<Variable>();
-        varSet = new VariableSet();
-        for (int i = 0; i <= 3; i++) {
-            Variable v = new Variable();
-            vars.add(i, v);
-            varSet.put(v);
-        }
-
-        vars.get(0).setTag("_v0 in Star 2");
-        vars.get(1).setTag("_a in Star 2");
-        vars.get(2).setTag("_v1 in Star 2");
-        vars.get(3).setTag("_v2 in Star 2");
-
-        args = new ArrayList<Polynomial>();
-        args.add(new Polynomial(vars.get(0)));	// star
-        args.add(new Polynomial(vars.get(1)));	// a
-        c = new Configuration();
-        c.add(new Pair(args.get(1), vars.get(2)));
-
-        answerArgs = new ArrayList<>();
-        answerArgs.add(new Polynomial(vars.get(1)));
-        c.add(new Pair(new Polynomial(new Answer(id_star, answerArgs)), vars.get(3)));
-
-        poly = new Polynomial();
-        poly.add(vars.get(2));
-        poly.add(vars.get(3));
-        g.addRule(id_star, new Rule(c, varSet, poly, args));
-
-        // Letter
-        // _z: LETTER; <letter, #> -> <_z, _v1>
-        vars = new ArrayList<Variable>();
-        varSet = new VariableSet();
-        for (int i = 0; i <= 2; i++) {
-            Variable v = new Variable();
-            vars.add(i, v);
-            varSet.put(v);
-        }
-
-        vars.get(0).setTag("_v0 in LetterType");
-        vars.get(1).setTag("_z in LetterType");
-        vars.get(2).setTag("_v1 in LetterType");
-
-        vars.get(1).setType(Type.LETTER_TYPE);
-        args = new ArrayList<Polynomial>();
-        args.add(new Polynomial(vars.get(0)));	// v0
-        c = new Configuration();
-        c.add(new Pair(new Polynomial(vars.get(1)), vars.get(2)));
-        g.addRule(letter, new Rule(c, varSet, new Polynomial(new Answer(AnswerIdentifier.Lambda())), args));
-
-        // Echo
-        // _z: LETTER; <echo, _v1> -> <_z, _v1>
-        vars = new ArrayList<Variable>();
-        varSet = new VariableSet();
-        for (int i = 0; i <= 2; i++) {
-            Variable v = new Variable();
-            vars.add(i, v);
-            varSet.put(v);
-        }
-
-        vars.get(0).setTag("_v0 in Echo");
-        vars.get(1).setTag("_z in Echo");
-        vars.get(2).setTag("_v1 in Echo");
-
-        vars.get(1).setType(Type.LETTER_TYPE);
-        args = new ArrayList<Polynomial>();
-        args.add(new Polynomial(vars.get(0)));	// v0
-        c = new Configuration();
-        c.add(new Pair(new Polynomial(vars.get(1)), vars.get(2)));
-        g.addRule(echo, new Rule(c, varSet, new Polynomial(vars.get(2)), args));
-
-
-        // Not
-        // _z1: LETTER, _z2: LETTER; <not(_z1) #> -> <_z2, _v1>
-        vars = new ArrayList<Variable>();
-        varSet = new VariableSet();
-        for (int i = 0; i <= 3; i++) {
-            Variable v = new Variable();
-            vars.add(i, v);
-            varSet.put(v);
-        }
-
-        vars.get(0).setTag("_v0 in Not");
-        vars.get(1).setTag("_z1 in Not");
-        vars.get(2).setTag("_z2 in Not");
-        vars.get(3).setTag("_v1 in Not");
-
-        vars.get(2).setType(Type.LETTER_TYPE);
-        vars.get(2).setType(Type.LETTER_TYPE);
-
+        args1 = new ArrayList<>();
         conditions = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            Variable v = new Variable();
+            vars.add(v);
+            varSet.put(v);
+        }
+
+        args1.add(new Polynomial(vars.get(0)));
+        poly1 = new Polynomial();
+        poly1.add(vars.get(1));
+        args1.add(poly1);
+
+        c = new Configuration();
+
+        c.add(new Answer(AnswerIdentifier.Lambda()));
+
+        poly2 = new Polynomial();
+        poly2.add(new Answer(AnswerIdentifier.Lambda()));
+
+        g.addRule(nt_answer_Star_1, new Rule(c, varSet, poly2, args1, conditions));
+        //////////////////////////////////////////////////
+        vars = new ArrayList<>();
+        varSet = new VariableSet();
+        args1 = new ArrayList<>();
+        conditions = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            Variable v = new Variable();
+            vars.add(v);
+            varSet.put(v);
+        }
+
+        args1.add(new Polynomial(vars.get(0)));
+        poly1 = new Polynomial();
+        poly1.add(vars.get(1));
+        args1.add(poly1);
+
+        c = new Configuration();
+
+        poly2 = new Polynomial();
+        poly2.add(vars.get(1));
+        c.add(new Pair(poly2, vars.get(2)));
+
+        poly3 = new Polynomial();
+        args2 = new ArrayList<>();
+        poly4 = new Polynomial();
+        poly4.add(vars.get(1));
+        args2.add(poly4);
+        poly3.add(new Answer(nt_answer_Star_1, args2));
+        c.add(new Pair(poly3, vars.get(3)));
+
+        poly5 = new Polynomial();
+        poly5.add(vars.get(2));
+        poly5.add(vars.get(3));
+
+        g.addRule(nt_answer_Star_1, new Rule(c, varSet, poly5, args1, conditions));
+        //////////////////////////////////////////////////
+        vars = new ArrayList<>();
+        varSet = new VariableSet();
+        args1 = new ArrayList<>();
+        conditions = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            Variable v = new Variable();
+            vars.add(v);
+            varSet.put(v);
+        }
+
+        args1.add(new Polynomial(vars.get(0)));
+        vars.get(1).setType(Type.LETTER_TYPE);
+
+        c = new Configuration();
+
+        poly1 = new Polynomial();
+        poly1.add(vars.get(1));
+        c.add(new Pair(poly1, vars.get(2)));
+
+        poly2 = new Polynomial();
+        poly2.add(new Answer(AnswerIdentifier.Lambda()));
+
+        g.addRule(nt_answer_Letter_0, new Rule(c, varSet, poly2, args1, conditions));
+        //////////////////////////////////////////////////
+        vars = new ArrayList<>();
+        varSet = new VariableSet();
+        args1 = new ArrayList<>();
+        conditions = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            Variable v = new Variable();
+            vars.add(v);
+            varSet.put(v);
+        }
+
+        args1.add(new Polynomial(vars.get(0)));
+        vars.get(1).setType(Type.LETTER_TYPE);
+
+        c = new Configuration();
+
+        poly1 = new Polynomial();
+        poly1.add(vars.get(1));
+        c.add(new Pair(poly1, vars.get(2)));
+
+        poly2 = new Polynomial();
+        poly2.add(vars.get(2));
+
+        g.addRule(nt_answer_Echo_0, new Rule(c, varSet, poly2, args1, conditions));
+        //////////////////////////////////////////////////
+        vars = new ArrayList<>();
+        varSet = new VariableSet();
+        args1 = new ArrayList<>();
+        conditions = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            Variable v = new Variable();
+            vars.add(v);
+            varSet.put(v);
+        }
+
+        args1.add(new Polynomial(vars.get(0)));
+        poly1 = new Polynomial();
+        poly1.add(vars.get(1));
+        args1.add(poly1);
+        vars.get(1).setType(Type.LETTER_TYPE);
+        vars.get(2).setType(Type.LETTER_TYPE);
         conditions.add(new VariableCondition(vars.get(1), vars.get(2), VariableCondition.VariableConditionType.NE));
 
-        args = new ArrayList<Polynomial>();
-        args.add(new Polynomial(vars.get(0))); // _v0
-        args.add(new Polynomial(vars.get(1))); // _z1
-
         c = new Configuration();
-        c.add(new Pair(new Polynomial(vars.get(2)), vars.get(3)));
-        g.addRule(not, new Rule(c, varSet, new Polynomial(new Answer(AnswerIdentifier.Lambda())), args, conditions));
 
-        /* ****************************************/
+        poly2 = new Polynomial();
+        poly2.add(vars.get(2));
+        c.add(new Pair(poly2, vars.get(3)));
 
+        poly3 = new Polynomial();
+        poly3.add(new Answer(AnswerIdentifier.Lambda()));
 
-
+        g.addRule(nt_answer_Not_1, new Rule(c, varSet, poly3, args1, conditions));
+        //////////////////////////////////////////////////
         return g;
-
     }
-
     public static void main(String[] args) {
-        // Sanity checks
         if (args.length == 0) {
-            System.err.println("Expecting some input to parse!");
-            System.exit(0);
+            System.err.println("ERROR: Expecting some input to parse!");
+            System.exit(-1);
         }
         performTest(new ListEqualityExample(), args[0]);
     }
-
 }

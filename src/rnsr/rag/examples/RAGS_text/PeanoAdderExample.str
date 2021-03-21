@@ -1,0 +1,15 @@
+Name: PeanoAdderExample
+Start: Add
+
+<Add, (ReArr ? &v1 '+' &v2)> -> <Num, &v1> '+' <Add, &v2>
+<Add, &v1> -> <Num, &v1>
+
+<Num, 's' &v1> -> 's' <Num, &v1>
+<Num, '0'> -> '0'
+
+<ReArr, &v1> -> <Num, &v1> '+' '0'
+<ReArr, (ReArr ? (Inc ? &v1) '+' (Dec ? &v2))> -> <Num, &v1> '+' <Num, &v2>
+
+<Inc, 's' &v1> -> <Num, &v1>
+
+<Dec, &v1> -> 's' <Num, &v1>

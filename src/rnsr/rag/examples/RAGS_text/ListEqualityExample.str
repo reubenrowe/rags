@@ -1,0 +1,25 @@
+Name: ListEqualityExample
+Start: MemOf[Cons['One', Cons['Two', Cons['Three', Nil]]]]
+
+<Eq[#], 'T'> -> #
+<Eq[#], 'F'> -> <Letter, &v1> <Star[Letter], &v2>
+&z : &LETTER; &t : &WORD; <Eq[&z&t], 'F'> -> #
+&z : &LETTER; &t : &WORD; <Eq[&z&t], 'F'> -> <Not[&z], &v1> <Star[Letter], &v2>
+&z : &LETTER; &t : &WORD; <Eq[&z&t], &v2> -> <&z, &v1> <Eq[&t], &v2>
+
+<Or, 'F'> -> 'F' 'F'
+<Or, 'T'> -> 'T' 'F'
+<Or, 'T'> -> 'F' 'T'
+<Or, 'T'> -> 'T' 'T'
+
+<MemOf[Nil], 'F'> -> <Star[Letter], &v1>
+&x : &WORD; &xs : &ANSWER; <MemOf[Cons[&x, &xs]], (Or ? (Eq[&x] ? &v1) (MemOf[&xs] ? &v1))> -> <Star[Echo], &v1>
+
+<Star[&a], #> -> #
+<Star[&a], &v1&v2> -> <&a, &v1> <Star[&a], &v2>
+
+&z : &LETTER; <Letter, #> -> <&z, &v1>
+
+&z : &LETTER; <Echo, &v1> -> <&z, &v1>
+
+&z : &LETTER; &zP : &LETTER; &z != &zP; <Not[&z], #> -> <&zP, &v1>
