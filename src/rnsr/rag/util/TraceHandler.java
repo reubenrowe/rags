@@ -3,8 +3,6 @@ package rnsr.rag.util;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 public class TraceHandler {
 
@@ -13,7 +11,7 @@ public class TraceHandler {
 
     public void openFile() {
         try {
-            Files.deleteIfExists(Path.of(fileName));
+            //Files.deleteIfExists(Path.of(fileName));
             out = new BufferedWriter(new FileWriter(fileName));
         } catch (IOException e) {
             e.printStackTrace();
@@ -30,7 +28,9 @@ public class TraceHandler {
 
     public void printTraceToFile(String trace) {
         try {
+            out = new BufferedWriter(new FileWriter(fileName, true));
             out.append(trace);
+            closeFile();
         } catch (IOException e) {
             e.printStackTrace();
         }

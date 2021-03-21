@@ -298,7 +298,6 @@ public	class		SententialForm
 	}
 
 
-	/*
 	public void removeRedundantVariables() {
 		VariableSet usedVariables = this.m_configuration.usedVariables();
 		usedVariables.putAll(this.m_result.usedVariables());
@@ -320,7 +319,6 @@ public	class		SententialForm
 			this.m_variables.put(v, this.m_variables.get(boundTo));
 		}
 	}
-	*/
 
 
 	public String toString() {

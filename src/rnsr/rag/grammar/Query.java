@@ -145,7 +145,9 @@ public	class		Query
 	}
 
 	public Polynomial resolveInnerVariables(VariableSet sfBindings) {
-		return null;
+		Polynomial p1 = this.m_metaSyntax.resolveVariablesInPolynomial(sfBindings);
+		Polynomial p2 = this.m_syntax.resolveVariablesInPolynomial(sfBindings);
+		return new Polynomial(new Query(p1, p2));
 	}
 
 	public VariableSet usedVariables() {

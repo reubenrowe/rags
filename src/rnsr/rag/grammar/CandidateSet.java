@@ -6,6 +6,7 @@ import rnsr.rag.grammar.interfaces.IPolynomialTerm;
 import rnsr.rag.parser.Parser;
 import rnsr.rag.parser.exception.ParseException;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -192,6 +193,7 @@ public	class		CandidateSet
 	 */
 	public void advance(Answer input, boolean discardNonMatching)
 	{
+		ArrayList<SententialForm> toRemove = new ArrayList<>();
 		Iterator<SententialForm> i = this.iterator();
 		while (i.hasNext())
 		{
@@ -212,11 +214,14 @@ public	class		CandidateSet
 			} else if (headTerm instanceof Pair && discardNonMatching) {
 				Variable unbound = (Variable) ((Pair) headTerm).Left().get(0);
 				try {
+					//System.out.println("/////////////");
+					//System.out.println("BEFORE : " + current);
 					unbound.resolveForConstraints(input.Identifier().Identifier(), current, this);
 					try {
 						current.consumeToken(input);
 					} catch (AnswerMismatchException e) {
-						throw new Error(e);
+						//this.remove(current);
+						toRemove.add(current);
 					}
 					//this.remove(current);
 					//this.advance(input, true);
@@ -231,6 +236,7 @@ public	class		CandidateSet
 					i.remove();
 			}
 		}
+		for (SententialForm sf: toRemove) this.remove(sf);
 	}
 	
 	/**
