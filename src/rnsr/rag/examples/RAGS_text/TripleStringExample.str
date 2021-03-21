@@ -1,0 +1,9 @@
+Name: TripleStringExample
+Start: S
+
+<S, &v3> -> <W, &v1> <&v1, &v2> <&v1, &v3>
+
+<W, #> -> #
+<W, &v1&v2> -> <C, &v1> <W, &v2>
+
+&z : &LETTER; <C, &z> -> <&z, &v1>

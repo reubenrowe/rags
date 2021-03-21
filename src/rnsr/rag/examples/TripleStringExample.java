@@ -119,7 +119,7 @@ public class TripleStringExample extends CommandLineInputBase {
 		c.add(new Pair(poly1, vars.get(2)));
 
 		poly2 = new Polynomial();
-		poly2.add(vars.get(2));
+		poly2.add(vars.get(1));
 
 		g.addRule(nt_answer_C_0, new Rule(c, varSet, poly2, args1, conditions));
 		//////////////////////////////////////////////////

@@ -109,12 +109,6 @@ public	class		CandidateSet
 				// as we expect the sentential form normalise() operation to resolve the variable for us
 				if (t instanceof Variable)
 				{
-
-
-					Variable currentVar = (Variable) t;
-
-					System.out.println(" + " + currentVar);
-
 					if (((Variable) t).isConstrained()) {
 						tempSet.add(currentForm);
 					}
