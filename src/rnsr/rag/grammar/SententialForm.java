@@ -73,7 +73,6 @@ public	class		SententialForm
 		{
 			if (((Pair) Head()).Left().size() > 1)
 			{
-				System.out.println((Pair) Head());
 				// remove the head pair, as we will be creating new pairs to replace it
 				Pair head = (Pair) this.m_configuration.remove(0);
 
