@@ -139,7 +139,6 @@ public class Parser
 				try
 				{
 					candidate.fork(this);
-					printCSFork(candidate);
 				}
 				catch (InvalidTermException e)
 				{
@@ -162,6 +161,7 @@ public class Parser
 					throw new ParseException("Problem when trying to fork candidate set", e);
 				}
 				candidate.advance(new Answer(AnswerIdentifier.Lambda()));
+				printCSFork(candidate);
 			}
 			
 			if (!input.isEmpty())
@@ -183,7 +183,6 @@ public class Parser
 			try
 			{
 				candidate.fork(this);
-				printCSFork(candidate);
 			}
 			catch (InvalidTermException e)
 			{
@@ -206,6 +205,7 @@ public class Parser
 				throw new ParseException("Problem when trying to fork candidate set", e);
 			}
 			candidate.advance(new Answer(AnswerIdentifier.Lambda()));
+			printCSFork(candidate);
 		}
 
 		// discard any non-empty forms that are left - they cannot match the input at this point!

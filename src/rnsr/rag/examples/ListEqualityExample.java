@@ -21,7 +21,6 @@ public class ListEqualityExample extends CommandLineInputBase {
         AnswerIdentifier or = new AnswerIdentifier("or", 0);
         AnswerIdentifier memOf = new AnswerIdentifier("memOf", 1);
         AnswerIdentifier cons = new AnswerIdentifier("cons", 2);
-        AnswerIdentifier start = new AnswerIdentifier("start", 0);
         AnswerIdentifier nil = new AnswerIdentifier("nil", 0);
 
 
@@ -60,7 +59,7 @@ public class ListEqualityExample extends CommandLineInputBase {
         Answer a41 = new Answer(memOf, answerArgs);
 
         Grammar g = new Grammar(a41);
-        
+
 
         // 2
         // <eq(#), T> -> #

@@ -73,6 +73,7 @@ public	class		SententialForm
 		{
 			if (((Pair) Head()).Left().size() > 1)
 			{
+				System.out.println((Pair) Head());
 				// remove the head pair, as we will be creating new pairs to replace it
 				Pair head = (Pair) this.m_configuration.remove(0);
 
@@ -291,13 +292,14 @@ public	class		SententialForm
 		this.m_configuration.consumeToken(answer);
 	}
 
+
 	public String buildDerivation() {
-		this.removeRedundantVariables();
+		//this.removeRedundantVariables();
 		return (this.previous == null) ? this.toString() : this.previous.buildDerivation() + "\n" + this;
 	}
 
 
-
+	/*
 	public void removeRedundantVariables() {
 		VariableSet usedVariables = this.m_configuration.usedVariables();
 		usedVariables.putAll(this.m_result.usedVariables());
@@ -319,11 +321,11 @@ public	class		SententialForm
 			this.m_variables.put(v, this.m_variables.get(boundTo));
 		}
 	}
-
+	*/
 
 
 	public String toString() {
-		String s = /*this.tag + " : " + */ m_configuration + ", ";
+		String s = this.tag + " : " + m_configuration + ", ";
 		s += ("Variable count: " + m_variables.size() + ", ");
 		//s+= m_variables + ", ";
 		s += "Result \"" + m_result + "\", ";

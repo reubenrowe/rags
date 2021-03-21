@@ -110,12 +110,12 @@ public	class		CandidateSet
 				if (t instanceof Variable)
 				{
 
+
 					Variable currentVar = (Variable) t;
-					if (currentForm.m_variables.get(currentVar) != null) {
 
-						// Some mechanism for replacing the pair of <v1, v2> with the polynomial v1 is bound to
+					System.out.println(" + " + currentVar);
 
-					} else if (((Variable) t).isConstrained()) {
+					if (((Variable) t).isConstrained()) {
 						tempSet.add(currentForm);
 					}
 					// throw an error here as this is a problem with the algorithm, not the parse

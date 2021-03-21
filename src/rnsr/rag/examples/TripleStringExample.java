@@ -1,159 +1,135 @@
 package rnsr.rag.examples;
-
 import rnsr.rag.grammar.*;
+import rnsr.rag.grammar.exception.ArgumentMismatchException;
 import rnsr.rag.grammar.exception.RuleFunctionException;
 import rnsr.rag.grammar.exception.VariableNotFoundException;
+import rnsr.rag.grammar.types.Type;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-
-/**
- * This class creates a RAG for the language {www | w in Z*} where the alphabet Z = {'z'}.
- * It uses this RAG to parse the user input.
- */
-public	class		TripleStringExample
-		extends		CommandLineInputBase
-{
-
-	/**
-	 * Creates the grammar
-	 */
-	public Grammar CreateRAG() throws	RuleFunctionException,
-										VariableNotFoundException
-	{
-		// Construct Answer Identifier set
-		AnswerIdentifier answer_z = new AnswerIdentifier("z");
-		AnswerIdentifier answer_S = new AnswerIdentifier("S", 0);
-		AnswerIdentifier answer_W = new AnswerIdentifier("W", 0);
-		AnswerIdentifier answer_C = new AnswerIdentifier("C", 0);
-
-		HashSet<AnswerIdentifier> answerSet = new HashSet<AnswerIdentifier>();
-		answerSet.add(answer_z);
-		answerSet.add(answer_S);
-		answerSet.add(answer_W);
-		answerSet.add(answer_C);
-		
-		Grammar g = new Grammar(answerSet, answer_S);
-		
-		/* ********** RULE PRODUCTIONS ********** */
-		
-		// Declare variables for reuse
+public class TripleStringExample extends CommandLineInputBase {
+	public Grammar CreateRAG() throws ArgumentMismatchException, RuleFunctionException, VariableNotFoundException {
+		AnswerIdentifier nt_answer_S_0 = new AnswerIdentifier("S", 0);
+		AnswerIdentifier nt_answer_C_0 = new AnswerIdentifier("C", 0);
+		AnswerIdentifier nt_answer_W_0 = new AnswerIdentifier("W", 0);
 		ArrayList<Variable> vars;
-		ArrayList<Variable> args;
+		ArrayList<VariableCondition> conditions;
 		VariableSet varSet;
 		Configuration c;
-		Polynomial poly;
-		
-		// S : <v0, v3> -> <W, v1> <v1, v2> <v1, v3>
-		vars = new ArrayList<Variable>();
+		////////////////////////////////////////////////////
+		ArrayList<Polynomial> args1;
+		Grammar g = new Grammar(new Answer(nt_answer_S_0));
+		////////////////////////////////////////////////////
+		vars = new ArrayList<>();
 		varSet = new VariableSet();
-		for (int i = 0; i <= 3; i++)
-		{
+		args1 = new ArrayList<>();
+		conditions = new ArrayList<>();
+		for (int i = 0; i < 4; i++) {
 			Variable v = new Variable();
-			vars.add(i, v);
+			vars.add(v);
 			varSet.put(v);
 		}
-		
-		args = new ArrayList<Variable>();
-		args.add(vars.get(0));
+
+		args1.add(new Polynomial(vars.get(0)));
 
 		c = new Configuration();
-		c.add(new Pair(
-				new Polynomial(new Answer(answer_W)),
-				vars.get(1)
-			));
-		c.add(new Pair(
-				new Polynomial(vars.get(1)),
-				vars.get(2)
-			));
-		c.add(new Pair(
-				new Polynomial(vars.get(1)),
-				vars.get(3)
-			));
 
-		g.addRule(answer_S,
-				new Rule(c, varSet, new Polynomial(vars.get(3)), args)
-			);
-		
-		// W : <v0, λ> -> λ
-		vars = new ArrayList<Variable>();
+		Polynomial poly1 = new Polynomial();
+		poly1.add(new Answer(nt_answer_W_0));
+		c.add(new Pair(poly1, vars.get(1)));
+
+		Polynomial poly2 = new Polynomial();
+		poly2.add(vars.get(1));
+		c.add(new Pair(poly2, vars.get(2)));
+
+		Polynomial poly3 = new Polynomial();
+		poly3.add(vars.get(1));
+		c.add(new Pair(poly3, vars.get(3)));
+
+		Polynomial poly4 = new Polynomial();
+		poly4.add(vars.get(3));
+
+		g.addRule(nt_answer_S_0, new Rule(c, varSet, poly4, args1, conditions));
+		//////////////////////////////////////////////////
+		vars = new ArrayList<>();
 		varSet = new VariableSet();
-		for (int i = 0; i <= 0; i++)
-		{
+		args1 = new ArrayList<>();
+		conditions = new ArrayList<>();
+		for (int i = 0; i < 1; i++) {
 			Variable v = new Variable();
-			vars.add(i, v);
+			vars.add(v);
 			varSet.put(v);
 		}
-		
-		args = new ArrayList<Variable>();
-		args.add(vars.get(0));
-		
+
+		args1.add(new Polynomial(vars.get(0)));
+
 		c = new Configuration();
+
 		c.add(new Answer(AnswerIdentifier.Lambda()));
-		
-		g.addRule(answer_W, new Rule(c, varSet, new Polynomial(new Answer(AnswerIdentifier.Lambda())), args));
-		
-		// W : <v0, v1v2> -> <C, v1> <v0, v2>
-		vars = new ArrayList<Variable>();
+
+		poly1 = new Polynomial();
+		poly1.add(new Answer(AnswerIdentifier.Lambda()));
+
+		g.addRule(nt_answer_W_0, new Rule(c, varSet, poly1, args1, conditions));
+		//////////////////////////////////////////////////
+		vars = new ArrayList<>();
 		varSet = new VariableSet();
-		for (int i = 0; i <= 2; i++)
-		{
+		args1 = new ArrayList<>();
+		conditions = new ArrayList<>();
+		for (int i = 0; i < 3; i++) {
 			Variable v = new Variable();
-			vars.add(i, v);
+			vars.add(v);
 			varSet.put(v);
 		}
-		
-		args = new ArrayList<Variable>();
-		args.add(vars.get(0));
-		
+
+		args1.add(new Polynomial(vars.get(0)));
+
 		c = new Configuration();
-		c.add(new Pair(
-				new Polynomial(new Answer(answer_C)), vars.get(1)
-			));
-		c.add(new Pair(
-				new Polynomial(vars.get(0)),
-				vars.get(2)
-			));
-		
-		poly = new Polynomial();
-		poly.add(vars.get(1));
-		poly.add(vars.get(
-				2));
-		
-		g.addRule(answer_W, new Rule(c, varSet, poly, args));
-		
-		// C : <v0, z> -> z
-		vars = new ArrayList<Variable>();
+
+		poly1 = new Polynomial();
+		poly1.add(new Answer(nt_answer_C_0));
+		c.add(new Pair(poly1, vars.get(1)));
+
+		poly2 = new Polynomial();
+		poly2.add(new Answer(nt_answer_W_0));
+		c.add(new Pair(poly2, vars.get(2)));
+
+		poly3 = new Polynomial();
+		poly3.add(vars.get(1));
+		poly3.add(vars.get(2));
+
+		g.addRule(nt_answer_W_0, new Rule(c, varSet, poly3, args1, conditions));
+		//////////////////////////////////////////////////
+		vars = new ArrayList<>();
 		varSet = new VariableSet();
-		for (int i = 0; i <= 0; i++)
-		{
+		args1 = new ArrayList<>();
+		conditions = new ArrayList<>();
+		for (int i = 0; i < 3; i++) {
 			Variable v = new Variable();
-			vars.add(i, v);
+			vars.add(v);
 			varSet.put(v);
 		}
-		
-		args = new ArrayList<Variable>();
-		args.add(vars.get(0));
-		
+
+		args1.add(new Polynomial(vars.get(0)));
+		vars.get(1).setType(Type.LETTER_TYPE);
+
 		c = new Configuration();
-		c.add(new Answer(answer_z));
-		
-		g.addRule(answer_C, new Rule(c, varSet, new Polynomial(new Answer(answer_z)), args));
-		
-		/* ************************************** */
-		
+
+		poly1 = new Polynomial();
+		poly1.add(vars.get(1));
+		c.add(new Pair(poly1, vars.get(2)));
+
+		poly2 = new Polynomial();
+		poly2.add(vars.get(2));
+
+		g.addRule(nt_answer_C_0, new Rule(c, varSet, poly2, args1, conditions));
+		//////////////////////////////////////////////////
 		return g;
 	}
-	
-	public static void main(String[] args)
-	{
-		// Sanity checks
-		if (args.length == 0)
-		{
-			System.err.println("Expecting some input to parse!");
-			System.exit(0);
+	public static void main(String[] args) {
+		if (args.length == 0) {
+			System.err.println("ERROR: Expecting some input to parse!");
+			System.exit(-1);
 		}
-		
 		performTest(new TripleStringExample(), args[0]);
 	}
 }
