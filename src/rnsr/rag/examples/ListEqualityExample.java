@@ -1,4 +1,5 @@
 package rnsr.rag.examples;
+import rnsr.rag.TestHarness;
 import rnsr.rag.grammar.*;
 import rnsr.rag.grammar.exception.ArgumentMismatchException;
 import rnsr.rag.grammar.exception.RuleFunctionException;
@@ -6,7 +7,8 @@ import rnsr.rag.grammar.exception.VariableNotFoundException;
 import rnsr.rag.grammar.types.Type;
 
 import java.util.ArrayList;
-public class ListEqualityExample extends CommandLineInputBase {
+
+public class ListEqualityExample {
     public Grammar CreateRAG() throws ArgumentMismatchException, RuleFunctionException, VariableNotFoundException {
         AnswerIdentifier nt_answer_Cons_2 = new AnswerIdentifier("Cons", 2);
         AnswerIdentifier nt_answer_MemOf_1 = new AnswerIdentifier("MemOf", 1);
@@ -542,6 +544,17 @@ public class ListEqualityExample extends CommandLineInputBase {
             System.err.println("ERROR: Expecting some input to parse!");
             System.exit(-1);
         }
-        performTest(new ListEqualityExample(), args[0]);
+
+        Grammar g = null;
+
+        try {
+            g = new ListEqualityExample().CreateRAG();
+        } catch (Exception e) {
+            System.err.println("Could not create grammar!");
+            e.printStackTrace(System.err);
+        }
+
+        TestHarness.runGrammar(g, args[0]);
+
     }
 }
