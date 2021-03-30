@@ -5,15 +5,15 @@ import rnsr.rag.grammar.Variable;
 
 public class DerivationPairVariable implements IDerivationConfigurationTerm {
 
-    private DerivationAnswer answer;
+    private DerivationPolynomial polynomial;
     private Variable variable;
 
-    public DerivationAnswer getAnswer() {
-        return answer;
+    public DerivationPolynomial getAnswer() {
+        return polynomial;
     }
 
-    public void setAnswer(DerivationAnswer answer) {
-        this.answer = answer;
+    public void setAnswer(DerivationPolynomial polynomial) {
+        this.polynomial = polynomial;
     }
 
     public Variable getVariable() {

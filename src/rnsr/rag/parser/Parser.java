@@ -118,8 +118,6 @@ public class Parser
 		SententialForm firstSF = new SententialForm(c, varSet, result, new ArrayList<>(), null);
 		firstSF.setTag();
 
-		firstSF.derivationStep(c);
-
 		CandidateSet candidate = new CandidateSet(firstSF);
 		
 		// Get input
@@ -239,7 +237,7 @@ public class Parser
 		for (ParseResult res: resultSet) {
 			Set<ExtendedAnswer> eas = res.getResult().getEASetFromInnerQueryResolution(this);
 			for (ExtendedAnswer ea: eas) {
-				realResults.add(new ParseResult(ea, res.getDerivation(), originalQuery));
+				realResults.add(new ParseResult(ea, originalQuery));
 				eaSet.add(ea);
 			}
 		}

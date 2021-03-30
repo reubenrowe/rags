@@ -1,26 +1,13 @@
 package rnsr.rag.grammar;
 
-import rnsr.rag.derivation.DerivationSequence;
-
 public class ParseResult {
 
-    private String derivation;
     private ExtendedAnswer result;
     private Query original;
-    private DerivationSequence realDerivation;
 
-    public ParseResult(ExtendedAnswer result, String derivation, Query original) {
+    public ParseResult(ExtendedAnswer result, Query original) {
         this.result = result;
-        this.derivation = derivation;
         this.original = original;
-    }
-
-    public String getDerivation() {
-        return derivation;
-    }
-
-    public void setDerivation(String derivation) {
-        this.derivation = derivation;
     }
 
     public ExtendedAnswer getResult() {
@@ -31,11 +18,12 @@ public class ParseResult {
         this.result = result;
     }
 
+
     public String toString() {
-        String s = "- QUERY: " + this.original + "\n";
-        s += "- RESULT: " + this.result + "\n";
-        s += "- DERIVATION: \n";
-        s += derivation;
+        String s = "- START QUERY: " + this.original + "\n";
+        s += "- SEMANTIC RESULT: " + this.result + "\n";
+        s += "- FORMAL DERIVATION: \n";
+        s += "OWO";
         return s + "\n";
     }
 
