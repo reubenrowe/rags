@@ -16,4 +16,5 @@ public class DerivationAnswer implements IDerivationConfigurationTerm, IDerivati
     public void setTerminals(ArrayList<DerivationTerminal> terminals) {
         this.terminals = terminals;
     }
+
 }

@@ -11,4 +11,5 @@ public class DerivationTerminal {
     public void setSymbol(String symbol) {
         this.symbol = symbol;
     }
+
 }

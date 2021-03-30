@@ -22,4 +22,5 @@ public class DerivationQuery implements IDerivationQueryTerm {
     public void setSyntax(IDerivationQueryTerm syntax) {
         this.syntax = syntax;
     }
+
 }
