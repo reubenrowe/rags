@@ -7,6 +7,13 @@ import java.util.ArrayList;
 
 public class DerivationAnswer implements IDerivationConfigurationTerm, IDerivationQueryTerm {
 
-    ArrayList<DerivationTerminal> terminals = new ArrayList<DerivationTerminal>();
+    private ArrayList<DerivationTerminal> terminals = new ArrayList<DerivationTerminal>();
 
+    public ArrayList<DerivationTerminal> getTerminals() {
+        return terminals;
+    }
+
+    public void setTerminals(ArrayList<DerivationTerminal> terminals) {
+        this.terminals = terminals;
+    }
 }
