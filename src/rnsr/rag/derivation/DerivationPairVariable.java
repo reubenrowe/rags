@@ -1,11 +1,12 @@
 package rnsr.rag.derivation;
 
 import rnsr.rag.derivation.Interface.IDerivationConfigurationTerm;
+import rnsr.rag.grammar.Variable;
 
-public class DerivationPair implements IDerivationConfigurationTerm {
+public class DerivationPairVariable implements IDerivationConfigurationTerm {
 
     private DerivationAnswer answer;
-    private DerivationQuery query;
+    private Variable variable;
 
     public DerivationAnswer getAnswer() {
         return answer;
@@ -15,12 +16,12 @@ public class DerivationPair implements IDerivationConfigurationTerm {
         this.answer = answer;
     }
 
-    public DerivationQuery getQuery() {
-        return query;
+    public Variable getVariable() {
+        return variable;
     }
 
-    public void setQuery(DerivationQuery query) {
-        this.query = query;
+    public void setVariable(Variable variable) {
+        this.variable = variable;
     }
 
 }

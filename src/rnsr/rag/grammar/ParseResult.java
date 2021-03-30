@@ -1,10 +1,13 @@
 package rnsr.rag.grammar;
 
+import rnsr.rag.derivation.DerivationSequence;
+
 public class ParseResult {
 
     private String derivation;
     private ExtendedAnswer result;
     private Query original;
+    private DerivationSequence realDerivation;
 
     public ParseResult(ExtendedAnswer result, String derivation, Query original) {
         this.result = result;

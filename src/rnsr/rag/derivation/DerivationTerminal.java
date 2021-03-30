@@ -1,6 +1,8 @@
 package rnsr.rag.derivation;
 
-public class DerivationTerminal {
+import rnsr.rag.derivation.Interface.IDerivationAnswerTerm;
+
+public class DerivationTerminal implements IDerivationAnswerTerm {
 
     private String symbol;
 
