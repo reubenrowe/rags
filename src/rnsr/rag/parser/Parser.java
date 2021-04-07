@@ -240,7 +240,7 @@ public class Parser
 		for (ParseResult res: resultSet) {
 			Set<ExtendedAnswer> eas = res.getResult().getEASetFromInnerQueryResolution(this);
 			for (ExtendedAnswer ea: eas) {
-				realResults.add(new ParseResult(ea, originalQuery));
+				realResults.add(new ParseResult(ea, originalQuery, res.getDerivationSequence()));
 				eaSet.add(ea);
 			}
 		}

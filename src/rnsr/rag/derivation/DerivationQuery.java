@@ -1,6 +1,7 @@
 package rnsr.rag.derivation;
 
 import rnsr.rag.derivation.Interface.IDerivationQueryTerm;
+import rnsr.rag.grammar.VariableSet;
 
 public class DerivationQuery implements IDerivationQueryTerm {
 
@@ -28,4 +29,7 @@ public class DerivationQuery implements IDerivationQueryTerm {
         this.syntax = syntax;
     }
 
+    public DerivationQuery resolve(VariableSet bindings) {
+        return new DerivationQuery(metaSyntax.resolve(bindings), syntax.resolve(bindings));
+    }
 }

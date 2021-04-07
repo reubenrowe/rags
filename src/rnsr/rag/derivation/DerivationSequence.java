@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class DerivationSequence extends ArrayList<DerivationConfiguration> {
 
-    VariableSet originalBindings = new VariableSet();
+    VariableSet originalBindings;
 
     public DerivationSequence(VariableSet originalBindings) {
         this.originalBindings = originalBindings;
@@ -18,6 +18,21 @@ public class DerivationSequence extends ArrayList<DerivationConfiguration> {
 
     public void setOriginalBindings(VariableSet originalBindings) {
         this.originalBindings = originalBindings;
+    }
+
+    public String toString() {
+        String s = "";
+        for (int i = 0; i < this.size(); i++) {
+            s += this.get(i);
+            if (i < this.size() - 1) s += " => ";
+        }
+        return s;
+    }
+
+    public DerivationSequence resolve() {
+        DerivationSequence ds = new DerivationSequence(originalBindings);
+        for (DerivationConfiguration dc: this) ds.add(dc.resolve(originalBindings));
+        return ds;
     }
 
 }

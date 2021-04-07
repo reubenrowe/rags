@@ -1,5 +1,6 @@
 package rnsr.rag.grammar;
 
+import rnsr.rag.derivation.DerivationVariable;
 import rnsr.rag.derivation.Interface.IDerivationQueryTerm;
 import rnsr.rag.grammar.exception.CloneException;
 import rnsr.rag.grammar.exception.UnificationLambdaException;
@@ -79,7 +80,7 @@ public	class		Variable
 	public String toString()
 	{
 		// TODO : Implement a better naming scheme for variables
-		return "_v" + this.id;
+		return "_v" + this.hashCode();
 	}
 
 	public HashSet<ExtendedAnswer> resolveQueries(Parser parser) {
@@ -174,7 +175,7 @@ public	class		Variable
 	}
 
 	public IDerivationQueryTerm getDerivationObject() {
-		return null;
+		return new DerivationVariable(this);
 	}
 
 }

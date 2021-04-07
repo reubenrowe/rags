@@ -269,6 +269,15 @@ public	class		SententialForm
 		SententialForm cloneSF = new SententialForm(clonedConfiguration, newVars, clonedResult, newConditions, this);
 		cloneSF.setTag(this.tag + "." + ++childCount);
 
+		// Carry over the derivation sequence
+		VariableSet derivationVars = new VariableSet();
+		derivationVars.putAll(newVars);
+		derivationVars.putAll(this.derivationSequence.getOriginalBindings());
+		for (Variable v: m_variables.keySet()) derivationVars.put(v, new Polynomial(cloneContext.get(v)));
+		DerivationSequence cloneDS = new DerivationSequence(derivationVars);
+		cloneDS.addAll(this.derivationSequence);
+		cloneSF.derivationSequence = cloneDS;
+
 		return cloneSF;
 	}
 
@@ -341,6 +350,10 @@ public	class		SententialForm
 
 	public void setTag() {
 		this.tag = String.valueOf(++count);
+	}
+
+	public DerivationSequence getDerivationSequence() {
+		return derivationSequence;
 	}
 
 
