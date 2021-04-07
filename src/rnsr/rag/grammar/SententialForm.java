@@ -1,5 +1,7 @@
 package rnsr.rag.grammar;
 
+import rnsr.rag.derivation.DerivationConfiguration;
+import rnsr.rag.derivation.DerivationSequence;
 import rnsr.rag.grammar.exception.*;
 import rnsr.rag.grammar.interfaces.IClonable;
 import rnsr.rag.grammar.interfaces.IConfigurationTerm;
@@ -22,7 +24,8 @@ public	class		SententialForm
 	private String tag = "";
 
 	private SententialForm previous;
-	private SententialForm thisFirst;
+
+	private DerivationSequence derivationSequence;
 
 	/**
 	 * Constructs a new Sentential Form object
@@ -36,6 +39,7 @@ public	class		SententialForm
 		this.m_result = result;
 		this.m_conditions = conditions;
 		this.previous = previous;
+		this.derivationSequence = new DerivationSequence(variables);
 	}
 	
 	/**
@@ -337,6 +341,11 @@ public	class		SententialForm
 
 	public void setTag() {
 		this.tag = String.valueOf(++count);
+	}
+
+
+	public void addDerivationStep(DerivationConfiguration c) {
+		this.derivationSequence.add(c);
 	}
 
 }

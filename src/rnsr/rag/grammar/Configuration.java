@@ -1,5 +1,6 @@
 package rnsr.rag.grammar;
 
+import rnsr.rag.derivation.DerivationConfiguration;
 import rnsr.rag.grammar.exception.AnswerMismatchException;
 import rnsr.rag.grammar.exception.CloneException;
 import rnsr.rag.grammar.interfaces.IConfigurationTerm;
@@ -82,6 +83,12 @@ public	class		Configuration
 		}
 		sb.append("]");
 		return sb.toString();
+	}
+
+	public DerivationConfiguration getDerivationObject() {
+		DerivationConfiguration dc = new DerivationConfiguration();
+		for (IConfigurationTerm ct: this) dc.add(ct.getDerivationObject());
+		return dc;
 	}
 
 }

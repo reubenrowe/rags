@@ -1,5 +1,6 @@
 package rnsr.rag.grammar;
 
+import rnsr.rag.derivation.Interface.IDerivationQueryTerm;
 import rnsr.rag.grammar.exception.CloneException;
 import rnsr.rag.grammar.exception.UnificationLambdaException;
 import rnsr.rag.grammar.interfaces.IConfigurationTerm;
@@ -170,6 +171,10 @@ public	class		Variable
 		VariableSet vs = new VariableSet();
 		vs.put(this);
 		return vs;
+	}
+
+	public IDerivationQueryTerm getDerivationObject() {
+		return null;
 	}
 
 }

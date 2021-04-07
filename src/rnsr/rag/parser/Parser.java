@@ -118,6 +118,9 @@ public class Parser
 		SententialForm firstSF = new SententialForm(c, varSet, result, new ArrayList<>(), null);
 		firstSF.setTag();
 
+		// Setting up initial derivation step
+		firstSF.addDerivationStep(c.getDerivationObject());
+
 		CandidateSet candidate = new CandidateSet(firstSF);
 		
 		// Get input

@@ -8,6 +8,10 @@ public class DerivationSequence extends ArrayList<DerivationConfiguration> {
 
     VariableSet originalBindings = new VariableSet();
 
+    public DerivationSequence(VariableSet originalBindings) {
+        this.originalBindings = originalBindings;
+    }
+
     public VariableSet getOriginalBindings() {
         return originalBindings;
     }
