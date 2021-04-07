@@ -6,14 +6,14 @@ import java.util.ArrayList;
 
 public class DerivationSequence extends ArrayList<DerivationConfiguration> {
 
-    VariableSet bindings = new VariableSet();
+    VariableSet originalBindings = new VariableSet();
 
-    public VariableSet getBindings() {
-        return bindings;
+    public VariableSet getOriginalBindings() {
+        return originalBindings;
     }
 
-    public void setBindings(VariableSet bindings) {
-        this.bindings = bindings;
+    public void setOriginalBindings(VariableSet originalBindings) {
+        this.originalBindings = originalBindings;
     }
 
 }

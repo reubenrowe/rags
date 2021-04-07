@@ -8,6 +8,11 @@ public class DerivationPairVariable implements IDerivationConfigurationTerm {
     private DerivationPolynomial polynomial;
     private Variable variable;
 
+    public DerivationPairVariable(DerivationPolynomial polynomial, Variable variable) {
+        this.polynomial = polynomial;
+        this.variable = variable;
+    }
+
     public DerivationPolynomial getAnswer() {
         return polynomial;
     }

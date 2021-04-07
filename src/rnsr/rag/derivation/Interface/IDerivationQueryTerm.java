@@ -1,4 +1,4 @@
 package rnsr.rag.derivation.Interface;
 
-public interface IDerivationQueryTerm {
+public interface IDerivationQueryTerm extends IDerivationConfigurationTerm {
 }

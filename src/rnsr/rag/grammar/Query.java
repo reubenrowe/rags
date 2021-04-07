@@ -1,5 +1,7 @@
 package rnsr.rag.grammar;
 
+import rnsr.rag.derivation.DerivationConfiguration;
+import rnsr.rag.derivation.DerivationQuery;
 import rnsr.rag.grammar.exception.CloneException;
 import rnsr.rag.grammar.exception.VariableNotBoundException;
 import rnsr.rag.grammar.exception.VariableNotFoundException;
@@ -155,6 +157,14 @@ public	class		Query
 		vs.putAll(this.m_metaSyntax.usedVariables());
 		vs.putAll(this.m_syntax.usedVariables());
 		return vs;
+	}
+
+	public DerivationQuery getDerivationObject() {
+		DerivationConfiguration left = new DerivationConfiguration();
+		left.add(m_metaSyntax.getDerivationObject());
+		DerivationConfiguration right = new DerivationConfiguration();
+		right.add(m_syntax.getDerivationObject());
+		return new DerivationQuery(left, right);
 	}
 
 

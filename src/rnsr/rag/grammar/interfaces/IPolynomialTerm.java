@@ -1,6 +1,9 @@
 package rnsr.rag.grammar.interfaces;
 
-import rnsr.rag.grammar.*;
+import rnsr.rag.derivation.Interface.IDerivationQueryTerm;
+import rnsr.rag.grammar.ExtendedAnswer;
+import rnsr.rag.grammar.Polynomial;
+import rnsr.rag.grammar.VariableSet;
 import rnsr.rag.grammar.exception.CloneException;
 import rnsr.rag.grammar.exception.PolynomialUnificationException;
 import rnsr.rag.grammar.exception.UnificationLambdaException;
@@ -37,5 +40,7 @@ public interface IPolynomialTerm
 	Polynomial resolveInnerVariables(VariableSet sfBindings);
 
 	VariableSet usedVariables();
+
+	IDerivationQueryTerm getDerivationObject();
 
 }

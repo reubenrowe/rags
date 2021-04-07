@@ -1,5 +1,8 @@
 package rnsr.rag.grammar;
 
+import rnsr.rag.derivation.DerivationConfiguration;
+import rnsr.rag.derivation.DerivationPairVariable;
+import rnsr.rag.derivation.DerivationPolynomial;
 import rnsr.rag.grammar.exception.CloneException;
 import rnsr.rag.grammar.interfaces.IConfigurationTerm;
 import rnsr.rag.grammar.interfaces.IContextClonable;
@@ -64,6 +67,13 @@ public	class		Pair
 		vs.put(this.m_right);
 		vs.putAll(this.m_left.usedVariables());
 		return vs;
+	}
+
+	public DerivationPairVariable getDerivationObject() {
+
+		DerivationPolynomial dp = m_left.getDerivationObject();
+		return new DerivationPairVariable(dp, m_right);
+
 	}
 
 }

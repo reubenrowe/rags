@@ -4,22 +4,27 @@ import rnsr.rag.derivation.Interface.IDerivationQueryTerm;
 
 public class DerivationQuery implements IDerivationQueryTerm {
 
-    private IDerivationQueryTerm metaSyntax;
-    private IDerivationQueryTerm syntax;
+    private DerivationConfiguration metaSyntax;
+    private DerivationConfiguration syntax;
 
-    public IDerivationQueryTerm getMetaSyntax() {
+    public DerivationQuery(DerivationConfiguration metaSyntax, DerivationConfiguration syntax) {
+        this.metaSyntax = metaSyntax;
+        this.syntax = syntax;
+    }
+
+    public DerivationConfiguration getMetaSyntax() {
         return metaSyntax;
     }
 
-    public void setMetaSyntax(IDerivationQueryTerm metaSyntax) {
+    public void setMetaSyntax(DerivationConfiguration metaSyntax) {
         this.metaSyntax = metaSyntax;
     }
 
-    public IDerivationQueryTerm getSyntax() {
+    public DerivationConfiguration getSyntax() {
         return syntax;
     }
 
-    public void setSyntax(IDerivationQueryTerm syntax) {
+    public void setSyntax(DerivationConfiguration syntax) {
         this.syntax = syntax;
     }
 

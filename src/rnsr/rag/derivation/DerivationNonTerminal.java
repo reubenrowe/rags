@@ -6,15 +6,20 @@ import java.util.ArrayList;
 
 public class DerivationNonTerminal implements IDerivationAnswerTerm {
 
-    private String ID;
+    private String identifier;
     private ArrayList<DerivationPolynomial> args;
 
-    public String getID() {
-        return ID;
+    public DerivationNonTerminal(String identifier, ArrayList<DerivationPolynomial> args) {
+        this.identifier = identifier;
+        this.args = args;
     }
 
-    public void setID(String ID) {
-        this.ID = ID;
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
 }

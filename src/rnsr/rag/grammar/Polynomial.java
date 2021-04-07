@@ -1,5 +1,6 @@
 package rnsr.rag.grammar;
 
+import rnsr.rag.derivation.DerivationPolynomial;
 import rnsr.rag.grammar.exception.*;
 import rnsr.rag.grammar.interfaces.IContextClonable;
 import rnsr.rag.grammar.interfaces.IPolynomialTerm;
@@ -216,6 +217,12 @@ public	class		Polynomial
 
 	public boolean onlyVariable() {
 		return this.size() == 1 && this.get(0) instanceof Variable;
+	}
+
+	public DerivationPolynomial getDerivationObject() {
+		DerivationPolynomial dp = new DerivationPolynomial();
+		for (IPolynomialTerm pt: this) dp.add(pt.getDerivationObject());
+		return dp;
 	}
 	
 }
