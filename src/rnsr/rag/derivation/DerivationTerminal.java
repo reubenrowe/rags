@@ -24,6 +24,11 @@ public class DerivationTerminal implements IDerivationAnswerTerm {
         return this;
     }
 
+    public boolean match(IDerivationConfigurationTerm other) {
+        if (!(other instanceof DerivationTerminal)) return false;
+        return symbol.equals(((DerivationTerminal) other).symbol);
+    }
+
     public String toString() {
         return symbol;
     }

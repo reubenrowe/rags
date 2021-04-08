@@ -88,7 +88,7 @@ public	class		Polynomial
 	 */
 	public Polynomial resolve(VariableSet vars) throws VariableNotBoundException, VariableNotFoundException {
 		Polynomial resolvedPolynomial = new Polynomial();
-		
+
 		for (IPolynomialTerm t : this) {
 			if (t instanceof Variable) {
 				if (!vars.containsKey(t)) {
@@ -105,7 +105,6 @@ public	class		Polynomial
 				resolvedPolynomial.add((IPolynomialTerm) ((IResolvable) t).resolve(vars));
 			}
 		}
-		
 		return resolvedPolynomial;
 	}
 

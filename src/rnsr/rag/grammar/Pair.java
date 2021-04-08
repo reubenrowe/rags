@@ -1,6 +1,5 @@
 package rnsr.rag.grammar;
 
-import rnsr.rag.derivation.DerivationConfiguration;
 import rnsr.rag.derivation.DerivationPairVariable;
 import rnsr.rag.derivation.DerivationPolynomial;
 import rnsr.rag.grammar.exception.CloneException;
@@ -14,13 +13,16 @@ public	class		Pair
 		implements	IConfigurationTerm, IContextClonable<Pair>
 {
 
+	public static int count = 0;
+
 	private Polynomial m_left = null;
 	private Variable m_right = null;
+	private int id;
 	
 	/**
 	 * Default Constructor
 	 */
-	public Pair() { }
+	public Pair() { this.id = count++; }
 	
 	/**
 	 * Constructs a pair
@@ -29,8 +31,13 @@ public	class		Pair
 	 */
 	public Pair(Polynomial left, Variable right)
 	{
+		this(left, right, count++);
+	}
+
+	public Pair(Polynomial left, Variable right, int id) {
 		this.m_left = left;
 		this.m_right = right;
+		this.id = id;
 	}
 	
 	/**
@@ -49,12 +56,16 @@ public	class		Pair
 		return this.m_right;
 	}
 
+	public int getId() {
+		return this.id;
+	}
+
 	/**
 	 * IContextClonable method - clones this Pair
 	 */
 	public Pair clone(ContextMapping context) throws CloneException
 	{
-		return new Pair(this.m_left.clone(context), this.m_right.clone(context));
+		return new Pair(this.m_left.clone(context), this.m_right.clone(context), id);
 	}
 
 	@Override
@@ -72,7 +83,7 @@ public	class		Pair
 	public DerivationPairVariable getDerivationObject() {
 
 		DerivationPolynomial dp = m_left.getDerivationObject();
-		return new DerivationPairVariable(dp, m_right);
+		return new DerivationPairVariable(dp, m_right, id);
 
 	}
 

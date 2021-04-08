@@ -214,18 +214,23 @@ public	class		CandidateSet
 			} else if (headTerm instanceof Pair && discardNonMatching) {
 				Variable unbound = (Variable) ((Pair) headTerm).Left().get(0);
 				try {
-					//System.out.println("/////////////");
-					//System.out.println("BEFORE : " + current);
+
 					unbound.resolveForConstraints(input.Identifier().Identifier(), current, this);
+
+					Configuration c = new Configuration();
+					Polynomial p = current.m_variables.get(unbound);
+					for (IPolynomialTerm pt: p) c.add((IConfigurationTerm) pt);
+
+					current.getDerivationSequence().applyStep(
+							((Pair) headTerm).getDerivationObject(),
+							new InstantiatedRule(c, current.m_variables, p, null)
+					);
+
 					try {
 						current.consumeToken(input);
 					} catch (AnswerMismatchException e) {
-						//this.remove(current);
 						toRemove.add(current);
 					}
-					//this.remove(current);
-					//this.advance(input, true);
-
 				} catch (CloneException e) {
 					throw new Error(e);
 				}

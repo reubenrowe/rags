@@ -42,4 +42,10 @@ public class DerivationNonTerminal implements IDerivationAnswerTerm {
         return new DerivationNonTerminal(identifier, dpList);
     }
 
+    public boolean match(IDerivationConfigurationTerm other) {
+        if (!(other instanceof DerivationNonTerminal)) return false;
+        DerivationNonTerminal otherNT = (DerivationNonTerminal) other;
+        return identifier.equals(otherNT.identifier) && args.size() == otherNT.args.size();
+    }
+
 }

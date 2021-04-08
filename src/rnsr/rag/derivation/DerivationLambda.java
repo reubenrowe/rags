@@ -10,4 +10,12 @@ public class DerivationLambda implements IDerivationAnswerTerm {
         return this;
     }
 
+    public boolean match(IDerivationConfigurationTerm other) {
+        return other instanceof DerivationLambda;
+    }
+
+    public String toString() {
+        return "#";
+    }
+
 }

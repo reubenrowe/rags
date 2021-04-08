@@ -22,4 +22,10 @@ public class DerivationInverse implements IDerivationConfigurationTerm {
     public IDerivationConfigurationTerm resolve(VariableSet bindings) {
         return new DerivationInverse(contents.resolve(bindings));
     }
+
+    public boolean match(IDerivationConfigurationTerm other) {
+        if (!(other instanceof DerivationInverse)) return false;
+        return contents.match(((DerivationInverse) other).contents);
+    }
+
 }

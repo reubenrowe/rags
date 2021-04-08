@@ -20,4 +20,17 @@ public class DerivationPolynomial extends ArrayList<IDerivationQueryTerm> implem
         return dp;
     }
 
+    public boolean match(IDerivationConfigurationTerm other) {
+        if (!(other instanceof DerivationPolynomial)) return false;
+        DerivationPolynomial otherPoly = (DerivationPolynomial) other;
+        if (this.size() != otherPoly.size()) return false;
+        for (int i = 0; i < this.size(); i++)
+            if (!this.get(i).match(otherPoly.get(i))) return false;
+        return true;
+    }
+
+    public boolean onlyLambda() {
+        return (this.size() == 1 && this.get(0) instanceof DerivationLambda) || (this.size() == 1 && this.get(0) instanceof DerivationPolynomial && ((DerivationPolynomial) this.get(0)).onlyLambda());
+    }
+
 }

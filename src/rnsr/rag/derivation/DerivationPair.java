@@ -33,6 +33,10 @@ public class DerivationPair implements IDerivationConfigurationTerm {
         return this;
     }
 
+    public boolean match(IDerivationConfigurationTerm other) {
+        return false;
+    }
+
     public String toString() {
         return "<" + left + ", " + right + ">";
     }

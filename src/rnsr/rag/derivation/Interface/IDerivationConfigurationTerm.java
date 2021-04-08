@@ -4,6 +4,8 @@ import rnsr.rag.grammar.VariableSet;
 
 public interface IDerivationConfigurationTerm {
 
-    public IDerivationConfigurationTerm resolve(VariableSet bindings);
+    IDerivationConfigurationTerm resolve(VariableSet bindings);
+
+    boolean match(IDerivationConfigurationTerm other);
 
 }

@@ -1,5 +1,6 @@
 package rnsr.rag.derivation;
 
+import rnsr.rag.derivation.Interface.IDerivationConfigurationTerm;
 import rnsr.rag.derivation.Interface.IDerivationQueryTerm;
 import rnsr.rag.grammar.VariableSet;
 
@@ -32,4 +33,11 @@ public class DerivationQuery implements IDerivationQueryTerm {
     public DerivationQuery resolve(VariableSet bindings) {
         return new DerivationQuery(metaSyntax.resolve(bindings), syntax.resolve(bindings));
     }
+
+    public boolean match(IDerivationConfigurationTerm other) {
+        if (!(other instanceof DerivationQuery)) return false;
+        DerivationQuery otherQuery = (DerivationQuery) other;
+        return metaSyntax.match(otherQuery.metaSyntax) && syntax.match(otherQuery.syntax);
+    }
+
 }

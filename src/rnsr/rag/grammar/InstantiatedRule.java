@@ -44,6 +44,10 @@ public	class		InstantiatedRule
 		return this.m_variables;
 	}
 
+	public Configuration getConfiguration() {
+		return this.m_configuration;
+	}
+
 	/**
 	 * Constructs an instantiated rule from the results of a Query parse which
 	 * can be used to advance the parse of a configuration containing the original query

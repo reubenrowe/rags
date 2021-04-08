@@ -14,4 +14,14 @@ public class DerivationAnswer extends ArrayList<IDerivationAnswerTerm> implement
         return da;
     }
 
+    public boolean match(IDerivationConfigurationTerm other) {
+        if (!(other instanceof DerivationAnswer)) return false;
+        DerivationAnswer otherAnswer = (DerivationAnswer) other;
+        if (this.size() != otherAnswer.size()) return false;
+        for (int i = 0; i < this.size(); i++) {
+            if (!this.get(i).match(otherAnswer.get(i))) return false;
+        }
+        return true;
+    }
+
 }
