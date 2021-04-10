@@ -337,10 +337,17 @@ public	class		Answer
 	}
 
 	public UnificationSetting unify(Polynomial other) throws UnificationLambdaException, PolynomialUnificationException, CloneException {
-		VariableSet newBindings = new VariableSet();
 
-		IPolynomialTerm firstTerm = other.get(0);
+		VariableSet newBindings;
+
+		IPolynomialTerm firstTerm = other.remove(0);
+
 		if (!(firstTerm instanceof Answer)) throw new UnificationLambdaException(); // Can only unify answer with answer
+
+		if (firstTerm instanceof Variable) {
+
+		}
+
 		Answer otherAns = (Answer) firstTerm;
 
 		if (!this.m_identifier.equals(otherAns.Identifier()) || (this.Arguments().size() != otherAns.Arguments().size()))

@@ -148,7 +148,6 @@ public	class		Variable
 
 	public UnificationSetting unify(Polynomial other) throws UnificationLambdaException {
 		VariableSet newBindings = new VariableSet();
-
 		// For variables with no type: take everything
 		if (this.type == null) {
 			newBindings.put(this, other);
@@ -165,7 +164,11 @@ public	class		Variable
 	}
 
 	public Polynomial resolveInnerVariables(VariableSet sfBindings) {
-		return sfBindings.get(this);
+		Polynomial res = sfBindings.get(this);
+		while (res.onlyVariable()) {
+			res = sfBindings.get(res.get(0));
+		}
+		return res;
 	}
 
 	public VariableSet usedVariables() {
