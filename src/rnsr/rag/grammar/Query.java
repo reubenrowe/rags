@@ -23,13 +23,16 @@ public	class		Query
 		implements	IPolynomialTerm, IResolvable<Query>, IContextClonable<Query>
 {
 
+	public static int count = 0;
+
 	private Polynomial m_metaSyntax = null;
 	private Polynomial m_syntax = null;
+	private int id;
 	
 	/**
 	 * Default Constructor
 	 */
-	public Query() { }
+	public Query() { this(null, null); }
 	
 	/**
 	 * Constructs a Query from the given arguments
@@ -38,8 +41,18 @@ public	class		Query
 	 */
 	public Query(Polynomial metasyntax, Polynomial syntax)
 	{
+		this(metasyntax, syntax, count++);
+	}
+
+	public Query(Polynomial metasyntax, Polynomial syntax, int id)
+	{
 		this.m_metaSyntax = metasyntax;
 		this.m_syntax = syntax;
+		this.id = id;
+	}
+
+	public int getId() {
+		return id;
 	}
 	
 	/**
@@ -63,7 +76,7 @@ public	class		Query
 	 */
 	public Query clone(ContextMapping context) throws CloneException
 	{
-		return new Query(this.m_metaSyntax.clone(context), this.m_syntax.clone(context));
+		return new Query(this.m_metaSyntax.clone(context), this.m_syntax.clone(context), id);
 	}
 
 	/**
@@ -71,7 +84,7 @@ public	class		Query
 	 */
 	public Query resolve(VariableSet vars) throws VariableNotBoundException, VariableNotFoundException
 	{
-		return new Query(this.m_metaSyntax.resolve(vars), this.m_syntax.resolve(vars));
+		return new Query(this.m_metaSyntax.resolve(vars), this.m_syntax.resolve(vars), id);
 	}
 	
 	/**
@@ -88,21 +101,11 @@ public	class		Query
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder();
-
-		/*
-		sb.append("Query(");
-		sb.append(this.m_metaSyntax.toString());
-		sb.append(", ");
-		sb.append(this.m_syntax.toString());
-		sb.append(")");
-		 */
-
 		sb.append("(");
 		sb.append(this.m_metaSyntax);
 		sb.append(" ? ");
 		sb.append(this.m_syntax);
 		sb.append(")");
-		
 		return sb.toString();
 	}
 
@@ -149,7 +152,7 @@ public	class		Query
 	public Polynomial resolveInnerVariables(VariableSet sfBindings) {
 		Polynomial p1 = this.m_metaSyntax.resolveVariablesInPolynomial(sfBindings);
 		Polynomial p2 = this.m_syntax.resolveVariablesInPolynomial(sfBindings);
-		return new Polynomial(new Query(p1, p2));
+		return new Polynomial(new Query(p1, p2, id));
 	}
 
 	public VariableSet usedVariables() {
@@ -164,7 +167,7 @@ public	class		Query
 		left.add(m_metaSyntax.getDerivationObject());
 		DerivationConfiguration right = new DerivationConfiguration();
 		right.add(m_syntax.getDerivationObject());
-		return new DerivationQuery(left, right);
+		return new DerivationQuery(left, right, id);
 	}
 
 

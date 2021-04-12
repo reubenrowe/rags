@@ -53,6 +53,10 @@ public class DerivationPairVariable implements IDerivationConfigurationTerm {
         return new DerivationPair(dc1, dc2);
     }
 
+    public IDerivationConfigurationTerm applyQuery(int queryID, DerivationConfiguration step) {
+        return new DerivationPairVariable((DerivationPolynomial) polynomial.applyQuery(queryID, step), variable, id);
+    }
+
     public boolean match(IDerivationConfigurationTerm other) {
         if (!(other instanceof DerivationPairVariable)) return false;
         DerivationPairVariable otherPair = (DerivationPairVariable) other;

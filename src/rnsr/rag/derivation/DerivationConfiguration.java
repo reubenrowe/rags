@@ -6,7 +6,7 @@ import rnsr.rag.grammar.VariableSet;
 
 import java.util.ArrayList;
 
-public class DerivationConfiguration extends ArrayList<IDerivationConfigurationTerm> {
+public class DerivationConfiguration extends ArrayList<IDerivationConfigurationTerm> implements IDerivationConfigurationTerm {
 
     public String toString() {
         String s = "";
@@ -24,10 +24,8 @@ public class DerivationConfiguration extends ArrayList<IDerivationConfigurationT
     }
 
     public DerivationConfiguration applyStep(int pairID, InstantiatedRule rule, VariableSet bindings) {
-
         DerivationConfiguration dc = new DerivationConfiguration();
         boolean done = false;
-
         for (int i = 0; i < this.size(); i++) {
             IDerivationConfigurationTerm ct = this.get(i);
             if (done || !(ct instanceof DerivationPairVariable)) {
@@ -42,56 +40,21 @@ public class DerivationConfiguration extends ArrayList<IDerivationConfigurationT
                 dc.add(pair);
             }
         }
-
-        /*
-        DerivationConfiguration dc = new DerivationConfiguration();
-
-        boolean done = false;
-
-
-        for (int i = 0; i < this.size(); i++) {
-            IDerivationConfigurationTerm ct = this.get(i);
-            if (done || !(ct instanceof DerivationPairVariable) || !(ct.match(p))) {
-                dc.add(ct);
-                continue;
-            }
-            DerivationConfiguration ruleConfig = rule.getConfiguration().getDerivationObject();
-            ArrayList<IDerivationConfigurationTerm> termList = new ArrayList<>();
-            for (IDerivationConfigurationTerm ruleCT: ruleConfig)
-                if (!(ruleCT instanceof DerivationLambda))
-                    termList.add(ruleCT);
-            dc.addAll(termList);
-            done = true;
-        }
-
-
-        /*
-        for (int i = 0; i < this.size(); i++) {
-            IDerivationConfigurationTerm ct = this.get(i);
-            if (done || !(ct instanceof DerivationPairVariable)) {
-                dc.add(ct);
-                continue;
-            }
-
-            DerivationPairVariable pair = (DerivationPairVariable) ct;
-            if (pair.getId() == p.getId()) {
-                dc.addAll(rule.getConfiguration().getDerivationObject());
-                done = true;
-            } else {
-                dc.add(pair);
-            }
-
-        }
-        */
         return dc;
     }
 
-    public boolean match(DerivationConfiguration other) {
+    public DerivationConfiguration applyQuery(int queryID, DerivationConfiguration step) {
+        DerivationConfiguration dc = new DerivationConfiguration();
+        for (IDerivationConfigurationTerm ct: this) dc.add(ct.applyQuery(queryID, step));
+        return dc;
+    }
+
+    public boolean match(IDerivationConfigurationTerm other) {
         if (!(other instanceof DerivationConfiguration)) return false;
-        DerivationConfiguration otherConfig = (DerivationConfiguration) other;
-        if (this.size() != otherConfig.size()) return false;
+        DerivationConfiguration otherC = (DerivationConfiguration) other;
+        if (otherC.size() != this.size()) return false;
         for (int i = 0; i < this.size(); i++) {
-            if (!this.get(i).match(otherConfig.get(i))) return false;
+            if (!this.get(i).match(otherC.get(i))) return false;
         }
         return true;
     }

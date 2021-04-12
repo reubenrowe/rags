@@ -33,6 +33,10 @@ public class DerivationPair implements IDerivationConfigurationTerm {
         return this;
     }
 
+    public IDerivationConfigurationTerm applyQuery(int queryID, DerivationConfiguration step) {
+        return new DerivationPair(left.applyQuery(queryID, step), right.applyQuery(queryID, step));
+    }
+
     public boolean match(IDerivationConfigurationTerm other) {
         return false;
     }

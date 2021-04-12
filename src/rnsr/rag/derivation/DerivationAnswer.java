@@ -14,6 +14,12 @@ public class DerivationAnswer extends ArrayList<IDerivationAnswerTerm> implement
         return da;
     }
 
+    public IDerivationConfigurationTerm applyQuery(int queryID, DerivationConfiguration step) {
+        DerivationAnswer newDA = new DerivationAnswer();
+        for (IDerivationAnswerTerm at: this) newDA.add((IDerivationAnswerTerm) at.applyQuery(queryID, step));
+        return newDA;
+    }
+
     public boolean match(IDerivationConfigurationTerm other) {
         if (!(other instanceof DerivationAnswer)) return false;
         DerivationAnswer otherAnswer = (DerivationAnswer) other;

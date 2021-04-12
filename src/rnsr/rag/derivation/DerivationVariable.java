@@ -26,6 +26,10 @@ public class DerivationVariable implements IDerivationAnswerTerm {
         return poly2;
     }
 
+    public IDerivationConfigurationTerm applyQuery(int queryID, DerivationConfiguration step) {
+        return this;
+    }
+
     public boolean match(IDerivationConfigurationTerm other) {
 
         return true;

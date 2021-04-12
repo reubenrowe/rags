@@ -10,6 +10,10 @@ public class DerivationLambda implements IDerivationAnswerTerm {
         return this;
     }
 
+    public IDerivationConfigurationTerm applyQuery(int queryID, DerivationConfiguration step) {
+        return this;
+    }
+
     public boolean match(IDerivationConfigurationTerm other) {
         return other instanceof DerivationLambda;
     }

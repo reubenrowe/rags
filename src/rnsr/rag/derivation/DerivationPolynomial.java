@@ -20,6 +20,12 @@ public class DerivationPolynomial extends ArrayList<IDerivationQueryTerm> implem
         return dp;
     }
 
+    public IDerivationConfigurationTerm applyQuery(int queryID, DerivationConfiguration step) {
+        DerivationPolynomial dp = new DerivationPolynomial();
+        for (IDerivationQueryTerm qt: this) dp.add((IDerivationQueryTerm) qt.applyQuery(queryID, step));
+        return dp;
+    }
+
     public boolean match(IDerivationConfigurationTerm other) {
         if (!(other instanceof DerivationPolynomial)) return false;
         DerivationPolynomial otherPoly = (DerivationPolynomial) other;

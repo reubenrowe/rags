@@ -22,7 +22,7 @@ public	class		Pair
 	/**
 	 * Default Constructor
 	 */
-	public Pair() { this.id = count++; }
+	public Pair() { this(null, null); }
 	
 	/**
 	 * Constructs a pair

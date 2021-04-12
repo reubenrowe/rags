@@ -138,19 +138,27 @@ public	class		CandidateSet
 					// Parse the query
 					Set<ParseResult> realResults = parser.parse(resolvedQuery);
 					Set<ExtendedAnswer> results = new HashSet<>();
-					for (ParseResult pr: realResults) results.add(pr.getResult());
 
 					// For each result in the parse, create a rule and apply it to the current sentential form
-					for (ExtendedAnswer result : results)
+					for (ParseResult pr: realResults)
 					{
+
+						ExtendedAnswer result = pr.getResult();
+						results.add(result);
+
 						// Construct the replacement rule
 						InstantiatedRule r = InstantiatedRule.constructQueryReplacementRule(result, headPair.Right());
 
-						// Apply the rule
+						// Handle derivation sequence
 						SententialForm clone = currentForm.cloneObject();
+						clone.getDerivationSequence().applyQuery(((Query) t).getId(), pr.getDerivationSequence());
+
+						// Apply the rule
 						clone.applyRule(r);
 						tempSet.add(clone);
+
 					}
+
 				}
 
 				// If the term is an answer, get and apply the appropriate rules
@@ -166,7 +174,6 @@ public	class		CandidateSet
 
 						try {
 							tempSet.add(currentForm.applyRule(r));
-							SententialForm sf = currentForm.applyRule(r);
 						} catch (UnificationLambdaException e) {
 							continue; // Rule arg requires lambda, but non-empty arg given
 						}
