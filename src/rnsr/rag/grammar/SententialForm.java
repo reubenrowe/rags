@@ -122,13 +122,13 @@ public	class		SententialForm
 				combinedResult.add(v2);
 				this.bind(head.Right(), combinedResult);
 
-
 				// Handling derivation sequence
 				Configuration c = new Configuration();
-				if (!newHead.Left().onlyLambda()) c.add(newHead);
-				if (!replacement.Left().onlyLambda()) c.add(replacement);
+				//if (!newHead.Left().onlyLambda()) c.add(newHead);
+				//if (!replacement.Left().onlyLambda()) c.add(replacement);
+
 				InstantiatedRule r = new InstantiatedRule(c, this.m_variables, combinedResult, null);
-				this.getDerivationSequence().applyStep(head.getDerivationObject(), r);
+				this.getDerivationSequence().applyStep(head.getId(), r);
 
 				// Now recursively call normalise() in case the head term requires further resolution
 				normalise();
@@ -194,8 +194,9 @@ public	class		SententialForm
 		this.bind(((Pair) t).Right(), ruleInstance.Result());
 
 		// Adjust derivation sequence
-		this.derivationSequence.applyStep(((Pair) t).getDerivationObject(), ruleInstance);
-		this.derivationSequence.getOriginalBindings().putAll(ruleInstance.m_variables);
+		this.derivationSequence.getOriginalBindings().put(((Pair) t).Right(), ruleInstance.Result());
+		this.derivationSequence.applyStep(((Pair) t).getId(), ruleInstance);
+		//this.derivationSequence.getOriginalBindings().putAll(ruleInstance.m_variables);
 
 	}
 
@@ -286,8 +287,8 @@ public	class		SententialForm
 		derivationVars.putAll(newVars);
 		derivationVars.putAll(this.derivationSequence.getOriginalBindings());
 		for (Variable v: m_variables.keySet()) derivationVars.put(v, new Polynomial(cloneContext.get(v)));
+
 		DerivationSequence cloneDS = new DerivationSequence(derivationVars);
-		cloneDS.steps += this.derivationSequence.steps;
 		cloneDS.addAll(this.derivationSequence);
 		cloneSF.derivationSequence = cloneDS;
 

@@ -40,4 +40,8 @@ public class DerivationQuery implements IDerivationQueryTerm {
         return metaSyntax.match(otherQuery.metaSyntax) && syntax.match(otherQuery.syntax);
     }
 
+    public String toString() {
+        return "(" + metaSyntax + "?" + syntax + ")";
+    }
+
 }

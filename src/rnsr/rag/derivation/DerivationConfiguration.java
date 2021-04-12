@@ -23,7 +23,27 @@ public class DerivationConfiguration extends ArrayList<IDerivationConfigurationT
         return dc;
     }
 
-    public DerivationConfiguration applyStep(DerivationPairVariable p, InstantiatedRule rule, VariableSet bindings) {
+    public DerivationConfiguration applyStep(int pairID, InstantiatedRule rule, VariableSet bindings) {
+
+        DerivationConfiguration dc = new DerivationConfiguration();
+        boolean done = false;
+
+        for (int i = 0; i < this.size(); i++) {
+            IDerivationConfigurationTerm ct = this.get(i);
+            if (done || !(ct instanceof DerivationPairVariable)) {
+                dc.add(ct);
+                continue;
+            }
+            DerivationPairVariable pair = (DerivationPairVariable) ct;
+            if (pair.getId() == pairID) {
+                dc.addAll(rule.getConfiguration().getDerivationObject());
+                done = true;
+            } else {
+                dc.add(pair);
+            }
+        }
+
+        /*
         DerivationConfiguration dc = new DerivationConfiguration();
 
         boolean done = false;
@@ -63,7 +83,6 @@ public class DerivationConfiguration extends ArrayList<IDerivationConfigurationT
 
         }
         */
-
         return dc;
     }
 

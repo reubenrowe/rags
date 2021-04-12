@@ -39,10 +39,10 @@ public class DerivationSequence extends ArrayList<DerivationConfiguration> {
         return ds;
     }
 
-    public void applyStep(DerivationPairVariable p, InstantiatedRule rule) {
+    public void applyStep(int pairID, InstantiatedRule rule) {
         DerivationConfiguration tailConfiguration = this.get(this.size() - 1);
-        this.add(tailConfiguration.applyStep(p, rule, originalBindings));
-        this.steps += p + " (" + p.getId() + ")   ->   " + rule.getConfiguration() + "    :    " + originalBindings + "\n";
+        this.add(tailConfiguration.applyStep(pairID, rule, originalBindings));
+        //this.steps += p + " (" + p.getId() + ")   ->   " + rule.getConfiguration() + "    :    " + originalBindings + "\n";
     }
 
 }

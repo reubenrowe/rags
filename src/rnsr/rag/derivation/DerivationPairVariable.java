@@ -41,17 +41,15 @@ public class DerivationPairVariable implements IDerivationConfigurationTerm {
     }
 
     public IDerivationConfigurationTerm resolve(VariableSet bindings) {
+
         DerivationConfiguration dc1 = new DerivationConfiguration();
-
         DerivationPolynomial p = (DerivationPolynomial) polynomial.resolve(bindings);
-        if (p.onlyLambda()) return null;
-
-        dc1.add(polynomial.resolve(bindings));
-
+        dc1.add(p);
 
         DerivationConfiguration dc2 = new DerivationConfiguration();
         DerivationPolynomial dp = (DerivationPolynomial) bindings.get(variable).getDerivationObject().resolve(bindings);
         dc2.add(dp);
+
         return new DerivationPair(dc1, dc2);
     }
 

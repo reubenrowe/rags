@@ -163,14 +163,15 @@ public	class		CandidateSet
 					// Loop through each rule returned and apply it.
 					for (Rule r : ruleSet)
 					{
+
 						try {
 							tempSet.add(currentForm.applyRule(r));
+							SententialForm sf = currentForm.applyRule(r);
 						} catch (UnificationLambdaException e) {
 							continue; // Rule arg requires lambda, but non-empty arg given
 						}
 
 					}
-
 				}
 			}
 		}
@@ -222,7 +223,7 @@ public	class		CandidateSet
 					for (IPolynomialTerm pt: p) c.add((IConfigurationTerm) pt);
 
 					current.getDerivationSequence().applyStep(
-							((Pair) headTerm).getDerivationObject(),
+							((Pair) headTerm).getId(),
 							new InstantiatedRule(c, current.m_variables, p, null)
 					);
 

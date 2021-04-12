@@ -2,7 +2,6 @@ package rnsr.rag.derivation;
 
 import rnsr.rag.derivation.Interface.IDerivationAnswerTerm;
 import rnsr.rag.derivation.Interface.IDerivationConfigurationTerm;
-import rnsr.rag.derivation.Interface.IDerivationQueryTerm;
 import rnsr.rag.grammar.Polynomial;
 import rnsr.rag.grammar.Variable;
 import rnsr.rag.grammar.VariableSet;
@@ -23,21 +22,7 @@ public class DerivationVariable implements IDerivationAnswerTerm {
             v = (Variable) p.get(0);
             p = bindings.get(v);
         }
-        DerivationPolynomial poly = (DerivationPolynomial) p.getDerivationObject().resolve(bindings);
-        //System.out.println(poly);
-
-        DerivationPolynomial poly2 = new DerivationPolynomial();
-        if (poly.size() > 1) {
-            for (IDerivationQueryTerm qt: poly) {
-                if (!(qt instanceof DerivationLambda) &&
-                        !(qt instanceof DerivationPolynomial && ((DerivationPolynomial) qt).onlyLambda()))
-                    poly2.add(qt);
-            }
-        } else {
-            poly2 = poly;
-        }
-
-
+        DerivationPolynomial poly2 = (DerivationPolynomial) p.getDerivationObject().resolve(bindings);
         return poly2;
     }
 
