@@ -124,11 +124,10 @@ public	class		SententialForm
 
 				// Handling derivation sequence
 				Configuration c = new Configuration();
-				//if (!newHead.Left().onlyLambda()) c.add(newHead);
-				//if (!replacement.Left().onlyLambda()) c.add(replacement);
-
-				InstantiatedRule r = new InstantiatedRule(c, this.m_variables, combinedResult, null);
-				this.getDerivationSequence().applyStep(head.getId(), r);
+				c.add(newHead);
+				c.add(replacement);
+				this.getDerivationSequence().applyStep(head.getId(),
+						new InstantiatedRule(c, this.m_variables, combinedResult, null));
 
 				// Now recursively call normalise() in case the head term requires further resolution
 				normalise();
@@ -158,6 +157,13 @@ public	class		SententialForm
 				Pair newPair = new Pair(resolved, head.Right(), head.getId());
 				// Insert new pair into configuration
 				this.m_configuration.add(0, newPair);
+
+				// Handle derivation sequence
+				Configuration c = new Configuration();
+				c.add(newPair);
+				this.derivationSequence.applyStep(head.getId(),
+						new InstantiatedRule(c, m_variables, new Polynomial(head.Right()), null));
+
 
 				// Now recursively call normalise() in case the head term requires further resolution
 				normalise();
