@@ -37,6 +37,10 @@ public class DerivationPair implements IDerivationConfigurationTerm {
         return new DerivationPair(left.applyQuery(queryID, step), right.applyQuery(queryID, step));
     }
 
+    public IDerivationConfigurationTerm applyQueryReverse(int queryID, DerivationConfiguration step, boolean isLeft) {
+        return new DerivationPair(left.applyQueryReverse(queryID, step, isLeft), right.applyQueryReverse(queryID, step, isLeft));
+    }
+
     public boolean match(IDerivationConfigurationTerm other) {
         return false;
     }

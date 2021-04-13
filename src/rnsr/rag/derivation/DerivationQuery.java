@@ -53,6 +53,16 @@ public class DerivationQuery implements IDerivationQueryTerm {
         return new DerivationQuery(metaSyntax, newSyntax, id);
     }
 
+    public IDerivationConfigurationTerm applyQueryReverse(int queryID, DerivationConfiguration step, boolean isLeft) {
+        if (queryID != id)
+            return new DerivationQuery(metaSyntax.applyQuery(queryID, step), syntax.applyQuery(queryID, step), id);
+
+        DerivationConfiguration newStep = new DerivationConfiguration();
+        newStep.add(new DerivationInverse(step));
+
+        return (isLeft) ? new DerivationQuery(newStep, syntax, id) : new DerivationQuery(metaSyntax, newStep, id);
+    }
+
     public boolean match(IDerivationConfigurationTerm other) {
         if (!(other instanceof DerivationQuery)) return false;
         DerivationQuery otherQuery = (DerivationQuery) other;

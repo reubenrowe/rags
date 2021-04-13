@@ -2,6 +2,7 @@ package rnsr.rag.grammar;
 
 import rnsr.rag.derivation.DerivationConfiguration;
 import rnsr.rag.derivation.DerivationQuery;
+import rnsr.rag.derivation.DerivationSequence;
 import rnsr.rag.grammar.exception.CloneException;
 import rnsr.rag.grammar.exception.VariableNotBoundException;
 import rnsr.rag.grammar.exception.VariableNotFoundException;
@@ -145,6 +146,55 @@ public	class		Query
 		return queriesReturnSet;
 	}
 
+	public HashSet<ParseResult> resolveInnerQueries(Parser parser) {
+		ArrayList<HashSet<ParseResult>> metaSyntaxPolyAnswers = new ArrayList<>();
+		ArrayList<HashSet<ParseResult>> syntaxPolyAnswers = new ArrayList<>();
+		for (IPolynomialTerm p: m_metaSyntax) metaSyntaxPolyAnswers.add(p.resolveInnerQueries(parser));
+		for (IPolynomialTerm p: m_syntax) syntaxPolyAnswers.add(p.resolveInnerQueries(parser));
+
+		Set<ParseResult> possiblePolynomialsMetaSyntax = ParseResult.parseResultPermutations(metaSyntaxPolyAnswers);
+		Set<ParseResult> possiblePolynomialsSyntax = ParseResult.parseResultPermutations(syntaxPolyAnswers);
+
+		HashSet<ParseResult> queriesReturnSet = new HashSet<>();
+
+		for (ParseResult pr1: possiblePolynomialsMetaSyntax) {
+			for (ParseResult pr2: possiblePolynomialsSyntax) {
+				try {
+
+					Query q = new Query(pr1.getResult(), pr2.getResult(), id);
+					Set<ParseResult> realResults = parser.parse(new Query(pr1.getResult(), pr2.getResult(), id));
+
+					for (ParseResult pr: realResults) {
+
+						DerivationSequence ds1 = pr1.getDerivationSequence();
+						ds1.applyQueryReverse(id, pr2.getDerivationSequence(), false);
+						ds1.applyQueryReverse(id, pr.getDerivationSequence(), false);
+
+						DerivationSequence currentResult = pr.getDerivationSequence();
+						DerivationConfiguration dc = new DerivationConfiguration();
+						dc.add(pr.getResult().getDerivationObject());
+						currentResult.add(0, dc);
+						DerivationConfiguration dc2 = new DerivationConfiguration();
+						dc2.add(q.getDerivationObject());
+						currentResult.add(dc2);
+
+						ds1.applyQueryReverse(id, currentResult, false);
+
+						queriesReturnSet.add(new ParseResult(pr.getResult(), pr.getOriginalQuery(), ds1));
+
+					}
+
+				} catch (ParseException e) {
+					throw new Error(e);
+				}
+			}
+		}
+
+		return queriesReturnSet;
+
+	}
+
+
 	public UnificationSetting unify(Polynomial other) {
 		return null;
 	}
@@ -170,10 +220,6 @@ public	class		Query
 		return new DerivationQuery(left, right, id);
 	}
 
-	public Set<ParseResult> resolveInnerQueries(Parser parser) {
 
-		return null;
-
-	}
 
 }

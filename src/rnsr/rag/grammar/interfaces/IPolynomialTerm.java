@@ -11,6 +11,7 @@ import rnsr.rag.grammar.exception.UnificationLambdaException;
 import rnsr.rag.parser.Parser;
 import rnsr.rag.util.UnificationSetting;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -31,7 +32,7 @@ public interface IPolynomialTerm
 	 */
 	Set<ExtendedAnswer> resolveQueries(Parser p);
 
-	Set<ParseResult> resolveInnerQueries(Parser parser);
+	HashSet<ParseResult> resolveInnerQueries(Parser parser);
 
 	/**
 	 * Method used to unify a polynomial term with a polynomial in a pattern matching operation.

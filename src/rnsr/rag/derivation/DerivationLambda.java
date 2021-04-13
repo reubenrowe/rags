@@ -14,6 +14,10 @@ public class DerivationLambda implements IDerivationAnswerTerm {
         return this;
     }
 
+    public IDerivationConfigurationTerm applyQueryReverse(int queryID, DerivationConfiguration step, boolean isLeft) {
+        return this;
+    }
+
     public boolean match(IDerivationConfigurationTerm other) {
         return other instanceof DerivationLambda;
     }

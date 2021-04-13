@@ -9,6 +9,8 @@ public interface IDerivationConfigurationTerm {
 
     IDerivationConfigurationTerm applyQuery(int queryID, DerivationConfiguration step);
 
+    IDerivationConfigurationTerm applyQueryReverse(int queryID, DerivationConfiguration step, boolean isLeft);
+
     IDerivationConfigurationTerm clone();
 
     boolean match(IDerivationConfigurationTerm other);

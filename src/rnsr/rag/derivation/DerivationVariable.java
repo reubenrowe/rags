@@ -29,6 +29,10 @@ public class DerivationVariable implements IDerivationAnswerTerm {
         return this;
     }
 
+    public IDerivationConfigurationTerm applyQueryReverse(int queryID, DerivationConfiguration step, boolean isLeft) {
+        return this;
+    }
+
     public boolean match(IDerivationConfigurationTerm other) {
         return true;
     }

@@ -49,6 +49,12 @@ public class DerivationConfiguration extends ArrayList<IDerivationConfigurationT
         return dc;
     }
 
+    public DerivationConfiguration applyQueryReverse(int queryID, DerivationConfiguration step, boolean isLeft) {
+        DerivationConfiguration dc = new DerivationConfiguration();
+        for (IDerivationConfigurationTerm ct: this) dc.add(ct.applyQueryReverse(queryID, step, isLeft));
+        return dc;
+    }
+
     public boolean match(IDerivationConfigurationTerm other) {
         if (!(other instanceof DerivationConfiguration)) return false;
         DerivationConfiguration otherC = (DerivationConfiguration) other;

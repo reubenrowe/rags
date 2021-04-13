@@ -63,6 +63,13 @@ public class DerivationSequence extends ArrayList<DerivationConfiguration> {
         }
     }
 
+    public void applyQueryReverse(int queryID, DerivationSequence querySequence, boolean isLeft) {
+        DerivationConfiguration headConfiguration = this.get(0);
+        for (DerivationConfiguration dc: querySequence) {
+            this.add(0, (DerivationConfiguration) headConfiguration.applyQueryReverse(queryID, dc, isLeft));
+        }
+    }
+
     public void putQueryResult(int queryID, DerivationPolynomial result) {
         subSequenceMap.put(queryID, result);
     }
@@ -79,7 +86,7 @@ public class DerivationSequence extends ArrayList<DerivationConfiguration> {
 
         DerivationConfiguration otherHead = other.remove(0);
         DerivationSequence appended = this.append(otherHead);
-        DerivationConfiguration tailConfiguration = appended.get(appended.size() - 1);
+        DerivationConfiguration tailConfiguration = this.get(this.size() - 1);
 
         for (DerivationConfiguration cStep: other) {
             DerivationConfiguration newStep = tailConfiguration.clone();

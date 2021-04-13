@@ -48,6 +48,12 @@ public class DerivationNonTerminal implements IDerivationAnswerTerm {
         return new DerivationNonTerminal(identifier, polyList);
     }
 
+    public IDerivationConfigurationTerm applyQueryReverse(int queryID, DerivationConfiguration step, boolean isLeft) {
+        ArrayList<DerivationPolynomial> polyList = new ArrayList<>();
+        for (DerivationPolynomial p: args) polyList.add((DerivationPolynomial) p.applyQueryReverse(queryID, step, isLeft));
+        return new DerivationNonTerminal(identifier, polyList);
+    }
+
     public boolean match(IDerivationConfigurationTerm other) {
         if (!(other instanceof DerivationNonTerminal)) return false;
         DerivationNonTerminal otherNT = (DerivationNonTerminal) other;

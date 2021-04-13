@@ -26,6 +26,12 @@ public class DerivationPolynomial extends ArrayList<IDerivationQueryTerm> implem
         return dp;
     }
 
+    public IDerivationConfigurationTerm applyQueryReverse(int queryID, DerivationConfiguration step, boolean isLeft) {
+        DerivationPolynomial dp = new DerivationPolynomial();
+        for (IDerivationQueryTerm qt: this) dp.add((IDerivationQueryTerm) qt.applyQueryReverse(queryID, step, isLeft));
+        return dp;
+    }
+
     public boolean match(IDerivationConfigurationTerm other) {
         if (!(other instanceof DerivationPolynomial)) return false;
         DerivationPolynomial otherPoly = (DerivationPolynomial) other;

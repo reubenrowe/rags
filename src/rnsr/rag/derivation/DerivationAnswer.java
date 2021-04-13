@@ -20,6 +20,12 @@ public class DerivationAnswer extends ArrayList<IDerivationAnswerTerm> implement
         return newDA;
     }
 
+    public IDerivationConfigurationTerm applyQueryReverse(int queryID, DerivationConfiguration step, boolean isLeft) {
+        DerivationAnswer newDA = new DerivationAnswer();
+        for (IDerivationAnswerTerm at: this) newDA.add((IDerivationAnswerTerm) at.applyQueryReverse(queryID, step, isLeft));
+        return newDA;
+    }
+
     public boolean match(IDerivationConfigurationTerm other) {
         if (!(other instanceof DerivationAnswer)) return false;
         DerivationAnswer otherAnswer = (DerivationAnswer) other;

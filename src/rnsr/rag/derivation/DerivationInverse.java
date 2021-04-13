@@ -27,6 +27,10 @@ public class DerivationInverse implements IDerivationConfigurationTerm {
         return new DerivationInverse(contents.applyQuery(queryID, step));
     }
 
+    public IDerivationConfigurationTerm applyQueryReverse(int queryID, DerivationConfiguration step, boolean isLeft) {
+        return new DerivationInverse(contents.applyQueryReverse(queryID, step, isLeft));
+    }
+
     public boolean match(IDerivationConfigurationTerm other) {
         if (!(other instanceof DerivationInverse)) return false;
         return contents.match(((DerivationInverse) other).contents);

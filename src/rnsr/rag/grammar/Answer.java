@@ -397,7 +397,7 @@ public	class		Answer
 		}
 	}
 
-	public Set<ParseResult> resolveInnerQueries(Parser parser) {
+	public HashSet<ParseResult> resolveInnerQueries(Parser parser) {
 
 		return null;
 
