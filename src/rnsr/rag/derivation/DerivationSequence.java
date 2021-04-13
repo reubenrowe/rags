@@ -77,7 +77,15 @@ public class DerivationSequence extends ArrayList<DerivationConfiguration> {
         newBindings.putAll(other.getOriginalBindings());
         DerivationSequence newDS = new DerivationSequence(newBindings);
 
-        // Looking for and resolving queries which have already been resolved in the left (this) derivation sequence
+        DerivationConfiguration otherHead = other.remove(0);
+        DerivationSequence appended = this.append(otherHead);
+        DerivationConfiguration tailConfiguration = appended.get(appended.size() - 1);
+
+        for (DerivationConfiguration cStep: other) {
+            DerivationConfiguration newStep = tailConfiguration.clone();
+            newStep.addAll(cStep);
+            appended.add(newStep);
+        }
 
         return newDS;
 

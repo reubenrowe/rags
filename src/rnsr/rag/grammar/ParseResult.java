@@ -53,10 +53,8 @@ public class ParseResult {
             return new ParseResult(newEA, original, newDS);
         }
 
-        DerivationSequence oldDS = dc;
-
-        DerivationConfiguration result = other.getDerivationSequence().get(0);
-        oldDS.append(result); // Appending query result to the end of each existing derivation step
+        DerivationSequence oldDS = dc.clone();
+        DerivationSequence newDS = oldDS.merge(other.getDerivationSequence());
 
         return null;
 
