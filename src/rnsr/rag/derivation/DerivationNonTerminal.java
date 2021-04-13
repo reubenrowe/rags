@@ -54,4 +54,10 @@ public class DerivationNonTerminal implements IDerivationAnswerTerm {
         return identifier.equals(otherNT.identifier) && args.size() == otherNT.args.size();
     }
 
+    public DerivationNonTerminal clone() {
+        ArrayList<DerivationPolynomial> newArgs=  new ArrayList<>();
+        for (DerivationPolynomial p: args) newArgs.add((DerivationPolynomial) p.clone());
+        return new DerivationNonTerminal(identifier, newArgs);
+    }
+
 }

@@ -13,6 +13,7 @@ import rnsr.rag.util.ConsumeSetting;
 import rnsr.rag.util.UnificationSetting;
 
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents a variable in a RAG polynomial expression
@@ -179,6 +180,10 @@ public	class		Variable
 
 	public IDerivationQueryTerm getDerivationObject() {
 		return new DerivationVariable(this);
+	}
+
+	public Set<ParseResult> resolveInnerQueries(Parser parser) {
+		return new HashSet<>();
 	}
 
 }

@@ -15,7 +15,6 @@ public class DerivationVariable implements IDerivationAnswerTerm {
     }
 
     public IDerivationConfigurationTerm resolve(VariableSet bindings) {
-
         Polynomial p = bindings.get(variable);
         Variable v;
         while (p.onlyVariable()) {
@@ -31,9 +30,11 @@ public class DerivationVariable implements IDerivationAnswerTerm {
     }
 
     public boolean match(IDerivationConfigurationTerm other) {
-
         return true;
+    }
 
+    public DerivationVariable clone() {
+        return new DerivationVariable(variable);
     }
 
 }

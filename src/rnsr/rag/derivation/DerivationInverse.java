@@ -36,4 +36,8 @@ public class DerivationInverse implements IDerivationConfigurationTerm {
         return "!(" + contents + ")";
     }
 
+    public DerivationInverse clone() {
+        return new DerivationInverse(contents.clone());
+    }
+
 }

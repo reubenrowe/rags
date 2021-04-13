@@ -170,5 +170,10 @@ public	class		Query
 		return new DerivationQuery(left, right, id);
 	}
 
+	public Set<ParseResult> resolveInnerQueries(Parser parser) {
+
+		return null;
+
+	}
 
 }

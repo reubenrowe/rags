@@ -59,4 +59,10 @@ public class DerivationConfiguration extends ArrayList<IDerivationConfigurationT
         return true;
     }
 
+    public DerivationConfiguration clone() {
+        DerivationConfiguration newDC = new DerivationConfiguration();
+        for (IDerivationConfigurationTerm ct: this) newDC.add(ct.clone());
+        return newDC;
+    }
+
 }

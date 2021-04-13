@@ -106,4 +106,15 @@ public	class		ExtendedAnswer
 	}
 
 
+
+	public Set<ParseResult> resolveInnerQueries(Parser parser) {
+		HashSet<ParseResult> newResults = new HashSet<>();
+		for (IPolynomialTerm ipt: this) {
+
+		}
+		return newResults;
+	}
+
+
+
 }

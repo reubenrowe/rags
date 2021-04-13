@@ -156,6 +156,7 @@ public	class		CandidateSet
 						// Apply the rule
 						clone.applyRule(r);
 						tempSet.add(clone);
+						clone.getDerivationSequence().putQueryResult(((Query) t).getId(), pr.getResult().getDerivationObject());
 
 					}
 

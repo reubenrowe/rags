@@ -37,4 +37,8 @@ public class DerivationTerminal implements IDerivationAnswerTerm {
         return symbol;
     }
 
+    public DerivationTerminal clone() {
+        return new DerivationTerminal(symbol);
+    }
+
 }

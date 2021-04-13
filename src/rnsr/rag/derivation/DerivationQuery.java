@@ -63,4 +63,8 @@ public class DerivationQuery implements IDerivationQueryTerm {
         return "(" + metaSyntax + "?" + syntax + ")";
     }
 
+    public DerivationQuery clone() {
+        return new DerivationQuery(metaSyntax.clone(), syntax.clone(), id);
+    }
+
 }

@@ -63,4 +63,8 @@ public class DerivationPairVariable implements IDerivationConfigurationTerm {
         return this.polynomial.match(otherPair.polynomial);
     }
 
+    public DerivationPairVariable clone() {
+        return new DerivationPairVariable(polynomial.clone(), variable, id);
+    }
+
 }

@@ -22,4 +22,8 @@ public class DerivationLambda implements IDerivationAnswerTerm {
         return "#";
     }
 
+    public DerivationLambda clone() {
+        return new DerivationLambda();
+    }
+
 }

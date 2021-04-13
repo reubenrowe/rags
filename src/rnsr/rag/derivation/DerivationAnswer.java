@@ -30,4 +30,10 @@ public class DerivationAnswer extends ArrayList<IDerivationAnswerTerm> implement
         return true;
     }
 
+    public DerivationAnswer clone() {
+        DerivationAnswer newAnswer = new DerivationAnswer();
+        for (IDerivationAnswerTerm at: this) newAnswer.add((IDerivationAnswerTerm) at.clone());
+        return newAnswer;
+    }
+
 }

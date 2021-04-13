@@ -397,4 +397,10 @@ public	class		Answer
 		}
 	}
 
+	public Set<ParseResult> resolveInnerQueries(Parser parser) {
+
+		return null;
+
+	}
+
 }

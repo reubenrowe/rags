@@ -45,4 +45,8 @@ public class DerivationPair implements IDerivationConfigurationTerm {
         return "<" + left + ", " + right + ">";
     }
 
+    public DerivationPair clone() {
+        return new DerivationPair(left.clone(), right.clone());
+    }
+
 }

@@ -39,4 +39,10 @@ public class DerivationPolynomial extends ArrayList<IDerivationQueryTerm> implem
         return (this.size() == 1 && this.get(0) instanceof DerivationLambda) || (this.size() == 1 && this.get(0) instanceof DerivationPolynomial && ((DerivationPolynomial) this.get(0)).onlyLambda());
     }
 
+    public DerivationPolynomial clone() {
+        DerivationPolynomial newP = new DerivationPolynomial();
+        for (IDerivationQueryTerm qt: this) newP.add((IDerivationQueryTerm) qt.clone());
+        return newP;
+    }
+
 }

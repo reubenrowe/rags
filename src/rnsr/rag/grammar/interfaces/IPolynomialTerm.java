@@ -2,6 +2,7 @@ package rnsr.rag.grammar.interfaces;
 
 import rnsr.rag.derivation.Interface.IDerivationQueryTerm;
 import rnsr.rag.grammar.ExtendedAnswer;
+import rnsr.rag.grammar.ParseResult;
 import rnsr.rag.grammar.Polynomial;
 import rnsr.rag.grammar.VariableSet;
 import rnsr.rag.grammar.exception.CloneException;
@@ -29,6 +30,8 @@ public interface IPolynomialTerm
 	 * @return The set of extended answers derived from resolving queries within a single extended answer
 	 */
 	Set<ExtendedAnswer> resolveQueries(Parser p);
+
+	Set<ParseResult> resolveInnerQueries(Parser parser);
 
 	/**
 	 * Method used to unify a polynomial term with a polynomial in a pattern matching operation.
