@@ -146,6 +146,60 @@ public	class		Query
 		return queriesReturnSet;
 	}
 
+	public HashSet<SubQueryResult> resolveInnerQueries(Parser parser) {
+
+		ArrayList<HashSet<SubQueryResult>> metaSyntaxPolyAnswers = new ArrayList<>();
+		ArrayList<HashSet<SubQueryResult>> syntaxPolyAnswers = new ArrayList<>();
+		for (IPolynomialTerm p: m_metaSyntax) metaSyntaxPolyAnswers.add(p.resolveInnerQueries(parser));
+		for (IPolynomialTerm p: m_syntax) syntaxPolyAnswers.add(p.resolveInnerQueries(parser));
+
+		Set<SubQueryResult> possiblePolynomialsMetaSyntax = SubQueryResult.subQueryResultsPermutations(metaSyntaxPolyAnswers);
+		Set<SubQueryResult> possiblePolynomialsSyntax = SubQueryResult.subQueryResultsPermutations(syntaxPolyAnswers);
+
+		HashSet<SubQueryResult> queryResults = new HashSet<>();
+
+		for (SubQueryResult sqr1: possiblePolynomialsMetaSyntax) {
+			for (SubQueryResult sqr2: possiblePolynomialsSyntax) {
+				try {
+
+					Polynomial p1 = sqr1.getResult();
+					Polynomial p2 = sqr2.getResult();
+					HashSet<ParseResult> realResults = (HashSet<ParseResult>) parser.parse(new Query(p1, p2));
+
+					for (ParseResult pr: realResults) {
+						DerivationSequence ds = pr.getDerivationSequence();
+
+						DerivationConfiguration c1 = new DerivationConfiguration();
+						c1.add(pr.getOriginalQuery().getDerivationObject());
+						ds.add(c1);
+
+						DerivationConfiguration c2 = new DerivationConfiguration();
+						c2.add(pr.getResult().getDerivationObject());
+						ds.add(0, c2);
+
+						//for (SubQuery sq: sqr1.getSubQueries()) ds.applyQuery(sq.getQueryID(), sq.getSequence());
+						//for (SubQuery sq: sqr2.getSubQueries()) ds.applyQuery(sq.getQueryID(), sq.getSequence());
+
+						ArrayList<SubQuery> sqList = new ArrayList<>();
+						sqList.addAll(sqr1.getSubQueries());
+						sqList.addAll(sqr2.getSubQueries());
+						sqList.add(new SubQuery(this.id, ds, pr.getResult()));
+
+						queryResults.add(new SubQueryResult(pr.getResult(), sqList));
+
+					}
+
+				} catch (ParseException e) {
+					throw new Error(e);
+				}
+			}
+		}
+
+		return queryResults;
+
+	}
+
+	/*
 	public HashSet<ParseResult> resolveInnerQueries(Parser parser) {
 		ArrayList<HashSet<ParseResult>> metaSyntaxPolyAnswers = new ArrayList<>();
 		ArrayList<HashSet<ParseResult>> syntaxPolyAnswers = new ArrayList<>();
@@ -193,6 +247,7 @@ public	class		Query
 		return queriesReturnSet;
 
 	}
+	 */
 
 
 	public UnificationSetting unify(Polynomial other) {

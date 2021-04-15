@@ -1,11 +1,9 @@
 package rnsr.rag.grammar;
 
-import rnsr.rag.derivation.DerivationConfiguration;
 import rnsr.rag.derivation.DerivationSequence;
+import rnsr.rag.parser.Parser;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 
 public class ParseResult {
 
@@ -35,68 +33,27 @@ public class ParseResult {
         return original;
     }
 
-    /*
-    public HashSet<ParseResult> resolveQueries(Parser parser) {
-        HashSet<ParseResult> resolvedResults = new HashSet<>();
-        for (ParseResult pr: result.resolveInnerQueries(parser)) {
-            resolvedResults.add(pr);
-        }
-        return resolvedResults;
-    }
-     */
 
-    public ParseResult merge(ParseResult other) {
 
-        ExtendedAnswer newEA = new ExtendedAnswer();
 
-        if (other.getDerivationSequence() == null) {
-            // Merging with a ParseResult object which only consists of answers - so no sub-derivations
-            newEA.addAll(other.getResult());
-            DerivationConfiguration newDC = new DerivationConfiguration();
-            newDC.add(other.getResult().getDerivationObject());
-            DerivationSequence newDS = this.dc.append(newDC);
-            return new ParseResult(newEA, null, newDS);
+    public HashSet<ParseResult> resolveInnerQueries(Parser parser) {
+
+        HashSet<ParseResult> resultSet = new HashSet<>();
+        HashSet<SubQueryResult> subQuerySet = result.resolveInnerQueries(parser);
+
+        for (SubQueryResult sqr: subQuerySet) {
+            DerivationSequence dcClone = dc.clone();
+            for (SubQuery sq: sqr.getSubQueries())
+                dcClone.applyQueryReverse(sq.getQueryID(), sq.getSequence(), false);
+            resultSet.add(new ParseResult(sqr.getResult(), null, dcClone));
         }
 
-        DerivationSequence oldDS = dc.clone();
-        DerivationSequence newDS = oldDS.merge(other.getDerivationSequence());
-
-        return new ParseResult(newEA, original, newDS);
+        return resultSet;
 
     }
 
-    public static HashSet<ParseResult> parseResultPermutations(ArrayList<HashSet<ParseResult>> resultSetList) {
 
-        ArrayList<ParseResult> permutations = new ArrayList<>();
 
-        // Creating a list of lists of extended answers from a list of sets of extended answers
-        // Need to access the elements of the extended answer set in an ordered way
-        ArrayList<ArrayList<ParseResult>> prListList = new ArrayList<>();
-
-        for (Set<ParseResult> prSet: resultSetList) {
-            prListList.add(new ArrayList<>(prSet));
-        }
-
-        // Creating an empty list for every permutation of the Answers possible
-        int sum = 1;
-        for (Set<ParseResult> possibleAnswerSet: resultSetList) sum *= possibleAnswerSet.size();
-        for (int i = 0; i < sum; i++) permutations.add(null);
-
-        // Filling the list of permutations of Answers
-        for (int i = 0; i < prListList.size(); i++) {
-            ArrayList<ParseResult> currentPossibilityPool = prListList.get(i);
-            for (int j = 0; j < sum; j++) {
-                if (permutations.get(j) == null) {
-                    permutations.set(j, currentPossibilityPool.get(j % currentPossibilityPool.size()));
-                } else {
-                    permutations.get(j).merge(currentPossibilityPool.get(j % currentPossibilityPool.size()));
-                }
-            }
-        }
-
-        return new HashSet<>(permutations);
-
-    }
 
     public String toString() {
         String s = "- START QUERY: " + this.original + "\n";

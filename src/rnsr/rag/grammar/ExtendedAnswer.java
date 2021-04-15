@@ -73,6 +73,14 @@ public	class		ExtendedAnswer
 		return ExtendedAnswer.extendedAnswerPermutations(subEaSetList);
 	}
 
+	public HashSet<SubQueryResult> resolveInnerQueries(Parser parser) {
+		ArrayList<HashSet<SubQueryResult>> subResultList = new ArrayList<>();
+		for (IPolynomialTerm ipt: this) {
+			subResultList.add(ipt.resolveInnerQueries(parser));
+		}
+		return SubQueryResult.subQueryResultsPermutations(subResultList);
+	}
+
 	/**
 	 * Generates, from a list of extended answer sets, a set containing all permutations of single extended answers
 	 * from each set in the input list.
@@ -104,17 +112,5 @@ public	class		ExtendedAnswer
 
 		return new HashSet<>(permutations);
 	}
-
-
-
-	public Set<ParseResult> resolveInnerQueries(Parser parser) {
-		HashSet<ParseResult> newResults = new HashSet<>();
-		for (IPolynomialTerm ipt: this) {
-
-		}
-		return newResults;
-	}
-
-
 
 }

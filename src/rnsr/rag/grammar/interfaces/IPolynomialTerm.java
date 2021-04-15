@@ -1,10 +1,7 @@
 package rnsr.rag.grammar.interfaces;
 
 import rnsr.rag.derivation.Interface.IDerivationQueryTerm;
-import rnsr.rag.grammar.ExtendedAnswer;
-import rnsr.rag.grammar.ParseResult;
-import rnsr.rag.grammar.Polynomial;
-import rnsr.rag.grammar.VariableSet;
+import rnsr.rag.grammar.*;
 import rnsr.rag.grammar.exception.CloneException;
 import rnsr.rag.grammar.exception.PolynomialUnificationException;
 import rnsr.rag.grammar.exception.UnificationLambdaException;
@@ -32,7 +29,7 @@ public interface IPolynomialTerm
 	 */
 	Set<ExtendedAnswer> resolveQueries(Parser p);
 
-	HashSet<ParseResult> resolveInnerQueries(Parser parser);
+	HashSet<SubQueryResult> resolveInnerQueries(Parser parser);
 
 	/**
 	 * Method used to unify a polynomial term with a polynomial in a pattern matching operation.

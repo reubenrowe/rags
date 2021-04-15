@@ -281,6 +281,71 @@ public	class		Answer
 		return new ArrayList<>(permsSet);
 	}
 
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+	public HashSet<SubQueryResult> resolveInnerQueries(Parser parser) {
+		try {
+			HashSet<SubQueryResult> possibleAnswers = new HashSet<>();
+			if (m_arguments == null || m_arguments.size() <= 0) {
+				possibleAnswers.add(new SubQueryResult(new Polynomial(this).toExtendedAnswer(), new ArrayList<>()));
+				return possibleAnswers;
+
+			}
+			return handleArguments2(parser);
+		} catch (InvalidTermException | ArgumentMismatchException e) {
+			throw new Error(e);
+		}
+	}
+
+	public HashSet<SubQueryResult> handleArguments2(Parser parser) throws ArgumentMismatchException {
+
+		HashSet<SubQueryResult> answerResultSet = new HashSet<>();
+		ArrayList<ArrayList<SubQueryResult>> argPolynomialListList = new ArrayList<>();
+
+		// List of (list of polynomial permutations) for every polynomial argument
+		ArrayList<ArrayList<SubQueryResult>> argAnswerListList = new ArrayList<>();
+		for (Polynomial p: m_arguments) argAnswerListList.add(handleSingleArg2(p, parser));
+
+		int sum = 1;
+		for (ArrayList<SubQueryResult> answerSet: argAnswerListList) sum *= answerSet.size();
+		for (int i = 0; i < sum; i++) argPolynomialListList.add(new ArrayList<>());
+
+		for (int i = 0; i < argAnswerListList.size(); i++) {	// For every polynomial argument
+			ArrayList<SubQueryResult> currentArgAnswers = argAnswerListList.get(i);		// Get the possible permutations for that argument
+			for (int j = 0; j < argPolynomialListList.size(); j++) {
+				argPolynomialListList.get(j).add(currentArgAnswers.get(j % currentArgAnswers.size()));
+			}
+		}
+
+		for (ArrayList<SubQueryResult> argList: argPolynomialListList) {
+			ArrayList<Polynomial> eaList = new ArrayList<>();
+			for (SubQueryResult sq: argList) eaList.add(sq.getResult());
+
+			Answer newA = new Answer(this.m_identifier, eaList);
+			ExtendedAnswer newEA = new ExtendedAnswer(newA);
+
+			ArrayList<SubQuery> sqList = new ArrayList<>();
+			for (SubQueryResult sq: argList) sqList.addAll(sq.getSubQueries());
+			SubQueryResult newRes = new SubQueryResult(newEA, sqList);
+			answerResultSet.add(newRes);
+		}
+		return answerResultSet;
+
+	}
+
+	public ArrayList<SubQueryResult> handleSingleArg2(Polynomial p, Parser parser) {
+		ArrayList<HashSet<SubQueryResult>> resultSets = new ArrayList<>();
+		for (IPolynomialTerm pt: p) resultSets.add(pt.resolveInnerQueries(parser));
+		HashSet<SubQueryResult> permsSet = SubQueryResult.subQueryResultsPermutations(resultSets);
+		return new ArrayList<>(permsSet);
+	}
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 	/**
 	 * Overload method to check for equality of answers
 	 */
@@ -395,12 +460,6 @@ public	class		Answer
 			for (Polynomial p: m_arguments) derivationArgs.add(p.getDerivationObject());
 			return new DerivationNonTerminal(m_identifier.Identifier(), derivationArgs);
 		}
-	}
-
-	public HashSet<ParseResult> resolveInnerQueries(Parser parser) {
-
-		return null;
-
 	}
 
 }

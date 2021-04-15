@@ -181,7 +181,7 @@ public	class		Variable
 		return new DerivationVariable(this);
 	}
 
-	public HashSet<ParseResult> resolveInnerQueries(Parser parser) {
+	public HashSet<SubQueryResult> resolveInnerQueries(Parser parser) {
 		return new HashSet<>();
 	}
 

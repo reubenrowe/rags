@@ -235,6 +235,7 @@ public class Parser
 			throw new ParseException(e);
 		}
 
+		/*
 		Set<ParseResult> realResults = new HashSet<>();
 		Set<ExtendedAnswer> eaSet = new HashSet<>();
 		for (ParseResult res: resultSet) {
@@ -244,6 +245,18 @@ public class Parser
 				eaSet.add(ea);
 			}
 		}
+		 */
+
+		Set<ParseResult> realResults = new HashSet<>();
+		Set<ExtendedAnswer> eaSet = new HashSet<>();
+		for (ParseResult res: resultSet) {
+			Set<ParseResult> prSet = res.resolveInnerQueries(this);
+			for (ParseResult pr: prSet) {
+				realResults.add(pr);
+				eaSet.add(pr.getResult());
+			}
+		}
+
 
 		depth--;
 		printCSFinished(q, eaSet);
