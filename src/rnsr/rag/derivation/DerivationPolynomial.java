@@ -51,4 +51,10 @@ public class DerivationPolynomial extends ArrayList<IDerivationQueryTerm> implem
         return newP;
     }
 
+    public DerivationPolynomial replaceQuery(int queryID, DerivationConfiguration config) {
+        DerivationPolynomial newP = new DerivationPolynomial();
+        for (IDerivationQueryTerm qt: this) newP.add((IDerivationQueryTerm) qt.replaceQuery(queryID, config));
+        return newP;
+    }
+
 }

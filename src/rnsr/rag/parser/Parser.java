@@ -75,6 +75,7 @@ public class Parser
 		
 		// Parse the query
 		Set<ParseResult> resultSet = this.parse(initialQuery);
+		for (ParseResult result: resultSet) result.setOriginal(initialQuery);
 
 		// Close trace file
 		traceHandler.closeFile();

@@ -44,4 +44,9 @@ public class DerivationInverse implements IDerivationConfigurationTerm {
         return new DerivationInverse(contents.clone());
     }
 
+    public DerivationInverse replaceQuery(int queryID, DerivationConfiguration config) {
+        return new DerivationInverse(contents.replaceQuery(queryID, config));
+
+    }
+
 }

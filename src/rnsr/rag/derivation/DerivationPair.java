@@ -53,4 +53,8 @@ public class DerivationPair implements IDerivationConfigurationTerm {
         return new DerivationPair(left.clone(), right.clone());
     }
 
+    public DerivationPair replaceQuery(int queryID, DerivationConfiguration config) {
+        return new DerivationPair(left.replaceQuery(queryID, config), right.replaceQuery(queryID, config));
+    }
+
 }

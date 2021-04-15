@@ -42,4 +42,10 @@ public class DerivationAnswer extends ArrayList<IDerivationAnswerTerm> implement
         return newAnswer;
     }
 
+    public DerivationAnswer replaceQuery(int queryID, DerivationConfiguration config) {
+        DerivationAnswer newAnswer = new DerivationAnswer();
+        for (IDerivationAnswerTerm at: this) newAnswer.add((IDerivationAnswerTerm) at.replaceQuery(queryID, config));
+        return newAnswer;
+    }
+
 }

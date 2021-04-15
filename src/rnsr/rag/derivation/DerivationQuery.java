@@ -59,7 +59,6 @@ public class DerivationQuery implements IDerivationQueryTerm {
 
         DerivationConfiguration newStep = new DerivationConfiguration();
         newStep.add(new DerivationInverse(step));
-
         return (isLeft) ? new DerivationQuery(newStep, syntax, id) : new DerivationQuery(metaSyntax, newStep, id);
     }
 
@@ -75,6 +74,14 @@ public class DerivationQuery implements IDerivationQueryTerm {
 
     public DerivationQuery clone() {
         return new DerivationQuery(metaSyntax.clone(), syntax.clone(), id);
+    }
+
+    public IDerivationConfigurationTerm replaceQuery(int queryID, DerivationConfiguration config) {
+        if (this.id != queryID) return new DerivationQuery(metaSyntax.replaceQuery(queryID, config), syntax.replaceQuery(queryID, config), id);
+        DerivationPair dp = (DerivationPair) config.get(0);
+        DerivationPolynomial dPoly = new DerivationPolynomial();
+        for (IDerivationConfigurationTerm ct: dp.getRight()) dPoly.add((IDerivationQueryTerm) ct);
+        return dPoly;
     }
 
 }

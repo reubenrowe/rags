@@ -45,4 +45,9 @@ public class DerivationTerminal implements IDerivationAnswerTerm {
         return new DerivationTerminal(symbol);
     }
 
+    @Override
+    public IDerivationConfigurationTerm replaceQuery(int queryID, DerivationConfiguration config) {
+        return new DerivationTerminal(symbol);
+    }
+
 }

@@ -71,4 +71,10 @@ public class DerivationConfiguration extends ArrayList<IDerivationConfigurationT
         return newDC;
     }
 
+    public DerivationConfiguration replaceQuery(int queryID, DerivationConfiguration config) {
+        DerivationConfiguration newDC = new DerivationConfiguration();
+        for (IDerivationConfigurationTerm ct: this) newDC.add(ct.replaceQuery(queryID, config));
+        return newDC;
+    }
+
 }

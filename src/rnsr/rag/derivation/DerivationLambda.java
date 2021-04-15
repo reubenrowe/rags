@@ -30,4 +30,8 @@ public class DerivationLambda implements IDerivationAnswerTerm {
         return new DerivationLambda();
     }
 
+    public DerivationLambda replaceQuery(int queryID, DerivationConfiguration config) {
+        return this;
+    }
+
 }

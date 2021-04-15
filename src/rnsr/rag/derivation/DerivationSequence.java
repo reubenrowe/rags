@@ -64,10 +64,15 @@ public class DerivationSequence extends ArrayList<DerivationConfiguration> {
     }
 
     public void applyQueryReverse(int queryID, DerivationSequence querySequence, boolean isLeft) {
+        Collections.reverse(querySequence);
+        querySequence.remove(0);
         DerivationConfiguration headConfiguration = this.get(0);
+        DerivationConfiguration last = querySequence.get(querySequence.size() - 1);
         for (DerivationConfiguration dc: querySequence) {
-            this.add(0, headConfiguration.applyQueryReverse(queryID, dc, isLeft));
+            headConfiguration = headConfiguration.applyQueryReverse(queryID, dc, isLeft);
+            this.add(0, headConfiguration);
         }
+        this.add(0, headConfiguration.replaceQuery(queryID, last));
     }
 
     public void putQueryResult(int queryID, DerivationPolynomial result) {

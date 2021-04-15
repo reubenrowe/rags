@@ -71,4 +71,8 @@ public class DerivationPairVariable implements IDerivationConfigurationTerm {
         return new DerivationPairVariable(polynomial.clone(), variable, id);
     }
 
+    public DerivationPairVariable replaceQuery(int queryID, DerivationConfiguration config) {
+        return new DerivationPairVariable(polynomial.replaceQuery(queryID, config), variable, id);
+    }
+
 }

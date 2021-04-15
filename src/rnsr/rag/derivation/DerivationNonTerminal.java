@@ -66,4 +66,10 @@ public class DerivationNonTerminal implements IDerivationAnswerTerm {
         return new DerivationNonTerminal(identifier, newArgs);
     }
 
+    public DerivationNonTerminal replaceQuery(int queryID, DerivationConfiguration config) {
+        ArrayList<DerivationPolynomial> newArgs=  new ArrayList<>();
+        for (DerivationPolynomial p: args) newArgs.add((DerivationPolynomial) p.replaceQuery(queryID, config));
+        return new DerivationNonTerminal(identifier, newArgs);
+    }
+
 }

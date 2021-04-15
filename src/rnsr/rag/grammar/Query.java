@@ -14,7 +14,6 @@ import rnsr.rag.parser.exception.ParseException;
 import rnsr.rag.util.UnificationSetting;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -172,26 +171,12 @@ public	class		Query
 					for (ParseResult pr: realResults) {
 						DerivationSequence ds = pr.getDerivationSequence();
 
-						DerivationConfiguration c1 = new DerivationConfiguration();
-						c1.add(q.getDerivationObject());
-						ds.set(ds.size()-1, c1);
-
 						DerivationConfiguration c2 = new DerivationConfiguration();
 						c2.add(pr.getResult().getDerivationObject());
-						ds.add(0, c2);
 
 						ArrayList<SubQuery> sqList = new ArrayList<>();
 						sqList.addAll(sqr1.getSubQueries());
 						sqList.addAll(sqr2.getSubQueries());
-						Collections.reverse(ds);
-
-						System.out.print("Using sub-queries [");
-						for (SubQuery sq: sqr1.getSubQueries()) System.out.print(sq.getQueryID() + " ");
-						System.out.print("] and [");
-						for (SubQuery sq: sqr2.getSubQueries()) System.out.print(sq.getQueryID() + " ");
-						System.out.print("] for parent query: " + this.getId() + "\n");
-
-
 						sqList.add(new SubQuery(this.id, ds, pr.getResult()));
 
 						SubQueryResult sqr = new SubQueryResult(pr.getResult(), sqList);

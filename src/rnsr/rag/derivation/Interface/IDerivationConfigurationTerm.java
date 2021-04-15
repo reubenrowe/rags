@@ -13,6 +13,8 @@ public interface IDerivationConfigurationTerm {
 
     IDerivationConfigurationTerm clone();
 
+    IDerivationConfigurationTerm replaceQuery(int queryID, DerivationConfiguration config);
+
     boolean match(IDerivationConfigurationTerm other);
 
 }

@@ -41,4 +41,8 @@ public class DerivationVariable implements IDerivationAnswerTerm {
         return new DerivationVariable(variable);
     }
 
+    public IDerivationConfigurationTerm replaceQuery(int queryID, DerivationConfiguration config) {
+        return new DerivationVariable(variable);
+    }
+
 }
