@@ -52,7 +52,7 @@ public class SubQueryResult {
         for (Set<SubQueryResult> prSet: subQuerySetList) prListList.add(new ArrayList<>(prSet));
 
         int sum = 1;
-        for (Set<SubQueryResult> possibleAnswerSet: subQuerySetList) sum *= possibleAnswerSet.size();
+        for (ArrayList<SubQueryResult> possibleAnswerSet: prListList) sum *= possibleAnswerSet.size();
         for (int i = 0; i < sum; i++) permutations.add(null);
 
         for (int i = 0; i < prListList.size(); i++) {
@@ -61,13 +61,22 @@ public class SubQueryResult {
                 if (permutations.get(j) == null) {
                     permutations.set(j, currentPossibilityPool.get(j % currentPossibilityPool.size()));
                 } else {
-                    permutations.get(j).merge(currentPossibilityPool.get(j % currentPossibilityPool.size()));
+                    permutations.set(j, permutations.get(j).merge(currentPossibilityPool.get(j % currentPossibilityPool.size())));
                 }
             }
         }
 
         return new HashSet<>(permutations);
 
+    }
+
+    public String toString() {
+        String s = "RESULT: " + result + "\n";
+        s += "SUB-DERIVATIONS: \n";
+        for (SubQuery sq: subQueries) {
+            s += "\t ID:" + sq.getQueryID() + " RES: " + sq.getResult() + " DERIV: " + sq.getSequence() + "\n";
+        }
+        return s;
     }
 
 }

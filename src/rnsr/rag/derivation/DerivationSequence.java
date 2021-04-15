@@ -66,7 +66,7 @@ public class DerivationSequence extends ArrayList<DerivationConfiguration> {
     public void applyQueryReverse(int queryID, DerivationSequence querySequence, boolean isLeft) {
         DerivationConfiguration headConfiguration = this.get(0);
         for (DerivationConfiguration dc: querySequence) {
-            this.add(0, (DerivationConfiguration) headConfiguration.applyQueryReverse(queryID, dc, isLeft));
+            this.add(0, headConfiguration.applyQueryReverse(queryID, dc, isLeft));
         }
     }
 

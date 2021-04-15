@@ -14,6 +14,7 @@ import rnsr.rag.parser.exception.ParseException;
 import rnsr.rag.util.UnificationSetting;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -150,6 +151,7 @@ public	class		Query
 
 		ArrayList<HashSet<SubQueryResult>> metaSyntaxPolyAnswers = new ArrayList<>();
 		ArrayList<HashSet<SubQueryResult>> syntaxPolyAnswers = new ArrayList<>();
+
 		for (IPolynomialTerm p: m_metaSyntax) metaSyntaxPolyAnswers.add(p.resolveInnerQueries(parser));
 		for (IPolynomialTerm p: m_syntax) syntaxPolyAnswers.add(p.resolveInnerQueries(parser));
 
@@ -164,28 +166,36 @@ public	class		Query
 
 					Polynomial p1 = sqr1.getResult();
 					Polynomial p2 = sqr2.getResult();
-					HashSet<ParseResult> realResults = (HashSet<ParseResult>) parser.parse(new Query(p1, p2));
+					Query q = new Query(p1, p2);
+					HashSet<ParseResult> realResults = (HashSet<ParseResult>) parser.parse(q);
 
 					for (ParseResult pr: realResults) {
 						DerivationSequence ds = pr.getDerivationSequence();
 
 						DerivationConfiguration c1 = new DerivationConfiguration();
-						c1.add(pr.getOriginalQuery().getDerivationObject());
-						ds.add(c1);
+						c1.add(q.getDerivationObject());
+						ds.set(ds.size()-1, c1);
 
 						DerivationConfiguration c2 = new DerivationConfiguration();
 						c2.add(pr.getResult().getDerivationObject());
 						ds.add(0, c2);
 
-						//for (SubQuery sq: sqr1.getSubQueries()) ds.applyQuery(sq.getQueryID(), sq.getSequence());
-						//for (SubQuery sq: sqr2.getSubQueries()) ds.applyQuery(sq.getQueryID(), sq.getSequence());
-
 						ArrayList<SubQuery> sqList = new ArrayList<>();
 						sqList.addAll(sqr1.getSubQueries());
 						sqList.addAll(sqr2.getSubQueries());
+						Collections.reverse(ds);
+
+						System.out.print("Using sub-queries [");
+						for (SubQuery sq: sqr1.getSubQueries()) System.out.print(sq.getQueryID() + " ");
+						System.out.print("] and [");
+						for (SubQuery sq: sqr2.getSubQueries()) System.out.print(sq.getQueryID() + " ");
+						System.out.print("] for parent query: " + this.getId() + "\n");
+
+
 						sqList.add(new SubQuery(this.id, ds, pr.getResult()));
 
-						queryResults.add(new SubQueryResult(pr.getResult(), sqList));
+						SubQueryResult sqr = new SubQueryResult(pr.getResult(), sqList);
+						queryResults.add(sqr);
 
 					}
 

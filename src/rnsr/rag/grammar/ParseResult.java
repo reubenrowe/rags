@@ -3,6 +3,7 @@ package rnsr.rag.grammar;
 import rnsr.rag.derivation.DerivationSequence;
 import rnsr.rag.parser.Parser;
 
+import java.util.Collections;
 import java.util.HashSet;
 
 public class ParseResult {
@@ -43,8 +44,18 @@ public class ParseResult {
 
         for (SubQueryResult sqr: subQuerySet) {
             DerivationSequence dcClone = dc.clone();
-            for (SubQuery sq: sqr.getSubQueries())
+            for (SubQuery sq: sqr.getSubQueries()) {
+
                 dcClone.applyQueryReverse(sq.getQueryID(), sq.getSequence(), false);
+
+                System.out.println("ID: " + sq.getQueryID());
+                System.out.println("RES: " + sq.getResult());
+                System.out.println("SUB DERIV:");
+                System.out.println(sq.getSequence());
+                System.out.println("-------");
+
+
+            }
             resultSet.add(new ParseResult(sqr.getResult(), null, dcClone));
         }
 
