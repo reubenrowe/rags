@@ -44,31 +44,23 @@ public class DerivationPairVariable implements IDerivationTerm {
     public IDerivationTerm resolve(VariableSet bindings) {
 
         DerivationTerm dc1 = new DerivationTerm();
-        DerivationTerm p = (DerivationTerm) polynomial.resolve(bindings);
+        DerivationTerm p = polynomial.resolve(bindings);
         dc1.add(p);
 
         DerivationTerm dc2 = new DerivationTerm();
-        DerivationTerm dp = (DerivationTerm) bindings.get(variable).getDerivationObject().resolve(bindings);
+        DerivationTerm dp = bindings.get(variable).getDerivationObject().resolve(bindings);
 
-        //if (dp.onlyAnswers()) dc2.add(dp);
-        //else dc2.add(new DerivationInverse(dp));
         dc2.add(dp);
 
         return new DerivationPair(dc1, dc2);
     }
 
     public IDerivationTerm applyQuery(int queryID, DerivationTerm step) {
-        return new DerivationPairVariable((DerivationTerm) polynomial.applyQuery(queryID, step), variable, id);
+        return new DerivationPairVariable(polynomial.applyQuery(queryID, step), variable, id);
     }
 
     public IDerivationTerm applyQueryReverse(int queryID, DerivationTerm step) {
-        return new DerivationPairVariable((DerivationTerm) polynomial.applyQueryReverse(queryID, step), variable, id);
-    }
-
-    public boolean match(IDerivationTerm other) {
-        if (!(other instanceof DerivationPairVariable)) return false;
-        DerivationPairVariable otherPair = (DerivationPairVariable) other;
-        return this.polynomial.match(otherPair.polynomial);
+        return new DerivationPairVariable(polynomial.applyQueryReverse(queryID, step), variable, id);
     }
 
     public DerivationPairVariable clone() {

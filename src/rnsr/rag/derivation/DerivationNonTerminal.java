@@ -54,12 +54,6 @@ public class DerivationNonTerminal implements IDerivationTerm {
         return new DerivationNonTerminal(identifier, polyList);
     }
 
-    public boolean match(IDerivationTerm other) {
-        if (!(other instanceof DerivationNonTerminal)) return false;
-        DerivationNonTerminal otherNT = (DerivationNonTerminal) other;
-        return identifier.equals(otherNT.identifier) && args.size() == otherNT.args.size();
-    }
-
     public DerivationNonTerminal clone() {
         ArrayList<DerivationTerm> newArgs=  new ArrayList<>();
         for (DerivationTerm p: args) newArgs.add(p.clone());

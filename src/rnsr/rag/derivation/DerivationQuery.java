@@ -20,18 +20,6 @@ public class DerivationQuery implements IDerivationTerm {
         return metaSyntax;
     }
 
-    public void setMetaSyntax(DerivationTerm metaSyntax) {
-        this.metaSyntax = metaSyntax;
-    }
-
-    public DerivationTerm getSyntax() {
-        return syntax;
-    }
-
-    public void setSyntax(DerivationTerm syntax) {
-        this.syntax = syntax;
-    }
-
     public int getId() {
         return this.id;
     }
@@ -62,12 +50,6 @@ public class DerivationQuery implements IDerivationTerm {
         return new DerivationQuery(metaSyntax, newStep, id);
     }
 
-    public boolean match(IDerivationTerm other) {
-        if (!(other instanceof DerivationQuery)) return false;
-        DerivationQuery otherQuery = (DerivationQuery) other;
-        return metaSyntax.match(otherQuery.metaSyntax) && syntax.match(otherQuery.syntax);
-    }
-
     public String toString() {
         return "(" + metaSyntax + "?" + syntax + ")";
     }
@@ -79,10 +61,6 @@ public class DerivationQuery implements IDerivationTerm {
     public IDerivationTerm replaceQuery(int queryID, DerivationTerm config) {
         if (this.id != queryID) return new DerivationQuery(metaSyntax.replaceQuery(queryID, config), syntax.replaceQuery(queryID, config), id);
         return config;
-        //DerivationPair dp = (DerivationPair) config.get(0);
-        //DerivationTerm dPoly = new DerivationTerm();
-        //for (IDerivationTerm ct: dp.getRight()) dPoly.add(ct);
-        //return dPoly;
     }
 
     public Algebra termAlgebra() {

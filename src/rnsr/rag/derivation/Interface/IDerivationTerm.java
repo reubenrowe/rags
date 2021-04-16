@@ -20,6 +20,4 @@ public interface IDerivationTerm {
 
     Algebra termAlgebra();
 
-    boolean match(IDerivationTerm other);
-
 }

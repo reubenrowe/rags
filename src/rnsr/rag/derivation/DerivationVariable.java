@@ -21,7 +21,7 @@ public class DerivationVariable implements IDerivationTerm {
             v = (Variable) p.get(0);
             p = bindings.get(v);
         }
-        DerivationTerm poly2 = (DerivationTerm) p.getDerivationObject().resolve(bindings);
+        DerivationTerm poly2 = p.getDerivationObject().resolve(bindings);
         return poly2;
     }
 
@@ -31,10 +31,6 @@ public class DerivationVariable implements IDerivationTerm {
 
     public IDerivationTerm applyQueryReverse(int queryID, DerivationTerm step) {
         return this;
-    }
-
-    public boolean match(IDerivationTerm other) {
-        return true;
     }
 
     public DerivationVariable clone() {

@@ -14,22 +14,6 @@ public class DerivationPair implements IDerivationTerm {
         this.right = right;
     }
 
-    public DerivationTerm getLeft() {
-        return left;
-    }
-
-    public void setLeft(DerivationTerm left) {
-        this.left = left;
-    }
-
-    public DerivationTerm getRight() {
-        return right;
-    }
-
-    public void setRight(DerivationTerm right) {
-        this.right = right;
-    }
-
     public IDerivationTerm resolve(VariableSet bindings) {
         return this;
     }
@@ -40,10 +24,6 @@ public class DerivationPair implements IDerivationTerm {
 
     public IDerivationTerm applyQueryReverse(int queryID, DerivationTerm step) {
         return new DerivationPair(left.applyQueryReverse(queryID, step), right.applyQueryReverse(queryID, step));
-    }
-
-    public boolean match(IDerivationTerm other) {
-        return false;
     }
 
     public String toString() {

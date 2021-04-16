@@ -18,10 +18,6 @@ public class DerivationLambda implements IDerivationTerm {
         return this;
     }
 
-    public boolean match(IDerivationTerm other) {
-        return other instanceof DerivationLambda;
-    }
-
     public String toString() {
         return "#";
     }

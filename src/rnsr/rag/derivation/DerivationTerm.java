@@ -65,16 +65,6 @@ public class DerivationTerm extends ArrayList<IDerivationTerm> implements IDeriv
         return dc;
     }
 
-    public boolean match(IDerivationTerm other) {
-        if (!(other instanceof DerivationTerm)) return false;
-        DerivationTerm otherC = (DerivationTerm) other;
-        if (otherC.size() != this.size()) return false;
-        for (int i = 0; i < this.size(); i++) {
-            if (!this.get(i).match(otherC.get(i))) return false;
-        }
-        return true;
-    }
-
     public DerivationTerm clone() {
         DerivationTerm newDC = new DerivationTerm();
         for (IDerivationTerm ct: this) newDC.add(ct.clone());

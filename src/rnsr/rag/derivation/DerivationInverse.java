@@ -32,11 +32,6 @@ public class DerivationInverse implements IDerivationTerm {
         return new DerivationInverse(contents.applyQueryReverse(queryID, step));
     }
 
-    public boolean match(IDerivationTerm other) {
-        if (!(other instanceof DerivationInverse)) return false;
-        return contents.match(((DerivationInverse) other).contents);
-    }
-
     public String toString() {
         return "!(" + contents + ")";
     }

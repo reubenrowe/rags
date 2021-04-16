@@ -12,14 +12,6 @@ public class DerivationTerminal implements IDerivationTerm {
         this.symbol = symbol;
     }
 
-    public String getSymbol() {
-        return symbol;
-    }
-
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
-    }
-
     public IDerivationTerm resolve(VariableSet bindings) {
         return this;
     }
@@ -30,11 +22,6 @@ public class DerivationTerminal implements IDerivationTerm {
 
     public IDerivationTerm applyQueryReverse(int queryID, DerivationTerm step) {
         return this;
-    }
-
-    public boolean match(IDerivationTerm other) {
-        if (!(other instanceof DerivationTerminal)) return false;
-        return symbol.equals(((DerivationTerminal) other).symbol);
     }
 
     public String toString() {
