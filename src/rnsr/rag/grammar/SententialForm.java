@@ -1,6 +1,6 @@
 package rnsr.rag.grammar;
 
-import rnsr.rag.derivation.DerivationConfiguration;
+import rnsr.rag.derivation.DerivationTerm;
 import rnsr.rag.derivation.DerivationSequence;
 import rnsr.rag.grammar.exception.*;
 import rnsr.rag.grammar.interfaces.IClonable;
@@ -377,7 +377,7 @@ public	class		SententialForm
 	}
 
 
-	public void addDerivationStep(DerivationConfiguration c) {
+	public void addDerivationStep(DerivationTerm c) {
 		this.derivationSequence.add(c);
 	}
 

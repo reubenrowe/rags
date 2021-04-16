@@ -1,10 +1,10 @@
 package rnsr.rag.grammar;
 
+import rnsr.rag.derivation.DerivationTerm;
 import rnsr.rag.derivation.DerivationLambda;
 import rnsr.rag.derivation.DerivationNonTerminal;
-import rnsr.rag.derivation.DerivationPolynomial;
 import rnsr.rag.derivation.DerivationTerminal;
-import rnsr.rag.derivation.Interface.IDerivationAnswerTerm;
+import rnsr.rag.derivation.Interface.IDerivationTerm;
 import rnsr.rag.grammar.exception.*;
 import rnsr.rag.grammar.interfaces.IConfigurationTerm;
 import rnsr.rag.grammar.interfaces.IContextClonable;
@@ -451,12 +451,12 @@ public	class		Answer
 		return vs;
 	}
 
-	public IDerivationAnswerTerm getDerivationObject() {
+	public IDerivationTerm getDerivationObject() {
 		if (this.m_identifier.Terminal()) {
 			if (m_identifier.equals(AnswerIdentifier.Lambda())) return new DerivationLambda();
 			return new DerivationTerminal(m_identifier.Identifier());
 		} else {
-			ArrayList<DerivationPolynomial> derivationArgs = new ArrayList<>();
+			ArrayList<DerivationTerm> derivationArgs = new ArrayList<>();
 			for (Polynomial p: m_arguments) derivationArgs.add(p.getDerivationObject());
 			return new DerivationNonTerminal(m_identifier.Identifier(), derivationArgs);
 		}

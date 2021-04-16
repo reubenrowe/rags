@@ -1,10 +1,10 @@
 package rnsr.rag.derivation;
 
-import rnsr.rag.derivation.Interface.IDerivationAnswerTerm;
-import rnsr.rag.derivation.Interface.IDerivationConfigurationTerm;
+import rnsr.rag.derivation.Enum.Algebra;
+import rnsr.rag.derivation.Interface.IDerivationTerm;
 import rnsr.rag.grammar.VariableSet;
 
-public class DerivationTerminal implements IDerivationAnswerTerm {
+public class DerivationTerminal implements IDerivationTerm {
 
     private String symbol;
 
@@ -20,19 +20,19 @@ public class DerivationTerminal implements IDerivationAnswerTerm {
         this.symbol = symbol;
     }
 
-    public IDerivationConfigurationTerm resolve(VariableSet bindings) {
+    public IDerivationTerm resolve(VariableSet bindings) {
         return this;
     }
 
-    public IDerivationConfigurationTerm applyQuery(int queryID, DerivationConfiguration step) {
+    public IDerivationTerm applyQuery(int queryID, DerivationTerm step) {
         return this;
     }
 
-    public IDerivationConfigurationTerm applyQueryReverse(int queryID, DerivationConfiguration step, boolean isLeft) {
+    public IDerivationTerm applyQueryReverse(int queryID, DerivationTerm step) {
         return this;
     }
 
-    public boolean match(IDerivationConfigurationTerm other) {
+    public boolean match(IDerivationTerm other) {
         if (!(other instanceof DerivationTerminal)) return false;
         return symbol.equals(((DerivationTerminal) other).symbol);
     }
@@ -46,8 +46,16 @@ public class DerivationTerminal implements IDerivationAnswerTerm {
     }
 
     @Override
-    public IDerivationConfigurationTerm replaceQuery(int queryID, DerivationConfiguration config) {
+    public IDerivationTerm replaceQuery(int queryID, DerivationTerm config) {
         return new DerivationTerminal(symbol);
+    }
+
+    public Algebra termAlgebra() {
+        return Algebra.TERMINAL;
+    }
+
+    public IDerivationTerm findQuery(int queryID) {
+        return null;
     }
 
 }

@@ -1,37 +1,38 @@
 package rnsr.rag.derivation;
 
-import rnsr.rag.derivation.Interface.IDerivationConfigurationTerm;
+import rnsr.rag.derivation.Enum.Algebra;
+import rnsr.rag.derivation.Interface.IDerivationTerm;
 import rnsr.rag.grammar.VariableSet;
 
-public class DerivationInverse implements IDerivationConfigurationTerm {
+public class DerivationInverse implements IDerivationTerm {
 
-    private IDerivationConfigurationTerm contents;
+    private IDerivationTerm contents;
 
-    public DerivationInverse(IDerivationConfigurationTerm contents) {
+    public DerivationInverse(IDerivationTerm contents) {
         this.contents = contents;
     }
 
-    public IDerivationConfigurationTerm getContents() {
+    public IDerivationTerm getContents() {
         return contents;
     }
 
-    public void setContents(IDerivationConfigurationTerm contents) {
+    public void setContents(IDerivationTerm contents) {
         this.contents = contents;
     }
 
-    public IDerivationConfigurationTerm resolve(VariableSet bindings) {
+    public IDerivationTerm resolve(VariableSet bindings) {
         return new DerivationInverse(contents.resolve(bindings));
     }
 
-    public IDerivationConfigurationTerm applyQuery(int queryID, DerivationConfiguration step) {
+    public IDerivationTerm applyQuery(int queryID, DerivationTerm step) {
         return new DerivationInverse(contents.applyQuery(queryID, step));
     }
 
-    public IDerivationConfigurationTerm applyQueryReverse(int queryID, DerivationConfiguration step, boolean isLeft) {
-        return new DerivationInverse(contents.applyQueryReverse(queryID, step, isLeft));
+    public IDerivationTerm applyQueryReverse(int queryID, DerivationTerm step) {
+        return new DerivationInverse(contents.applyQueryReverse(queryID, step));
     }
 
-    public boolean match(IDerivationConfigurationTerm other) {
+    public boolean match(IDerivationTerm other) {
         if (!(other instanceof DerivationInverse)) return false;
         return contents.match(((DerivationInverse) other).contents);
     }
@@ -44,9 +45,17 @@ public class DerivationInverse implements IDerivationConfigurationTerm {
         return new DerivationInverse(contents.clone());
     }
 
-    public DerivationInverse replaceQuery(int queryID, DerivationConfiguration config) {
+    public DerivationInverse replaceQuery(int queryID, DerivationTerm config) {
         return new DerivationInverse(contents.replaceQuery(queryID, config));
 
+    }
+
+    public Algebra termAlgebra() {
+        return Algebra.CONFIGURATION;
+    }
+
+    public IDerivationTerm findQuery(int queryID) {
+        return contents.findQuery(queryID);
     }
 
 }

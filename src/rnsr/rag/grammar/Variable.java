@@ -1,7 +1,7 @@
 package rnsr.rag.grammar;
 
 import rnsr.rag.derivation.DerivationVariable;
-import rnsr.rag.derivation.Interface.IDerivationQueryTerm;
+import rnsr.rag.derivation.Interface.IDerivationTerm;
 import rnsr.rag.grammar.exception.CloneException;
 import rnsr.rag.grammar.exception.UnificationLambdaException;
 import rnsr.rag.grammar.interfaces.IConfigurationTerm;
@@ -177,7 +177,7 @@ public	class		Variable
 		return vs;
 	}
 
-	public IDerivationQueryTerm getDerivationObject() {
+	public IDerivationTerm getDerivationObject() {
 		return new DerivationVariable(this);
 	}
 

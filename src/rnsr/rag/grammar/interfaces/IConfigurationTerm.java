@@ -1,6 +1,6 @@
 package rnsr.rag.grammar.interfaces;
 
-import rnsr.rag.derivation.Interface.IDerivationConfigurationTerm;
+import rnsr.rag.derivation.Interface.IDerivationTerm;
 import rnsr.rag.grammar.VariableSet;
 
 /**
@@ -10,6 +10,6 @@ public	interface	IConfigurationTerm {
 
     VariableSet usedVariables();
 
-    IDerivationConfigurationTerm getDerivationObject();
+    IDerivationTerm getDerivationObject();
 
 }

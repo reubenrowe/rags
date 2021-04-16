@@ -1,34 +1,34 @@
 package rnsr.rag.derivation;
 
-import rnsr.rag.derivation.Interface.IDerivationConfigurationTerm;
-import rnsr.rag.derivation.Interface.IDerivationQueryTerm;
+import rnsr.rag.derivation.Enum.Algebra;
+import rnsr.rag.derivation.Interface.IDerivationTerm;
 import rnsr.rag.grammar.VariableSet;
 
-public class DerivationQuery implements IDerivationQueryTerm {
+public class DerivationQuery implements IDerivationTerm {
 
-    private DerivationConfiguration metaSyntax;
-    private DerivationConfiguration syntax;
+    private DerivationTerm metaSyntax;
+    private DerivationTerm syntax;
     private int id;
 
-    public DerivationQuery(DerivationConfiguration metaSyntax, DerivationConfiguration syntax, int id) {
+    public DerivationQuery(DerivationTerm metaSyntax, DerivationTerm syntax, int id) {
         this.metaSyntax = metaSyntax;
         this.syntax = syntax;
         this.id = id;
     }
 
-    public DerivationConfiguration getMetaSyntax() {
+    public DerivationTerm getMetaSyntax() {
         return metaSyntax;
     }
 
-    public void setMetaSyntax(DerivationConfiguration metaSyntax) {
+    public void setMetaSyntax(DerivationTerm metaSyntax) {
         this.metaSyntax = metaSyntax;
     }
 
-    public DerivationConfiguration getSyntax() {
+    public DerivationTerm getSyntax() {
         return syntax;
     }
 
-    public void setSyntax(DerivationConfiguration syntax) {
+    public void setSyntax(DerivationTerm syntax) {
         this.syntax = syntax;
     }
 
@@ -44,25 +44,25 @@ public class DerivationQuery implements IDerivationQueryTerm {
         return new DerivationQuery(metaSyntax.resolve(bindings), syntax.resolve(bindings), id);
     }
 
-    public IDerivationConfigurationTerm applyQuery(int queryID, DerivationConfiguration step) {
+    public IDerivationTerm applyQuery(int queryID, DerivationTerm step) {
         if (queryID != id)
             return new DerivationQuery(metaSyntax.applyQuery(queryID, step), syntax.applyQuery(queryID, step), id);
 
-        DerivationConfiguration newSyntax = new DerivationConfiguration();
+        DerivationTerm newSyntax = new DerivationTerm();
         newSyntax.add(new DerivationInverse(step));
         return new DerivationQuery(metaSyntax, newSyntax, id);
     }
 
-    public IDerivationConfigurationTerm applyQueryReverse(int queryID, DerivationConfiguration step, boolean isLeft) {
+    public IDerivationTerm applyQueryReverse(int queryID, DerivationTerm step) {
         if (queryID != id)
             return new DerivationQuery(metaSyntax.applyQuery(queryID, step), syntax.applyQuery(queryID, step), id);
 
-        DerivationConfiguration newStep = new DerivationConfiguration();
+        DerivationTerm newStep = new DerivationTerm();
         newStep.add(new DerivationInverse(step));
-        return (isLeft) ? new DerivationQuery(newStep, syntax, id) : new DerivationQuery(metaSyntax, newStep, id);
+        return new DerivationQuery(metaSyntax, newStep, id);
     }
 
-    public boolean match(IDerivationConfigurationTerm other) {
+    public boolean match(IDerivationTerm other) {
         if (!(other instanceof DerivationQuery)) return false;
         DerivationQuery otherQuery = (DerivationQuery) other;
         return metaSyntax.match(otherQuery.metaSyntax) && syntax.match(otherQuery.syntax);
@@ -76,12 +76,29 @@ public class DerivationQuery implements IDerivationQueryTerm {
         return new DerivationQuery(metaSyntax.clone(), syntax.clone(), id);
     }
 
-    public IDerivationConfigurationTerm replaceQuery(int queryID, DerivationConfiguration config) {
+    public IDerivationTerm replaceQuery(int queryID, DerivationTerm config) {
         if (this.id != queryID) return new DerivationQuery(metaSyntax.replaceQuery(queryID, config), syntax.replaceQuery(queryID, config), id);
-        DerivationPair dp = (DerivationPair) config.get(0);
-        DerivationPolynomial dPoly = new DerivationPolynomial();
-        for (IDerivationConfigurationTerm ct: dp.getRight()) dPoly.add((IDerivationQueryTerm) ct);
-        return dPoly;
+        return config;
+        //DerivationPair dp = (DerivationPair) config.get(0);
+        //DerivationTerm dPoly = new DerivationTerm();
+        //for (IDerivationTerm ct: dp.getRight()) dPoly.add(ct);
+        //return dPoly;
+    }
+
+    public Algebra termAlgebra() {
+        Algebra currentAlgebraLevel = Algebra.QUERY;
+        currentAlgebraLevel = currentAlgebraLevel.compare(metaSyntax.termAlgebra());
+        currentAlgebraLevel = currentAlgebraLevel.compare(syntax.termAlgebra());
+        return currentAlgebraLevel;
+    }
+
+    public IDerivationTerm findQuery(int queryID) {
+        if (queryID != this.id) {
+            IDerivationTerm dt1 = metaSyntax.findQuery(queryID);
+            IDerivationTerm dt2 = syntax.findQuery(queryID);
+            return (dt1 != null) ? dt1 : (dt2 != null) ? dt2 : null;
+        }
+        return this;
     }
 
 }

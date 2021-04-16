@@ -1,24 +1,24 @@
 package rnsr.rag.derivation;
 
-import rnsr.rag.derivation.Interface.IDerivationAnswerTerm;
-import rnsr.rag.derivation.Interface.IDerivationConfigurationTerm;
+import rnsr.rag.derivation.Enum.Algebra;
+import rnsr.rag.derivation.Interface.IDerivationTerm;
 import rnsr.rag.grammar.VariableSet;
 
-public class DerivationLambda implements IDerivationAnswerTerm {
+public class DerivationLambda implements IDerivationTerm {
 
-    public IDerivationConfigurationTerm resolve(VariableSet bindings) {
+    public IDerivationTerm resolve(VariableSet bindings) {
         return this;
     }
 
-    public IDerivationConfigurationTerm applyQuery(int queryID, DerivationConfiguration step) {
+    public IDerivationTerm applyQuery(int queryID, DerivationTerm step) {
         return this;
     }
 
-    public IDerivationConfigurationTerm applyQueryReverse(int queryID, DerivationConfiguration step, boolean isLeft) {
+    public IDerivationTerm applyQueryReverse(int queryID, DerivationTerm step) {
         return this;
     }
 
-    public boolean match(IDerivationConfigurationTerm other) {
+    public boolean match(IDerivationTerm other) {
         return other instanceof DerivationLambda;
     }
 
@@ -30,8 +30,16 @@ public class DerivationLambda implements IDerivationAnswerTerm {
         return new DerivationLambda();
     }
 
-    public DerivationLambda replaceQuery(int queryID, DerivationConfiguration config) {
+    public DerivationLambda replaceQuery(int queryID, DerivationTerm config) {
         return this;
+    }
+
+    public Algebra termAlgebra() {
+        return Algebra.TERMINAL;
+    }
+
+    public IDerivationTerm findQuery(int queryID) {
+        return null;
     }
 
 }

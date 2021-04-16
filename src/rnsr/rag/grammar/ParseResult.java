@@ -41,7 +41,7 @@ public class ParseResult {
         for (SubQueryResult sqr: subQuerySet) {
             DerivationSequence dcClone = dc.clone();
             for (SubQuery sq: sqr.getSubQueries()) {
-                dcClone.applyQueryReverse(sq.getQueryID(), sq.getSequence(), false);
+                dcClone.applyQueryReverse(sq.getQueryID(), sq.getSequence(), sq.getResult().getDerivationObject());
             }
             resultSet.add(new ParseResult(sqr.getResult(), this.original, dcClone));
         }

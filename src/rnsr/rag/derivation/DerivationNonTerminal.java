@@ -1,17 +1,17 @@
 package rnsr.rag.derivation;
 
-import rnsr.rag.derivation.Interface.IDerivationAnswerTerm;
-import rnsr.rag.derivation.Interface.IDerivationConfigurationTerm;
+import rnsr.rag.derivation.Enum.Algebra;
+import rnsr.rag.derivation.Interface.IDerivationTerm;
 import rnsr.rag.grammar.VariableSet;
 
 import java.util.ArrayList;
 
-public class DerivationNonTerminal implements IDerivationAnswerTerm {
+public class DerivationNonTerminal implements IDerivationTerm {
 
     private String identifier;
-    private ArrayList<DerivationPolynomial> args;
+    private ArrayList<DerivationTerm> args;
 
-    public DerivationNonTerminal(String identifier, ArrayList<DerivationPolynomial> args) {
+    public DerivationNonTerminal(String identifier, ArrayList<DerivationTerm> args) {
         this.identifier = identifier;
         this.args = args;
     }
@@ -36,40 +36,56 @@ public class DerivationNonTerminal implements IDerivationAnswerTerm {
         return s;
     }
 
-    public IDerivationConfigurationTerm resolve(VariableSet bindings) {
-        ArrayList<DerivationPolynomial> dpList = new ArrayList<>();
-        for (DerivationPolynomial dp: args) dpList.add((DerivationPolynomial) dp.resolve(bindings));
+    public IDerivationTerm resolve(VariableSet bindings) {
+        ArrayList<DerivationTerm> dpList = new ArrayList<>();
+        for (DerivationTerm dp: args) dpList.add(dp.resolve(bindings));
         return new DerivationNonTerminal(identifier, dpList);
     }
 
-    public IDerivationConfigurationTerm applyQuery(int queryID, DerivationConfiguration step) {
-        ArrayList<DerivationPolynomial> polyList = new ArrayList<>();
-        for (DerivationPolynomial p: args) polyList.add((DerivationPolynomial) p.applyQuery(queryID, step));
+    public IDerivationTerm applyQuery(int queryID, DerivationTerm step) {
+        ArrayList<DerivationTerm> polyList = new ArrayList<>();
+        for (DerivationTerm p: args) polyList.add(p.applyQuery(queryID, step));
         return new DerivationNonTerminal(identifier, polyList);
     }
 
-    public IDerivationConfigurationTerm applyQueryReverse(int queryID, DerivationConfiguration step, boolean isLeft) {
-        ArrayList<DerivationPolynomial> polyList = new ArrayList<>();
-        for (DerivationPolynomial p: args) polyList.add((DerivationPolynomial) p.applyQueryReverse(queryID, step, isLeft));
+    public IDerivationTerm applyQueryReverse(int queryID, DerivationTerm step) {
+        ArrayList<DerivationTerm> polyList = new ArrayList<>();
+        for (DerivationTerm p: args) polyList.add(p.applyQueryReverse(queryID, step));
         return new DerivationNonTerminal(identifier, polyList);
     }
 
-    public boolean match(IDerivationConfigurationTerm other) {
+    public boolean match(IDerivationTerm other) {
         if (!(other instanceof DerivationNonTerminal)) return false;
         DerivationNonTerminal otherNT = (DerivationNonTerminal) other;
         return identifier.equals(otherNT.identifier) && args.size() == otherNT.args.size();
     }
 
     public DerivationNonTerminal clone() {
-        ArrayList<DerivationPolynomial> newArgs=  new ArrayList<>();
-        for (DerivationPolynomial p: args) newArgs.add((DerivationPolynomial) p.clone());
+        ArrayList<DerivationTerm> newArgs=  new ArrayList<>();
+        for (DerivationTerm p: args) newArgs.add(p.clone());
         return new DerivationNonTerminal(identifier, newArgs);
     }
 
-    public DerivationNonTerminal replaceQuery(int queryID, DerivationConfiguration config) {
-        ArrayList<DerivationPolynomial> newArgs=  new ArrayList<>();
-        for (DerivationPolynomial p: args) newArgs.add((DerivationPolynomial) p.replaceQuery(queryID, config));
+    public DerivationNonTerminal replaceQuery(int queryID, DerivationTerm config) {
+        ArrayList<DerivationTerm> newArgs=  new ArrayList<>();
+        for (DerivationTerm p: args) newArgs.add(p.replaceQuery(queryID, config));
         return new DerivationNonTerminal(identifier, newArgs);
+    }
+
+    public Algebra termAlgebra() {
+        Algebra currentAlgebraLevel = Algebra.ANSWER;
+        for (DerivationTerm dt: args) {
+            currentAlgebraLevel = currentAlgebraLevel.compare(dt.termAlgebra());
+        }
+        return currentAlgebraLevel;
+    }
+
+    public IDerivationTerm findQuery(int queryID) {
+        for (DerivationTerm dt: this.args) {
+            IDerivationTerm subTermFinding = dt.findQuery(queryID);
+            if (subTermFinding != null) return subTermFinding;
+        }
+        return null;
     }
 
 }

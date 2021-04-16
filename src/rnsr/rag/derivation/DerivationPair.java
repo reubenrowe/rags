@@ -1,47 +1,48 @@
 package rnsr.rag.derivation;
 
-import rnsr.rag.derivation.Interface.IDerivationConfigurationTerm;
+import rnsr.rag.derivation.Enum.Algebra;
+import rnsr.rag.derivation.Interface.IDerivationTerm;
 import rnsr.rag.grammar.VariableSet;
 
-public class DerivationPair implements IDerivationConfigurationTerm {
+public class DerivationPair implements IDerivationTerm {
 
-    private DerivationConfiguration left;
-    private DerivationConfiguration right;
+    private DerivationTerm left;
+    private DerivationTerm right;
 
-    public DerivationPair(DerivationConfiguration left, DerivationConfiguration right) {
+    public DerivationPair(DerivationTerm left, DerivationTerm right) {
         this.left = left;
         this.right = right;
     }
 
-    public DerivationConfiguration getLeft() {
+    public DerivationTerm getLeft() {
         return left;
     }
 
-    public void setLeft(DerivationConfiguration left) {
+    public void setLeft(DerivationTerm left) {
         this.left = left;
     }
 
-    public DerivationConfiguration getRight() {
+    public DerivationTerm getRight() {
         return right;
     }
 
-    public void setRight(DerivationConfiguration right) {
+    public void setRight(DerivationTerm right) {
         this.right = right;
     }
 
-    public IDerivationConfigurationTerm resolve(VariableSet bindings) {
+    public IDerivationTerm resolve(VariableSet bindings) {
         return this;
     }
 
-    public IDerivationConfigurationTerm applyQuery(int queryID, DerivationConfiguration step) {
+    public IDerivationTerm applyQuery(int queryID, DerivationTerm step) {
         return new DerivationPair(left.applyQuery(queryID, step), right.applyQuery(queryID, step));
     }
 
-    public IDerivationConfigurationTerm applyQueryReverse(int queryID, DerivationConfiguration step, boolean isLeft) {
-        return new DerivationPair(left.applyQueryReverse(queryID, step, isLeft), right.applyQueryReverse(queryID, step, isLeft));
+    public IDerivationTerm applyQueryReverse(int queryID, DerivationTerm step) {
+        return new DerivationPair(left.applyQueryReverse(queryID, step), right.applyQueryReverse(queryID, step));
     }
 
-    public boolean match(IDerivationConfigurationTerm other) {
+    public boolean match(IDerivationTerm other) {
         return false;
     }
 
@@ -53,8 +54,18 @@ public class DerivationPair implements IDerivationConfigurationTerm {
         return new DerivationPair(left.clone(), right.clone());
     }
 
-    public DerivationPair replaceQuery(int queryID, DerivationConfiguration config) {
+    public DerivationPair replaceQuery(int queryID, DerivationTerm config) {
         return new DerivationPair(left.replaceQuery(queryID, config), right.replaceQuery(queryID, config));
+    }
+
+    public Algebra termAlgebra() {
+        return Algebra.CONFIGURATION;
+    }
+
+    public IDerivationTerm findQuery(int queryID) {
+        IDerivationTerm dt1 = left.findQuery(queryID);
+        IDerivationTerm dt2 = right.findQuery(queryID);
+        return (dt1 != null) ? dt1 : (dt2 != null) ? dt2 : null;
     }
 
 }

@@ -1,6 +1,6 @@
 package rnsr.rag.grammar;
 
-import rnsr.rag.derivation.DerivationConfiguration;
+import rnsr.rag.derivation.DerivationTerm;
 import rnsr.rag.grammar.exception.AnswerMismatchException;
 import rnsr.rag.grammar.exception.CloneException;
 import rnsr.rag.grammar.interfaces.IConfigurationTerm;
@@ -85,8 +85,8 @@ public	class		Configuration
 		return sb.toString();
 	}
 
-	public DerivationConfiguration getDerivationObject() {
-		DerivationConfiguration dc = new DerivationConfiguration();
+	public DerivationTerm getDerivationObject() {
+		DerivationTerm dc = new DerivationTerm();
 		for (IConfigurationTerm ct: this) dc.add(ct.getDerivationObject());
 		return dc;
 	}

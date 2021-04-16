@@ -1,6 +1,6 @@
 package rnsr.rag.grammar;
 
-import rnsr.rag.derivation.DerivationConfiguration;
+import rnsr.rag.derivation.DerivationTerm;
 import rnsr.rag.derivation.DerivationQuery;
 import rnsr.rag.derivation.DerivationSequence;
 import rnsr.rag.grammar.exception.CloneException;
@@ -171,8 +171,8 @@ public	class		Query
 					for (ParseResult pr: realResults) {
 						DerivationSequence ds = pr.getDerivationSequence();
 
-						DerivationConfiguration c2 = new DerivationConfiguration();
-						c2.add(pr.getResult().getDerivationObject());
+						//DerivationTerm c2 = new DerivationTerm();
+						//c2.add(pr.getResult().getDerivationObject());
 
 						ArrayList<SubQuery> sqList = new ArrayList<>();
 						sqList.addAll(sqr1.getSubQueries());
@@ -220,10 +220,10 @@ public	class		Query
 						ds1.applyQueryReverse(id, pr.getDerivationSequence(), false);
 
 						DerivationSequence currentResult = pr.getDerivationSequence();
-						DerivationConfiguration dc = new DerivationConfiguration();
+						DerivationTerm dc = new DerivationTerm();
 						dc.add(pr.getResult().getDerivationObject());
 						currentResult.add(0, dc);
-						DerivationConfiguration dc2 = new DerivationConfiguration();
+						DerivationTerm dc2 = new DerivationTerm();
 						dc2.add(q.getDerivationObject());
 						currentResult.add(dc2);
 
@@ -263,9 +263,9 @@ public	class		Query
 	}
 
 	public DerivationQuery getDerivationObject() {
-		DerivationConfiguration left = new DerivationConfiguration();
+		DerivationTerm left = new DerivationTerm();
 		left.add(m_metaSyntax.getDerivationObject());
-		DerivationConfiguration right = new DerivationConfiguration();
+		DerivationTerm right = new DerivationTerm();
 		right.add(m_syntax.getDerivationObject());
 		return new DerivationQuery(left, right, id);
 	}

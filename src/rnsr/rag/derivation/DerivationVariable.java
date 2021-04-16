@@ -1,12 +1,12 @@
 package rnsr.rag.derivation;
 
-import rnsr.rag.derivation.Interface.IDerivationAnswerTerm;
-import rnsr.rag.derivation.Interface.IDerivationConfigurationTerm;
+import rnsr.rag.derivation.Enum.Algebra;
+import rnsr.rag.derivation.Interface.IDerivationTerm;
 import rnsr.rag.grammar.Polynomial;
 import rnsr.rag.grammar.Variable;
 import rnsr.rag.grammar.VariableSet;
 
-public class DerivationVariable implements IDerivationAnswerTerm {
+public class DerivationVariable implements IDerivationTerm {
 
     private Variable variable;
 
@@ -14,26 +14,26 @@ public class DerivationVariable implements IDerivationAnswerTerm {
         this.variable = variable;
     }
 
-    public IDerivationConfigurationTerm resolve(VariableSet bindings) {
+    public IDerivationTerm resolve(VariableSet bindings) {
         Polynomial p = bindings.get(variable);
         Variable v;
         while (p.onlyVariable()) {
             v = (Variable) p.get(0);
             p = bindings.get(v);
         }
-        DerivationPolynomial poly2 = (DerivationPolynomial) p.getDerivationObject().resolve(bindings);
+        DerivationTerm poly2 = (DerivationTerm) p.getDerivationObject().resolve(bindings);
         return poly2;
     }
 
-    public IDerivationConfigurationTerm applyQuery(int queryID, DerivationConfiguration step) {
+    public IDerivationTerm applyQuery(int queryID, DerivationTerm step) {
         return this;
     }
 
-    public IDerivationConfigurationTerm applyQueryReverse(int queryID, DerivationConfiguration step, boolean isLeft) {
+    public IDerivationTerm applyQueryReverse(int queryID, DerivationTerm step) {
         return this;
     }
 
-    public boolean match(IDerivationConfigurationTerm other) {
+    public boolean match(IDerivationTerm other) {
         return true;
     }
 
@@ -41,8 +41,16 @@ public class DerivationVariable implements IDerivationAnswerTerm {
         return new DerivationVariable(variable);
     }
 
-    public IDerivationConfigurationTerm replaceQuery(int queryID, DerivationConfiguration config) {
+    public IDerivationTerm replaceQuery(int queryID, DerivationTerm config) {
         return new DerivationVariable(variable);
+    }
+
+    public Algebra termAlgebra() {
+        return Algebra.ANSWER;
+    }
+
+    public IDerivationTerm findQuery(int queryID) {
+        return null;
     }
 
 }
