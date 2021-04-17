@@ -7,12 +7,10 @@ import rnsr.rag.grammar.VariableSet;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 
 public class DerivationSequence extends ArrayList<DerivationTerm> {
 
     VariableSet originalBindings;
-    HashMap<Integer, DerivationTerm> subSequenceMap;
 
     public DerivationSequence() {
         this(null);
@@ -46,14 +44,25 @@ public class DerivationSequence extends ArrayList<DerivationTerm> {
         this.add(tailConfiguration.applyStep(pairID, rule, originalBindings));
     }
 
-    public void applyQuery(int queryID, DerivationSequence querySequence) {
-        Collections.reverse(querySequence);
-        DerivationTerm tailConfiguration = this.get(this.size() - 1);
-        querySequence.remove(0);
-        for (DerivationTerm dc: querySequence) {
-            this.add(tailConfiguration.applyQuery(queryID, dc));
-            tailConfiguration = this.get(this.size() - 1);
-        }
+    public void applyQuery(int queryID, DerivationSequence querySequence, IDerivationTerm result) {
+
+        DerivationSequence invertedSeq = querySequence.reverseSequence();
+        DerivationTerm head = this.remove(this.size() - 1);
+        DerivationQuery parent = (DerivationQuery) head.findQuery(queryID);
+
+        DerivationSequence embedded = new DerivationSequence();
+        for (DerivationTerm dt: invertedSeq)
+            embedded.add(new DerivationTerm(new DerivationQuery(parent.getMetaSyntax(), dt, parent.getId())));
+        embedded.add(new DerivationTerm(result));
+
+        DerivationSequence finalEmbed = new DerivationSequence();
+        for (int i = invertedSeq.size() - 1; i >= 0; i--)
+            finalEmbed.add(head.clone().replaceQuery(queryID, embedded.get(i)));
+
+        Collections.reverse(finalEmbed);
+
+        for (DerivationTerm dt: finalEmbed) this.add(dt);
+
     }
 
     public void applyQueryReverse(int queryID, DerivationSequence querySequence, IDerivationTerm result) {
@@ -74,10 +83,6 @@ public class DerivationSequence extends ArrayList<DerivationTerm> {
 
         for (DerivationTerm dt: finalEmbed) this.add(0, dt);
 
-    }
-
-    public void putQueryResult(int queryID, DerivationTerm result) {
-        subSequenceMap.put(queryID, result);
     }
 
     public DerivationSequence reverseSequence() {

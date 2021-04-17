@@ -151,12 +151,12 @@ public	class		CandidateSet
 
 						// Handle derivation sequence
 						SententialForm clone = currentForm.cloneObject();
-						clone.getDerivationSequence().applyQuery(((Query) t).getId(), pr.getDerivationSequence());
+						clone.getDerivationSequence().applyQuery(((Query) t).getId(), pr.getDerivationSequence(), pr.getResult().getDerivationObject());
 
 						// Apply the rule
 						clone.applyRule(r);
 						tempSet.add(clone);
-						clone.getDerivationSequence().putQueryResult(((Query) t).getId(), pr.getResult().getDerivationObject());
+						//clone.getDerivationSequence().putQueryResult(((Query) t).getId(), pr.getResult().getDerivationObject());
 
 					}
 
