@@ -18,6 +18,8 @@ public interface IDerivationTerm {
 
     IDerivationTerm findQuery(int queryID);
 
+    IDerivationTerm removeSurroundedLambdas();
+
     Algebra termAlgebra();
 
 }

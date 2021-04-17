@@ -73,7 +73,9 @@ public class DerivationTerm extends ArrayList<IDerivationTerm> implements IDeriv
 
     public DerivationTerm replaceQuery(int queryID, DerivationTerm config) {
         DerivationTerm newDC = new DerivationTerm();
-        for (IDerivationTerm ct: this) newDC.add(ct.replaceQuery(queryID, config));
+        for (IDerivationTerm ct: this)  {
+            newDC.add(ct.replaceQuery(queryID, config));
+        }
         return newDC;
     }
 
@@ -91,6 +93,25 @@ public class DerivationTerm extends ArrayList<IDerivationTerm> implements IDeriv
             if (subTermFinding != null) return subTermFinding;
         }
         return null;
+    }
+
+    public DerivationTerm removeSurroundedLambdas() {
+        DerivationTerm newThis = this.flattenTerm();
+        DerivationTerm retTerm = new DerivationTerm();
+        for (IDerivationTerm dt: newThis) {
+            if (dt instanceof DerivationLambda && newThis.size() != 1) continue;
+            else retTerm.add(dt.removeSurroundedLambdas());
+        }
+        return retTerm;
+    }
+
+    public DerivationTerm flattenTerm() {
+        DerivationTerm ret = new DerivationTerm();
+        for (IDerivationTerm dt: this) {
+            if (!(dt instanceof DerivationTerm)) ret.add(dt);
+            else ret.addAll(((DerivationTerm) dt).flattenTerm());
+        }
+        return ret;
     }
 
 }

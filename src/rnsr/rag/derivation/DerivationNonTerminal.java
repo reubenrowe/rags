@@ -82,4 +82,10 @@ public class DerivationNonTerminal implements IDerivationTerm {
         return null;
     }
 
+    public IDerivationTerm removeSurroundedLambdas() {
+        ArrayList<DerivationTerm> newArgs=  new ArrayList<>();
+        for (DerivationTerm dt: this.args) newArgs.add(dt.removeSurroundedLambdas());
+        return new DerivationNonTerminal(identifier, newArgs);
+    }
+
 }

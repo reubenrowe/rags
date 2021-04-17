@@ -165,19 +165,20 @@ public	class		Query
 
 					Polynomial p1 = sqr1.getResult();
 					Polynomial p2 = sqr2.getResult();
-					Query q = new Query(p1, p2);
+					Query q = new Query(p1, p2, id);
+					//System.out.println("Doing query: " + q + " - ID: " + q.getId());
 					HashSet<ParseResult> realResults = (HashSet<ParseResult>) parser.parse(q);
 
 					for (ParseResult pr: realResults) {
 						DerivationSequence ds = pr.getDerivationSequence();
 
-						//DerivationTerm c2 = new DerivationTerm();
-						//c2.add(pr.getResult().getDerivationObject());
-
 						ArrayList<SubQuery> sqList = new ArrayList<>();
-						sqList.addAll(sqr1.getSubQueries());
-						sqList.addAll(sqr2.getSubQueries());
-						sqList.add(new SubQuery(this.id, ds, pr.getResult()));
+
+						ArrayList<SubQuery> subs = new ArrayList<>();
+						subs.addAll(sqr1.getSubQueries());
+						subs.addAll(sqr2.getSubQueries());
+
+						sqList.add(new SubQuery(this.id, ds, pr.getResult(), subs));
 
 						SubQueryResult sqr = new SubQueryResult(pr.getResult(), sqList);
 						queryResults.add(sqr);
@@ -267,7 +268,7 @@ public	class		Query
 		left.add(m_metaSyntax.getDerivationObject());
 		DerivationTerm right = new DerivationTerm();
 		right.add(m_syntax.getDerivationObject());
-		return new DerivationQuery(left, right, id);
+		return new DerivationQuery(m_metaSyntax.getDerivationObject(), m_syntax.getDerivationObject(), id);
 	}
 
 

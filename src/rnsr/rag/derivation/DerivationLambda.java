@@ -38,4 +38,8 @@ public class DerivationLambda implements IDerivationTerm {
         return null;
     }
 
+    public IDerivationTerm removeSurroundedLambdas() {
+        return this;
+    }
+
 }

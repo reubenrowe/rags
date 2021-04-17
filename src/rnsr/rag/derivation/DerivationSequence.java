@@ -78,8 +78,10 @@ public class DerivationSequence extends ArrayList<DerivationTerm> {
         invertedSeq = embedded.reverseSequence();
 
         DerivationSequence finalEmbed = new DerivationSequence();
-        for (int i = invertedSeq.size() - 1; i >= 0; i--)
+        for (int i = invertedSeq.size() - 1; i >= 0; i--) {
             finalEmbed.add(head.clone().replaceQuery(queryID, invertedSeq.get(i)));
+            DerivationQuery.doneReplace = false;
+        }
 
         for (DerivationTerm dt: finalEmbed) this.add(0, dt);
 
@@ -106,6 +108,15 @@ public class DerivationSequence extends ArrayList<DerivationTerm> {
         DerivationSequence newSeq = new DerivationSequence(originalBindings);
         for (DerivationTerm c: this) newSeq.add(c.clone());
         return newSeq;
+    }
+
+    public DerivationSequence removeSurroundedLambdas() {
+        DerivationSequence ds = new DerivationSequence();
+        for (DerivationTerm dt: this) {
+            DerivationTerm dt2 = dt.removeSurroundedLambdas();
+            if (dt2.size() > 0) ds.add(dt.removeSurroundedLambdas());
+        }
+        return ds;
     }
 
 }

@@ -48,4 +48,8 @@ public class DerivationPair implements IDerivationTerm {
         return (dt1 != null) ? dt1 : (dt2 != null) ? dt2 : null;
     }
 
+    public IDerivationTerm removeSurroundedLambdas() {
+        return new DerivationPair(left.removeSurroundedLambdas(), right.removeSurroundedLambdas());
+    }
+
 }

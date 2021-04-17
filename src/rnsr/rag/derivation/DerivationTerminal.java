@@ -45,4 +45,8 @@ public class DerivationTerminal implements IDerivationTerm {
         return null;
     }
 
+    public IDerivationTerm removeSurroundedLambdas() {
+        return this;
+    }
+
 }

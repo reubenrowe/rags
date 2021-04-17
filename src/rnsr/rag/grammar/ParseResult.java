@@ -41,9 +41,11 @@ public class ParseResult {
         for (SubQueryResult sqr: subQuerySet) {
             DerivationSequence dcClone = dc.clone();
             for (SubQuery sq: sqr.getSubQueries()) {
-                dcClone.applyQueryReverse(sq.getQueryID(), sq.getSequence(), sq.getResult().getDerivationObject());
+                for (SubQuery sq2: sq.getSubQueryOrder()) {
+                    dcClone.applyQueryReverse(sq2.getQueryID(), sq2.getSequence(), sq2.getResult().getDerivationObject());
+                }
             }
-            resultSet.add(new ParseResult(sqr.getResult(), this.original, dcClone));
+            resultSet.add(new ParseResult(sqr.getResult(), this.original, dcClone.removeSurroundedLambdas()));
         }
 
         return resultSet;
