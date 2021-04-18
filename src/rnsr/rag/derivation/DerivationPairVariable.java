@@ -83,4 +83,8 @@ public class DerivationPairVariable implements IDerivationTerm {
         return new DerivationPairVariable(polynomial.removeSurroundedLambdas(), variable, id);
     }
 
+    public IDerivationTerm applyInvertToPreviousQueries(int queryID) {
+        return new DerivationPairVariable(polynomial.applyInvertToPreviousQueries(queryID), variable, id);
+    }
+
 }

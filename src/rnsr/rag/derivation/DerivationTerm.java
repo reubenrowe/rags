@@ -105,6 +105,14 @@ public class DerivationTerm extends ArrayList<IDerivationTerm> implements IDeriv
         return retTerm;
     }
 
+    public DerivationTerm applyInvertToPreviousQueries(int queryID) {
+        DerivationTerm newDC = new DerivationTerm();
+        for (IDerivationTerm ct: this)  {
+            newDC.add(ct.applyInvertToPreviousQueries(queryID));
+        }
+        return newDC;
+    }
+
     public DerivationTerm flattenTerm() {
         DerivationTerm ret = new DerivationTerm();
         for (IDerivationTerm dt: this) {

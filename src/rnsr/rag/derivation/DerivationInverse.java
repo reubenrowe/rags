@@ -57,5 +57,9 @@ public class DerivationInverse implements IDerivationTerm {
         return new DerivationInverse(contents.removeSurroundedLambdas());
     }
 
+    public IDerivationTerm applyInvertToPreviousQueries(int queryID) {
+        return new DerivationInverse(contents.applyInvertToPreviousQueries(queryID));
+    }
+
 
 }

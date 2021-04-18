@@ -49,4 +49,8 @@ public class DerivationTerminal implements IDerivationTerm {
         return this;
     }
 
+    public IDerivationTerm applyInvertToPreviousQueries(int queryID) {
+        return new DerivationTerminal(symbol);
+    }
+
 }

@@ -88,4 +88,10 @@ public class DerivationNonTerminal implements IDerivationTerm {
         return new DerivationNonTerminal(identifier, newArgs);
     }
 
+    public IDerivationTerm applyInvertToPreviousQueries(int queryID) {
+        ArrayList<DerivationTerm> newArgs=  new ArrayList<>();
+        for (DerivationTerm dt: this.args) newArgs.add(dt.applyInvertToPreviousQueries(queryID));
+        return new DerivationNonTerminal(identifier, newArgs);
+    }
+
 }

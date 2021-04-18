@@ -42,4 +42,8 @@ public class DerivationLambda implements IDerivationTerm {
         return this;
     }
 
+    public IDerivationTerm applyInvertToPreviousQueries(int queryID) {
+        return new DerivationLambda();
+    }
+
 }

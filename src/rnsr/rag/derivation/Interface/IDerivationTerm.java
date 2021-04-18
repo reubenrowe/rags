@@ -20,6 +20,8 @@ public interface IDerivationTerm {
 
     IDerivationTerm removeSurroundedLambdas();
 
+    IDerivationTerm applyInvertToPreviousQueries(int queryID);
+
     Algebra termAlgebra();
 
 }

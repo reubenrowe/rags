@@ -61,12 +61,9 @@ public class DerivationQuery implements IDerivationTerm {
     }
 
     public IDerivationTerm replaceQuery(int queryID, DerivationTerm config) {
-        DerivationQuery sub = new DerivationQuery(metaSyntax.replaceQuery(queryID, config), syntax.replaceQuery(queryID, config), id);
-        if (this.id == queryID && !doneReplace) {
-            doneReplace = true;
-            return config;
-        }
-        return sub;
+        if (queryID != this.id)
+            return new DerivationQuery(metaSyntax.replaceQuery(queryID, config), syntax.replaceQuery(queryID, config), id);
+        return config;
 
     }
 
@@ -89,5 +86,12 @@ public class DerivationQuery implements IDerivationTerm {
     public IDerivationTerm removeSurroundedLambdas() {
         return new DerivationQuery(metaSyntax.removeSurroundedLambdas(), syntax.removeSurroundedLambdas(), id);
     }
+
+    public IDerivationTerm applyInvertToPreviousQueries(int queryID) {
+        if (id != queryID)
+            return new DerivationQuery(metaSyntax.applyInvertToPreviousQueries(queryID), syntax.applyInvertToPreviousQueries(queryID), id);
+        return new DerivationInverse(this);
+    }
+
 
 }

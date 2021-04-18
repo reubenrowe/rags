@@ -52,4 +52,8 @@ public class DerivationPair implements IDerivationTerm {
         return new DerivationPair(left.removeSurroundedLambdas(), right.removeSurroundedLambdas());
     }
 
+    public IDerivationTerm applyInvertToPreviousQueries(int queryID) {
+        return new DerivationPair(left.applyInvertToPreviousQueries(queryID), right.applyInvertToPreviousQueries(queryID));
+    }
+
 }
