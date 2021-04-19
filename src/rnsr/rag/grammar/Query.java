@@ -110,42 +110,6 @@ public	class		Query
 		return sb.toString();
 	}
 
-	/**
-	 * Derives a set of extended answers from a query object by resolving all sub-queries and all possible
-	 * permutations of the original query where the operands are both answers
-	 * @param parser The Parser object we pass to sub-queries for resolution
-	 * @return The set of extended answers derived from resolving queries within a single extended answer
-	 */
-	public Set<ExtendedAnswer> resolveQueries(Parser parser) {
-		ArrayList<Set<ExtendedAnswer>> metaSyntaxPolyAnswers = new ArrayList<>();
-		ArrayList<Set<ExtendedAnswer>> syntaxPolyAnswers = new ArrayList<>();
-		for (IPolynomialTerm p: m_metaSyntax) metaSyntaxPolyAnswers.add(p.resolveQueries(parser));
-		for (IPolynomialTerm p: m_syntax) syntaxPolyAnswers.add(p.resolveQueries(parser));
-
-		Set<ExtendedAnswer> possiblePolynomialsMetaSyntax = ExtendedAnswer.extendedAnswerPermutations(metaSyntaxPolyAnswers);
-		Set<ExtendedAnswer> possiblePolynomialsSyntax = ExtendedAnswer.extendedAnswerPermutations(syntaxPolyAnswers);
-
-		// Get all of the extended answer sets for all possible queries
-		Set<ExtendedAnswer> queriesReturnSet = new HashSet<>();
-		for (Polynomial p1: possiblePolynomialsMetaSyntax) {
-			for (Polynomial p2: possiblePolynomialsSyntax) {
-				try {
-
-					Set<ParseResult> realResults = parser.parse(new Query(p1, p2));
-					Set<ExtendedAnswer> results = new HashSet<>();
-					for (ParseResult pr: realResults) results.add(pr.getResult());
-
-					for (ExtendedAnswer ea: results)
-						queriesReturnSet.addAll(ea.getEASetFromInnerQueryResolution(parser));
-				} catch (ParseException e) {
-					throw new Error(e);
-				}
-			}
-		}
-
-		return queriesReturnSet;
-	}
-
 	public HashSet<SubQueryResult> resolveInnerQueries(Parser parser) {
 
 		ArrayList<HashSet<SubQueryResult>> metaSyntaxPolyAnswers = new ArrayList<>();
@@ -194,57 +158,6 @@ public	class		Query
 		return queryResults;
 
 	}
-
-	/*
-	public HashSet<ParseResult> resolveInnerQueries(Parser parser) {
-		ArrayList<HashSet<ParseResult>> metaSyntaxPolyAnswers = new ArrayList<>();
-		ArrayList<HashSet<ParseResult>> syntaxPolyAnswers = new ArrayList<>();
-		for (IPolynomialTerm p: m_metaSyntax) metaSyntaxPolyAnswers.add(p.resolveInnerQueries(parser));
-		for (IPolynomialTerm p: m_syntax) syntaxPolyAnswers.add(p.resolveInnerQueries(parser));
-
-		Set<ParseResult> possiblePolynomialsMetaSyntax = ParseResult.parseResultPermutations(metaSyntaxPolyAnswers);
-		Set<ParseResult> possiblePolynomialsSyntax = ParseResult.parseResultPermutations(syntaxPolyAnswers);
-
-		HashSet<ParseResult> queriesReturnSet = new HashSet<>();
-
-		for (ParseResult pr1: possiblePolynomialsMetaSyntax) {
-			for (ParseResult pr2: possiblePolynomialsSyntax) {
-				try {
-
-					Query q = new Query(pr1.getResult(), pr2.getResult(), id);
-					Set<ParseResult> realResults = parser.parse(new Query(pr1.getResult(), pr2.getResult(), id));
-
-					for (ParseResult pr: realResults) {
-
-						DerivationSequence ds1 = pr1.getDerivationSequence();
-						ds1.applyQueryReverse(id, pr2.getDerivationSequence(), false);
-						ds1.applyQueryReverse(id, pr.getDerivationSequence(), false);
-
-						DerivationSequence currentResult = pr.getDerivationSequence();
-						DerivationTerm dc = new DerivationTerm();
-						dc.add(pr.getResult().getDerivationObject());
-						currentResult.add(0, dc);
-						DerivationTerm dc2 = new DerivationTerm();
-						dc2.add(q.getDerivationObject());
-						currentResult.add(dc2);
-
-						ds1.applyQueryReverse(id, currentResult, false);
-
-						queriesReturnSet.add(new ParseResult(pr.getResult(), pr.getOriginalQuery(), ds1));
-
-					}
-
-				} catch (ParseException e) {
-					throw new Error(e);
-				}
-			}
-		}
-
-		return queriesReturnSet;
-
-	}
-	 */
-
 
 	public UnificationSetting unify(Polynomial other) {
 		return null;

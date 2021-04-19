@@ -1,8 +1,8 @@
 package rnsr.rag.grammar;
 
-import rnsr.rag.derivation.DerivationTerm;
 import rnsr.rag.derivation.DerivationLambda;
 import rnsr.rag.derivation.DerivationNonTerminal;
+import rnsr.rag.derivation.DerivationTerm;
 import rnsr.rag.derivation.DerivationTerminal;
 import rnsr.rag.derivation.Interface.IDerivationTerm;
 import rnsr.rag.grammar.exception.*;
@@ -15,7 +15,6 @@ import rnsr.rag.util.UnificationSetting;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Represents an answer (terminal or nonterminal) in a recursive adaptive grammar 
@@ -211,78 +210,6 @@ public	class		Answer
 		
 		return sb.toString();
 	}
-
-	/**
-	 * Derives a set of extended answers from an answer object by resolving inner-queries
-	 * @param parser The Parser object we pass to sub-queries for resolution
-	 * @return The set of extended answers derived from resolving queries within a single extended answer
-	 */
-	public Set<ExtendedAnswer> resolveQueries(Parser parser) {
-		try {
-			Set<ExtendedAnswer> possibleAnswers = new HashSet<>();
-			if (m_arguments == null || m_arguments.size() <= 0) {
-				possibleAnswers.add(new Polynomial(this).toExtendedAnswer());
-				return possibleAnswers;
-			}
-
-			return handleArguments(possibleAnswers, parser);
-		} catch (InvalidTermException | ArgumentMismatchException e) {
-			throw new Error(e);
-		}
-	}
-
-	/**
-	 * Generates a set of extended answers representing every possible permutation of answer arguments to the original
-	 * answer, after resolving inner-argument queries.
-	 * @param possibleAnswerSet The set we add all possible answer forms to
-	 * @param parser The Parser object we pass to sub-queries for resolution
-	 * @return The set we add all possible answer forms
-	 * @throws ArgumentMismatchException Thrown when the number of supplied arguments doesn't match the arity of the identifier
-	 */
-
-	public Set<ExtendedAnswer> handleArguments(Set<ExtendedAnswer> possibleAnswerSet, Parser parser) throws ArgumentMismatchException {
-
-		ArrayList<ArrayList<ExtendedAnswer>> argAnswerListList = new ArrayList<>();
-		ArrayList<ArrayList<Polynomial>> argPolynomialListList = new ArrayList<>();
-
-		// List of (list of polynomial permutations) for every polynomial argument
-		for (Polynomial p: m_arguments) { argAnswerListList.add(handleSingleArg(p, parser)); }
-
-		int sum = 1;
-		for (ArrayList<ExtendedAnswer> answerSet: argAnswerListList) sum *= answerSet.size();
-		for (int i = 0; i < sum; i++) argPolynomialListList.add(new ArrayList<>());
-
-		for (int i = 0; i < argAnswerListList.size(); i++) {	// For every polynomial argument
-			ArrayList<ExtendedAnswer> currentArgAnswers = argAnswerListList.get(i);		// Get the possible permutations for that argument
-			for (int j = 0; j < argPolynomialListList.size(); j++) {
-				//argPolynomialListList.get(j).add(currentArgAnswers.get(j % currentArgAnswers.get(i).size()));
-				argPolynomialListList.get(j).add(currentArgAnswers.get(j % currentArgAnswers.size()));
-			}
-		}
-
-		for (ArrayList<Polynomial> argList: argPolynomialListList) {
-			Answer a = new Answer(this.m_identifier, argList);
-			possibleAnswerSet.add(new ExtendedAnswer(a));
-		}
-
-		return possibleAnswerSet;
-	}
-
-	/**
-	 * Generates a list of extended answers by resolving the inner-queries of each polynomial term in an answer argument
-	 * @param p The polynomial whose terms we expand
-	 * @param parser The Parser object we pass to sub-queries for resolution
-	 * @return List of extended answers representing the expanded form of each polynomial term
-	 */
-	public ArrayList<ExtendedAnswer> handleSingleArg(Polynomial p, Parser parser) {
-		ArrayList<Set<ExtendedAnswer>> termSets = new ArrayList<>();
-		for (IPolynomialTerm ipt: p) termSets.add(ipt.resolveQueries(parser));
-		Set<ExtendedAnswer> permsSet = ExtendedAnswer.extendedAnswerPermutations(termSets);
-		return new ArrayList<>(permsSet);
-	}
-
-
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 	public HashSet<SubQueryResult> resolveInnerQueries(Parser parser) {

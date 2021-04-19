@@ -59,20 +59,7 @@ public	class		ExtendedAnswer
 			return a;
 		}
 	}
-
-	/**
-	 * Converts an extended answer into a set of extended answers by resolving queries contained within the
-	 * polynomial terms of the original extended answer.
-	 * @param parser The Parser object we pass to sub-queries for resolution
-	 * @return The set of extended answers derived from resolving queries within a single extended answer
-	 */
-	public Set<ExtendedAnswer> getEASetFromInnerQueryResolution(Parser parser) {
-		ArrayList<Set<ExtendedAnswer>> subEaSetList = new ArrayList<>();
-		for (IPolynomialTerm pt: this)
-			subEaSetList.add(pt.resolveQueries(parser));
-		return ExtendedAnswer.extendedAnswerPermutations(subEaSetList);
-	}
-
+	
 	public HashSet<SubQueryResult> resolveInnerQueries(Parser parser) {
 		ArrayList<HashSet<SubQueryResult>> subResultList = new ArrayList<>();
 		for (IPolynomialTerm ipt: this) {
