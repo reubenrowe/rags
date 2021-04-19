@@ -53,11 +53,15 @@ public class DerivationSequence extends ArrayList<DerivationTerm> {
         DerivationSequence embedded = new DerivationSequence();
         for (DerivationTerm dt: invertedSeq)
             embedded.add(new DerivationTerm(new DerivationQuery(parent.getMetaSyntax(), dt, parent.getId())));
-        embedded.add(new DerivationTerm(result));
+        //embedded.add(new DerivationTerm(result));
 
         DerivationSequence finalEmbed = new DerivationSequence();
-        for (int i = invertedSeq.size() - 1; i >= 0; i--)
+        for (int i = embedded.size() - 1; i >= 0; i--) {
             finalEmbed.add(head.clone().replaceQuery(queryID, embedded.get(i)));
+            DerivationQuery.doneReplace = false;
+        }
+
+        Collections.reverse(finalEmbed);
 
         for (DerivationTerm dt: finalEmbed) this.add(dt);
 
@@ -76,8 +80,10 @@ public class DerivationSequence extends ArrayList<DerivationTerm> {
         invertedSeq = embedded.reverseSequence();
 
         DerivationSequence finalEmbed = new DerivationSequence();
-        for (int i = invertedSeq.size() - 1; i >= 0; i--)
+        for (int i = invertedSeq.size() - 1; i >= 0; i--) {
             finalEmbed.add(head.clone().replaceQuery(queryID, invertedSeq.get(i)));
+            DerivationQuery.doneReplace = false;
+        }
 
         DerivationSequence invertedPrevious = this.applyInvertToPreviousQueries(queryID);
         for (int i = 0; i < this.size(); i++) this.set(i, invertedPrevious.get(i));

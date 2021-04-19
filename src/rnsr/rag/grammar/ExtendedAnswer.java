@@ -59,7 +59,7 @@ public	class		ExtendedAnswer
 			return a;
 		}
 	}
-	
+
 	public HashSet<SubQueryResult> resolveInnerQueries(Parser parser) {
 		ArrayList<HashSet<SubQueryResult>> subResultList = new ArrayList<>();
 		for (IPolynomialTerm ipt: this) {

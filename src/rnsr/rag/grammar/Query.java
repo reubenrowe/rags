@@ -77,7 +77,7 @@ public	class		Query
 	 */
 	public Query clone(ContextMapping context) throws CloneException
 	{
-		return new Query(this.m_metaSyntax.clone(context), this.m_syntax.clone(context));
+		return new Query(this.m_metaSyntax.clone(context), this.m_syntax.clone(context), id);
 	}
 
 	/**
@@ -138,11 +138,14 @@ public	class		Query
 
 						ArrayList<SubQuery> sqList = new ArrayList<>();
 
-						ArrayList<SubQuery> subs = new ArrayList<>();
-						subs.addAll(sqr1.getSubQueries());
-						subs.addAll(sqr2.getSubQueries());
+						//ArrayList<SubQuery> subs = new ArrayList<>();
+						//subs.addAll(sqr1.getSubQueries());
+						//subs.addAll(sqr2.getSubQueries());
+						//sqList.add(new SubQuery(id, ds, pr.getResult(), subs));
 
-						sqList.add(new SubQuery(this.id, ds, pr.getResult(), subs));
+						sqList.addAll(sqr1.getSubQueries());
+						sqList.addAll(sqr2.getSubQueries());
+						sqList.add(new SubQuery(id, ds, pr.getResult()));
 
 						SubQueryResult sqr = new SubQueryResult(pr.getResult(), sqList);
 						queryResults.add(sqr);

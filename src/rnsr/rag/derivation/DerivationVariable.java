@@ -46,7 +46,7 @@ public class DerivationVariable implements IDerivationTerm {
     }
 
     public IDerivationTerm findQuery(int queryID) {
-        return this;
+        return null;
     }
 
     public IDerivationTerm removeSurroundedLambdas() {

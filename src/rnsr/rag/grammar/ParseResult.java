@@ -41,9 +41,10 @@ public class ParseResult {
         for (SubQueryResult sqr: subQuerySet) {
             DerivationSequence dcClone = dc.clone();
             for (SubQuery sq: sqr.getSubQueries()) {
-                for (SubQuery sq2: sq.getSubQueryOrder()) {
-                    dcClone.applyQueryReverse(sq2.getQueryID(), sq2.getSequence(), sq2.getResult().getDerivationObject());
-                }
+                //for (SubQuery sq2: sq.getSubQueryOrder()) {
+                    //dcClone.applyQueryReverse(sq2.getQueryID(), sq2.getSequence(), sq2.getResult().getDerivationObject());
+                //}
+                dcClone.applyQueryReverse(sq.getQueryID(), sq.getSequence(), sq.getResult().getDerivationObject());
             }
             resultSet.add(new ParseResult(sqr.getResult(), this.original, dcClone.removeSurroundedLambdas()));
         }
@@ -51,9 +52,6 @@ public class ParseResult {
         return resultSet;
 
     }
-
-
-
 
     public String toString() {
         String s = "- START QUERY: " + this.original + "\n";

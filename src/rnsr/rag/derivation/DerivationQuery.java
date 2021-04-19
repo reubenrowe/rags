@@ -61,10 +61,14 @@ public class DerivationQuery implements IDerivationTerm {
     }
 
     public IDerivationTerm replaceQuery(int queryID, DerivationTerm config) {
-        if (queryID != this.id)
-            return new DerivationQuery(metaSyntax.replaceQuery(queryID, config), syntax.replaceQuery(queryID, config), id);
-        return config;
-
+        //if (queryID != this.id) return new DerivationQuery(metaSyntax.replaceQuery(queryID, config), syntax.replaceQuery(queryID, config), id);
+        DerivationQuery dq = new DerivationQuery(metaSyntax.replaceQuery(queryID, config), syntax.replaceQuery(queryID, config), id);
+        if (this.id == queryID) {
+            if (doneReplace) return this;
+            doneReplace = true;
+            return config;
+        }
+        return dq;
     }
 
     public Algebra termAlgebra() {

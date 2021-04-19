@@ -186,7 +186,7 @@ public	class		Answer
 			sb.append(this.m_identifier.Identifier());
 			if (this.m_arguments.size() > 0)
 			{
-				sb.append("(");
+				sb.append("[");
 			
 				boolean first = true;
 				for (Polynomial arg : this.m_arguments)
@@ -201,7 +201,7 @@ public	class		Answer
 					first = false;
 				}
 				
-				sb.append(")");
+				sb.append("]");
 			}
 		} else {
 			if (this.m_identifier.equals(AnswerIdentifier.Lambda())) sb.append("#");
