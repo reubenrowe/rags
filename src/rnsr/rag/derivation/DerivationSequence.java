@@ -69,6 +69,7 @@ public class DerivationSequence extends ArrayList<DerivationTerm> {
 
     public void applyQueryReverse(int queryID, DerivationSequence querySequence, IDerivationTerm result) {
 
+        /*
         DerivationSequence invertedSeq = querySequence.reverseSequence();
         DerivationTerm head = this.remove(0);
         DerivationQuery parent = (DerivationQuery) head.findQuery(queryID);
@@ -86,10 +87,63 @@ public class DerivationSequence extends ArrayList<DerivationTerm> {
         }
 
         DerivationSequence invertedPrevious = this.applyInvertToPreviousQueries(queryID);
-        for (int i = 0; i < this.size(); i++) this.set(i, invertedPrevious.get(i));
-
+        for (int i = 0; i < this.size(); i++) {
+            this.set(i, invertedPrevious.get(i));
+            DerivationQuery.doneReplace = false;
+        }
         for (DerivationTerm dt: finalEmbed) this.add(0, dt);
+         */
 
+        int first = this.getFirstMentionQueryIndex(queryID);
+
+        /*
+        System.out.println("First mention of query " + queryID + ": " + first);
+        for (int i = first; i >= 0; i--) {
+            System.out.println("\tFound this query in index " + i + "? - " + this.get(i).findQuery(queryID));
+        }
+         */
+
+        DerivationSequence invertedSeq = querySequence.reverseSequence();
+        DerivationTerm firstQueryMentionStep = this.remove(first);
+        DerivationQuery parent = (DerivationQuery) firstQueryMentionStep.findQuery(queryID);
+
+        DerivationSequence embedded = new DerivationSequence();
+        for (DerivationTerm dt: invertedSeq)
+            embedded.add(new DerivationTerm(new DerivationQuery(parent.getMetaSyntax(), dt, parent.getId())));
+        embedded.add(new DerivationTerm(result));
+        invertedSeq = embedded.reverseSequence();
+
+        DerivationSequence finalEmbed = new DerivationSequence();
+        for (int i = invertedSeq.size() - 1; i >= 0; i--) {
+            finalEmbed.add(firstQueryMentionStep.clone().replaceQuery(queryID, invertedSeq.get(i)));
+            DerivationQuery.doneReplace = false;
+        }
+
+        /*
+        DerivationSequence invertedPrevious = this.applyInvertToPreviousQueries(queryID);
+        for (int i = 0; i < this.size(); i++) {
+            this.set(i, invertedPrevious.get(i));
+            DerivationQuery.doneReplace = false;
+        }
+
+         */
+
+        Collections.reverse(finalEmbed);
+        this.addAll(first, finalEmbed);
+
+        for (int i = first-1; i >= 0; i--) {
+            this.set(i, this.get(i).replaceQuery(queryID, new DerivationTerm(result)));
+            DerivationQuery.doneReplace = false;
+        }
+
+    }
+
+    public int getFirstMentionQueryIndex(int queryID) {
+        int n = -1;
+        for (int i = 0; i < this.size(); i++) {
+            if (this.get(i).findQuery(queryID) != null) n = i;
+        }
+        return n;
     }
 
     public DerivationSequence reverseSequence() {
@@ -113,6 +167,7 @@ public class DerivationSequence extends ArrayList<DerivationTerm> {
         DerivationSequence sequenceWithQueryInvert = new DerivationSequence();
         for (DerivationTerm dt: this) {
             sequenceWithQueryInvert.add(dt.applyInvertToPreviousQueries(queryID));
+            DerivationQuery.doneReplace = false;
         }
         return sequenceWithQueryInvert;
     }

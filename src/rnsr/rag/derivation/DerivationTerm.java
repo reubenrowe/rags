@@ -122,4 +122,12 @@ public class DerivationTerm extends ArrayList<IDerivationTerm> implements IDeriv
         return ret;
     }
 
+    public boolean onlyInverse() {
+        DerivationTerm newThis = this.flattenTerm();
+        for (IDerivationTerm dt: newThis) {
+            if (!(dt instanceof DerivationInverse)) return false;
+        }
+        return true;
+    }
+
 }

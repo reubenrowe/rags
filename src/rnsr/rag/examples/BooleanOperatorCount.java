@@ -15,7 +15,7 @@ public class BooleanOperatorCount {
         AnswerIdentifier nt_answer_E_0 = new AnswerIdentifier("E", 0);
         AnswerIdentifier nt_answer_Y_0 = new AnswerIdentifier("Y", 0);
         AnswerIdentifier tl_answer_1 = new AnswerIdentifier("s");
-        AnswerIdentifier tl_answer_3 = new AnswerIdentifier("!");
+        AnswerIdentifier tl_answer_3 = new AnswerIdentifier("~");
         AnswerIdentifier tl_answer_5 = new AnswerIdentifier("1");
         AnswerIdentifier tl_answer_4 = new AnswerIdentifier("0");
         AnswerIdentifier tl_answer_0 = new AnswerIdentifier("|");
