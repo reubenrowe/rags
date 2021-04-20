@@ -10,8 +10,6 @@ public class DerivationQuery implements IDerivationTerm {
     private DerivationTerm syntax;
     private int id;
 
-    public static boolean doneReplace = false;
-
     public DerivationQuery(DerivationTerm metaSyntax, DerivationTerm syntax, int id) {
         this.metaSyntax = metaSyntax;
         this.syntax = syntax;
@@ -61,6 +59,7 @@ public class DerivationQuery implements IDerivationTerm {
     }
 
     public IDerivationTerm replaceQuery(int queryID, DerivationTerm config) {
+        /*
         //if (queryID != this.id) return new DerivationQuery(metaSyntax.replaceQuery(queryID, config), syntax.replaceQuery(queryID, config), id);
         DerivationQuery dq = new DerivationQuery(metaSyntax.replaceQuery(queryID, config), syntax.replaceQuery(queryID, config), id);
         if (this.id == queryID) {
@@ -69,6 +68,9 @@ public class DerivationQuery implements IDerivationTerm {
             return config;
         }
         return dq;
+         */
+        if (queryID != this.id) return new DerivationQuery(metaSyntax.replaceQuery(queryID, config), syntax.replaceQuery(queryID, config), id);
+        return config;
     }
 
     public Algebra termAlgebra() {
@@ -92,6 +94,7 @@ public class DerivationQuery implements IDerivationTerm {
     }
 
     public IDerivationTerm applyInvertToPreviousQueries(int queryID) {
+        /*
         DerivationQuery dq = new DerivationQuery(metaSyntax.applyInvertToPreviousQueries(queryID), syntax.applyInvertToPreviousQueries(queryID), id);
         if (this.id == queryID) {
             if (doneReplace) return dq;
@@ -99,6 +102,11 @@ public class DerivationQuery implements IDerivationTerm {
             return new DerivationInverse(this);
         }
         return dq;
+
+         */
+        if (this.id != queryID)
+            return new DerivationQuery(metaSyntax.applyInvertToPreviousQueries(queryID), syntax.applyInvertToPreviousQueries(queryID), id);
+        return new DerivationInverse(this);
     }
 
 
