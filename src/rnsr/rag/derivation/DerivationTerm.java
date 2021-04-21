@@ -113,6 +113,12 @@ public class DerivationTerm extends ArrayList<IDerivationTerm> implements IDeriv
         return newDC;
     }
 
+    public boolean queryIsSubQuery(int queryID) {
+        boolean ret = false;
+        for (IDerivationTerm dt: this) ret |= dt.queryIsSubQuery(queryID);
+        return ret;
+    }
+
     public DerivationTerm flattenTerm() {
         DerivationTerm ret = new DerivationTerm();
         for (IDerivationTerm dt: this) {

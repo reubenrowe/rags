@@ -32,7 +32,6 @@ public class DerivationTerminal implements IDerivationTerm {
         return new DerivationTerminal(symbol);
     }
 
-    @Override
     public IDerivationTerm replaceQuery(int queryID, DerivationTerm config) {
         return new DerivationTerminal(symbol);
     }
@@ -51,6 +50,10 @@ public class DerivationTerminal implements IDerivationTerm {
 
     public IDerivationTerm applyInvertToPreviousQueries(int queryID) {
         return new DerivationTerminal(symbol);
+    }
+
+    public boolean queryIsSubQuery(int queryID) {
+        return false;
     }
 
 }

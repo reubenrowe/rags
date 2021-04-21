@@ -46,7 +46,7 @@ public class DerivationSequence extends ArrayList<DerivationTerm> {
 
     public void applyQuery(int queryID, DerivationSequence querySequence, IDerivationTerm result) {
 
-        DerivationSequence invertedSeq = querySequence.reverseSequence();
+        DerivationSequence invertedSeq = querySequence.reverseAndInvert();
         DerivationTerm head = this.remove(this.size() - 1);
         DerivationQuery parent = (DerivationQuery) head.findQuery(queryID);
 
@@ -58,7 +58,7 @@ public class DerivationSequence extends ArrayList<DerivationTerm> {
         for (int i = embedded.size() - 1; i >= 0; i--)
             finalEmbed.add(head.clone().replaceQuery(queryID, embedded.get(i)));
 
-        Collections.reverse(finalEmbed);
+        finalEmbed = finalEmbed.reverseSequence();
 
         for (DerivationTerm dt: finalEmbed) this.add(dt);
 
@@ -68,7 +68,7 @@ public class DerivationSequence extends ArrayList<DerivationTerm> {
 
         int last = getLastMentionQueryIndex(queryID);
 
-        DerivationSequence invertedSeq = querySequence.reverseSequence();
+        DerivationSequence invertedSeq = querySequence.reverseAndInvert();
         DerivationTerm firstQueryMentionStep = this.remove(last);
         DerivationQuery parent = (DerivationQuery) firstQueryMentionStep.findQuery(queryID);
 
@@ -76,7 +76,13 @@ public class DerivationSequence extends ArrayList<DerivationTerm> {
         for (DerivationTerm dt: invertedSeq)
             embedded.add(new DerivationTerm(new DerivationQuery(parent.getMetaSyntax(), dt, parent.getId())));
         embedded.add(new DerivationTerm(result));
-        invertedSeq = embedded.reverseSequence();
+
+        // Check at this point if the parent query is part of another query - if not thne we apply inverse, if so, we only reverse
+        // invertedSeq = embedded.reverseAndInvert();
+        if (firstQueryMentionStep.queryIsSubQuery(queryID))
+            invertedSeq = embedded.reverseSequence();
+        else
+            invertedSeq = embedded.reverseAndInvert();
 
         DerivationSequence finalEmbed = new DerivationSequence();
         for (int i = invertedSeq.size() - 1; i >= 0; i--)
@@ -92,13 +98,23 @@ public class DerivationSequence extends ArrayList<DerivationTerm> {
     public int getLastMentionQueryIndex(int queryID) {
         int n = -1;
         for (int i = 0; i < this.size(); i++) {
-            if (this.get(i).findQuery(queryID) == null) return n;
+            IDerivationTerm dt = this.get(i).findQuery(queryID);
+            if (dt == null || !((DerivationQuery) dt).isRewritable()) continue;
             n = i;
         }
+
+        for (int i = n + 1; i < this.size(); i++)
+            this.set(i, this.get(i).applyInvertToPreviousQueries(queryID));
         return n;
     }
 
     public DerivationSequence reverseSequence() {
+        DerivationSequence cloneDS = this.clone();
+        Collections.reverse(cloneDS);
+        return cloneDS;
+    }
+
+    public DerivationSequence reverseAndInvert() {
         DerivationSequence cloneDS = this.clone();
         Collections.reverse(cloneDS);
         return cloneDS.applyInverse(cloneDS);

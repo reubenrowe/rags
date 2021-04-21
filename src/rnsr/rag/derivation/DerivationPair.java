@@ -56,4 +56,8 @@ public class DerivationPair implements IDerivationTerm {
         return new DerivationPair(left.applyInvertToPreviousQueries(queryID), right.applyInvertToPreviousQueries(queryID));
     }
 
+    public boolean queryIsSubQuery(int queryID) {
+        return left.queryIsSubQuery(queryID) || right.queryIsSubQuery(queryID);
+    }
+
 }

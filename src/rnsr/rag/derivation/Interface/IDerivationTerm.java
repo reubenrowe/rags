@@ -22,6 +22,8 @@ public interface IDerivationTerm {
 
     IDerivationTerm applyInvertToPreviousQueries(int queryID);
 
+    boolean queryIsSubQuery(int queryID);
+
     Algebra termAlgebra();
 
 }

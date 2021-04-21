@@ -109,5 +109,14 @@ public class DerivationQuery implements IDerivationTerm {
         return new DerivationInverse(this);
     }
 
+    public boolean queryIsSubQuery(int queryID) {
+        return (queryID != this.id && (metaSyntax.findQuery(queryID) != null || syntax.findQuery(queryID) != null));
+    }
+
+    public boolean isRewritable() {
+        return this.metaSyntax.termAlgebra().getID() < Algebra.QUERY.getID()
+                && this.syntax.termAlgebra().getID() < Algebra.QUERY.getID();
+    }
+
 
 }

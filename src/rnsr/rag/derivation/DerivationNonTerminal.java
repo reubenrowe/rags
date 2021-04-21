@@ -94,4 +94,10 @@ public class DerivationNonTerminal implements IDerivationTerm {
         return new DerivationNonTerminal(identifier, newArgs);
     }
 
+    public boolean queryIsSubQuery(int queryID) {
+        boolean ret = false;
+        for (DerivationTerm dt: this.args) ret |= dt.queryIsSubQuery(queryID);
+        return ret;
+    }
+
 }

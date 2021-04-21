@@ -17,4 +17,8 @@ public enum Algebra {
         return (this.id >= other.id) ? this : other;
     }
 
+    public int getID() {
+        return this.id;
+    }
+
 }

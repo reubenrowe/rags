@@ -87,4 +87,8 @@ public class DerivationPairVariable implements IDerivationTerm {
         return new DerivationPairVariable(polynomial.applyInvertToPreviousQueries(queryID), variable, id);
     }
 
+    public boolean queryIsSubQuery(int queryID) {
+        return polynomial.queryIsSubQuery(queryID);
+    }
+
 }

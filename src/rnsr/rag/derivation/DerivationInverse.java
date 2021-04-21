@@ -62,5 +62,9 @@ public class DerivationInverse implements IDerivationTerm {
         return new DerivationInverse(contents.applyInvertToPreviousQueries(queryID));
     }
 
+    public boolean queryIsSubQuery(int queryID) {
+        return contents.queryIsSubQuery(queryID);
+    }
+
 
 }

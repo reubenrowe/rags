@@ -57,4 +57,8 @@ public class DerivationVariable implements IDerivationTerm {
         return this;
     }
 
+    public boolean queryIsSubQuery(int queryID) {
+        return false;
+    }
+
 }

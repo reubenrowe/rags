@@ -46,4 +46,9 @@ public class DerivationLambda implements IDerivationTerm {
         return new DerivationLambda();
     }
 
+    public boolean queryIsSubQuery(int queryID) {
+        return false;
+    }
+
+
 }
