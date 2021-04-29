@@ -77,7 +77,7 @@ public	class		Query
 	 */
 	public Query clone(ContextMapping context) throws CloneException
 	{
-		return new Query(this.m_metaSyntax.clone(context), this.m_syntax.clone(context));
+		return new Query(this.m_metaSyntax.clone(context), this.m_syntax.clone(context), id);
 	}
 
 	/**

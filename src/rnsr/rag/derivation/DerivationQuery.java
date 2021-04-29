@@ -81,12 +81,22 @@ public class DerivationQuery implements IDerivationTerm {
     }
 
     public IDerivationTerm findQuery(int queryID) {
+
         IDerivationTerm dt1 = metaSyntax.findQuery(queryID);
         IDerivationTerm dt2 = syntax.findQuery(queryID);
         return (dt1 != null && (((DerivationQuery) dt1).id == queryID)) ? dt1 :
                 (dt2 != null && (((DerivationQuery) dt2).id == queryID)) ? dt2 :
                         (this.id == queryID) ? this :
                                 null;
+
+        /*
+        if (this.id == queryID) return this;
+        IDerivationTerm dt1 = metaSyntax.findQuery(queryID);
+        IDerivationTerm dt2 = syntax.findQuery(queryID);
+        return (dt1 != null && (((DerivationQuery) dt1).id == queryID)) ? dt1 :
+
+
+         */
     }
 
     public IDerivationTerm removeSurroundedLambdas() {
