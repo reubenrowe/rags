@@ -34,8 +34,6 @@ public class DerivationSequence extends ArrayList<DerivationTerm> {
     }
 
     public DerivationSequence resolve(VariableSet vs) {
-        System.out.println("-----");
-        System.out.println("Resolving sequence:\n" + this);
         originalBindings.putAll(vs);
         DerivationSequence ds = new DerivationSequence(originalBindings);
         for (DerivationTerm dc: this) ds.add(dc.resolve(originalBindings));
