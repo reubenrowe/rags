@@ -16,6 +16,10 @@ public class DerivationVariable implements IDerivationTerm {
 
     public IDerivationTerm resolve(VariableSet bindings) {
         Polynomial p = bindings.get(variable);
+        System.out.println("Resolving derivation poly for var ID: " + this.variable + " with variable set:");
+        for (Variable v: bindings.keySet()) {
+            System.out.println(v + " -> " + bindings.get(v));
+        }
         Variable v;
         while (p.onlyVariable()) {
             v = (Variable) p.get(0);
