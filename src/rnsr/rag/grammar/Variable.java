@@ -154,9 +154,7 @@ public	class		Variable
 			return new UnificationSetting(newBindings, new Polynomial());
 		}
 
-		// For now: assuming that Polynomial 'other' is a list of length 1 containing a single terminal.
-		Answer polyAns = (Answer) other.get(0);
-		ConsumeSetting consumeSetting = this.type.consumeFromAnswer(polyAns);
+		ConsumeSetting consumeSetting = this.type.consumeFromPolynomial(other);
 		Polynomial rest = consumeSetting.getRemainder();
 		newBindings.put(this, consumeSetting.getConsumed());
 
