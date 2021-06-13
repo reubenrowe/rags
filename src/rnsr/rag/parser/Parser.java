@@ -236,18 +236,6 @@ public class Parser
 			throw new ParseException(e);
 		}
 
-		/*
-		Set<ParseResult> realResults = new HashSet<>();
-		Set<ExtendedAnswer> eaSet = new HashSet<>();
-		for (ParseResult res: resultSet) {
-			Set<ExtendedAnswer> eas = res.getResult().getEASetFromInnerQueryResolution(this);
-			for (ExtendedAnswer ea: eas) {
-				realResults.add(new ParseResult(ea, originalQuery, res.getDerivationSequence()));
-				eaSet.add(ea);
-			}
-		}
-		 */
-
 		Set<ParseResult> realResults = new HashSet<>();
 		Set<ExtendedAnswer> eaSet = new HashSet<>();
 		for (ParseResult res: resultSet) {

@@ -2,6 +2,7 @@ package rnsr.rag.derivation;
 
 import rnsr.rag.derivation.Enum.Algebra;
 import rnsr.rag.derivation.Interface.IDerivationTerm;
+import rnsr.rag.grammar.ContextMapping;
 import rnsr.rag.grammar.VariableSet;
 
 public class DerivationTerminal implements IDerivationTerm {
@@ -29,6 +30,10 @@ public class DerivationTerminal implements IDerivationTerm {
     }
 
     public DerivationTerminal clone() {
+        return new DerivationTerminal(symbol);
+    }
+
+    public DerivationTerminal clone(ContextMapping context) {
         return new DerivationTerminal(symbol);
     }
 

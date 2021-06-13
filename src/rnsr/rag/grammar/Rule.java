@@ -97,7 +97,7 @@ public	class		Rule
 		{
 			Variable newV = new Variable(v.getType());
 			newV.setTag(v.getTag());
-			cloneContext.put(v, newV);
+			cloneContext.putVariableMapping(v, newV);
 			newVars.put(newV, this.m_variables.get(v));
 		}
 
@@ -109,8 +109,8 @@ public	class		Rule
 		ArrayList<VariableCondition> newConds = new ArrayList<>();
 		if (m_conditions != null) {
 			for (VariableCondition vc : m_conditions) {
-				Variable v1 = cloneContext.get(vc.getFirstVariable());
-				Variable v2 = cloneContext.get(vc.getSecondVariable());
+				Variable v1 = cloneContext.getVariableMapping(vc.getFirstVariable());
+				Variable v2 = cloneContext.getVariableMapping(vc.getSecondVariable());
 				VariableCondition newCond = new VariableCondition(v1, v2, vc.getConditionType());
 				newConds.add(newCond);
 			}
@@ -129,7 +129,7 @@ public	class		Rule
 
 				for (Variable v: unifyBindings.keySet()) { // Because variables inside of arguments aren't their cloned partners
 					//newVars.put(v, unifyBindings.get(v));
-					newVars.put(cloneContext.get(v), unifyBindings.get(v));
+					newVars.put(cloneContext.getVariableMapping(v), unifyBindings.get(v));
 				}
 				//newVars.putAll(unifyBindings);
 
@@ -144,7 +144,7 @@ public	class		Rule
 		InstantiatedRule r = new InstantiatedRule(clonedDerivative, newVars, clonedResult, newConds);
 
 		// Binding v_0 to answer
-		r.bind(cloneContext.get(m_arguments.get(0).get(0)), new Polynomial(answer));
+		r.bind(cloneContext.getVariableMapping((Variable) m_arguments.get(0).get(0)), new Polynomial(answer));
 		
 		return r;
 	}

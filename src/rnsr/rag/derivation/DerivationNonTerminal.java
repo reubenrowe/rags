@@ -2,6 +2,7 @@ package rnsr.rag.derivation;
 
 import rnsr.rag.derivation.Enum.Algebra;
 import rnsr.rag.derivation.Interface.IDerivationTerm;
+import rnsr.rag.grammar.ContextMapping;
 import rnsr.rag.grammar.VariableSet;
 
 import java.util.ArrayList;
@@ -55,8 +56,14 @@ public class DerivationNonTerminal implements IDerivationTerm {
     }
 
     public DerivationNonTerminal clone() {
-        ArrayList<DerivationTerm> newArgs=  new ArrayList<>();
+        ArrayList<DerivationTerm> newArgs =  new ArrayList<>();
         for (DerivationTerm p: args) newArgs.add(p.clone());
+        return new DerivationNonTerminal(identifier, newArgs);
+    }
+
+    public DerivationNonTerminal clone(ContextMapping context) {
+        ArrayList<DerivationTerm> newArgs =  new ArrayList<>();
+        for (DerivationTerm p: args) newArgs.add(p.clone(context));
         return new DerivationNonTerminal(identifier, newArgs);
     }
 

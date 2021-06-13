@@ -135,6 +135,11 @@ public	class		CandidateSet
 						throw new TermResolutionException(e);
 					}
 
+					// Replace query with resolved in both sentential form and its derivation sequence
+					p.set(0, resolvedQuery);
+					currentForm.setDerivationSequence(currentForm.getDerivationSequence().replaceQuery(((Query) t).getId(),
+							resolvedQuery.getDerivationObject()));
+
 					Set<SubQueryResult> sqResults = resolvedQuery.resolveInnerQueries(parser);
 					Set<ExtendedAnswer> results = new HashSet<>();
 
@@ -144,44 +149,20 @@ public	class		CandidateSet
 						results.add(result);
 						InstantiatedRule r = InstantiatedRule.constructQueryReplacementRule(result, headPair.Right());
 
-						SententialForm clone = currentForm.cloneObject();
+						ContextMapping cx = new ContextMapping();
+						SententialForm clone = currentForm.cloneObject(cx);
 
-						//clone.getDerivationSequence().applyQuery(((Query) t).getId(), pr.getDerivationSequence(), pr.getResult().getDerivationObject());
+						ArrayList<Integer> subIDs = resolvedQuery.findQueryIDs();
+
 						for (SubQuery sub: sq.getSubQueries()) {
-							clone.getDerivationSequence().applyQuery(sub.getQueryID(), sub.getSequence(), sub.getResult().getDerivationObject());
+							clone.getDerivationSequence().applyQuery(cx.getQueryMapping(sub.getQueryID()),
+									sub.getSequence(), sub.getResult().getDerivationObject());
 						}
 
 						// Apply the rule
 						clone.applyRule(r);
 						tempSet.add(clone);
 
-						/*
-
-						// Parse the query
-						Set<ParseResult> realResults = parser.parse(resolvedQuery);
-						Set<ExtendedAnswer> results = new HashSet<>();
-
-						// For each result in the parse, create a rule and apply it to the current sentential form
-						for (ParseResult pr : realResults) {
-
-							ExtendedAnswer result = pr.getResult();
-							results.add(result);
-
-							// Construct the replacement rule
-							InstantiatedRule r = InstantiatedRule.constructQueryReplacementRule(result, headPair.Right());
-
-							// Handle derivation sequence
-							SententialForm clone = currentForm.cloneObject();
-							clone.getDerivationSequence().applyQuery(((Query) t).getId(), pr.getDerivationSequence(), pr.getResult().getDerivationObject());
-
-							// Apply the rule
-							clone.applyRule(r);
-							tempSet.add(clone);
-							//clone.getDerivationSequence().putQueryResult(((Query) t).getId(), pr.getResult().getDerivationObject());
-
-						}
-
-						 */
 					}
 
 				}

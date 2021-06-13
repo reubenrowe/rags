@@ -239,7 +239,7 @@ public	class		SententialForm
 		{
 			throw new InvalidTermException("Polynomial term contained in the head pair is not an Answer!");
 		}
-		
+
 		InstantiatedRule ruleInstance = rule.instantiate(((Answer) t), clone.m_variables);
 		clone.applyRule(ruleInstance);
 		
@@ -259,9 +259,11 @@ public	class		SententialForm
 		for (Variable v : this.m_variables.keySet()) {
 			Variable vNew = new Variable(v.getType());
 			vNew.setTag(v.getTag());    // FOR DEBUGGING
-			cloneContext.put(v, vNew);
+			cloneContext.putVariableMapping(v, vNew);
 		}
-		
+
+		// Create new IDs for queries in sentential forms
+		for (int i: findQueryIDs()) cloneContext.putQueryMapping(i, Query.generateQueryID());
 		// Clone the configuration and result
 		Polynomial clonedResult = this.m_result.clone(cloneContext);
 		Configuration clonedConfiguration = this.m_configuration.clone(cloneContext);
@@ -271,7 +273,7 @@ public	class		SententialForm
 
 		for (Variable v : this.m_variables.keySet()) {
 			Polynomial p = this.m_variables.get(v);
-			newVars.put(cloneContext.get(v), p.clone(cloneContext));
+			newVars.put(cloneContext.getVariableMapping(v), p.clone(cloneContext));
 		}
 
 		ArrayList<VariableCondition> newConditions = new ArrayList<>();
@@ -281,7 +283,7 @@ public	class		SententialForm
 			Variable vLeftOld = cond.getFirstVariable();
 			Variable vRightOld = cond.getSecondVariable();
 			VariableCondition.VariableConditionType vCondOld = cond.getConditionType();
-			newConditions.add(new VariableCondition(cloneContext.get(vLeftOld), cloneContext.get(vRightOld), vCondOld));
+			newConditions.add(new VariableCondition(cloneContext.getVariableMapping(vLeftOld), cloneContext.getVariableMapping(vRightOld), vCondOld));
 		}
 		
 		// Create and return a new Sentential form using the cloned components
@@ -292,13 +294,24 @@ public	class		SententialForm
 		VariableSet derivationVars = new VariableSet();
 		derivationVars.putAll(newVars);
 		derivationVars.putAll(this.derivationSequence.getOriginalBindings());
-		for (Variable v: m_variables.keySet()) derivationVars.put(v, new Polynomial(cloneContext.get(v)));
+		for (Variable v: m_variables.keySet()) derivationVars.put(v, new Polynomial(cloneContext.getVariableMapping(v)));
 
-		DerivationSequence cloneDS = new DerivationSequence(derivationVars);
-		cloneDS.addAll(this.derivationSequence);
+		//DerivationSequence cloneDS = new DerivationSequence(derivationVars);
+		//cloneDS.addAll(this.derivationSequence);
+		//cloneSF.derivationSequence = cloneDS;
+
+		DerivationSequence cloneDS = this.derivationSequence.clone(derivationVars, cloneContext);
 		cloneSF.derivationSequence = cloneDS;
 
 		return cloneSF;
+	}
+
+	public ArrayList<Integer> findQueryIDs() {
+		ArrayList<Integer> ids = new ArrayList<>();
+		for (IConfigurationTerm ct: this.m_configuration) {
+			ids.addAll(ct.findQueryIDs());
+		}
+		return ids;
 	}
 
 	public boolean checkVariableConditions() {
@@ -374,6 +387,10 @@ public	class		SententialForm
 
 	public DerivationSequence getDerivationSequence() {
 		return derivationSequence;
+	}
+
+	public void setDerivationSequence(DerivationSequence ds) {
+		this.derivationSequence = ds;
 	}
 
 

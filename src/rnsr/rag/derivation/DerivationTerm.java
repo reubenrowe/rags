@@ -2,6 +2,7 @@ package rnsr.rag.derivation;
 
 import rnsr.rag.derivation.Enum.Algebra;
 import rnsr.rag.derivation.Interface.IDerivationTerm;
+import rnsr.rag.grammar.ContextMapping;
 import rnsr.rag.grammar.InstantiatedRule;
 import rnsr.rag.grammar.VariableSet;
 
@@ -69,6 +70,12 @@ public class DerivationTerm extends ArrayList<IDerivationTerm> implements IDeriv
         DerivationTerm newDC = new DerivationTerm();
         for (IDerivationTerm ct: this) newDC.add(ct.clone());
         return newDC;
+    }
+
+    public DerivationTerm clone(ContextMapping context) {
+        DerivationTerm dt = new DerivationTerm();
+        for (IDerivationTerm ct: this) dt.add(ct.clone(context));
+        return dt;
     }
 
     public DerivationTerm replaceQuery(int queryID, DerivationTerm config) {

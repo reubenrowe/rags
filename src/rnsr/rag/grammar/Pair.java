@@ -5,6 +5,9 @@ import rnsr.rag.derivation.DerivationTerm;
 import rnsr.rag.grammar.exception.CloneException;
 import rnsr.rag.grammar.interfaces.IConfigurationTerm;
 import rnsr.rag.grammar.interfaces.IContextClonable;
+import rnsr.rag.grammar.interfaces.IPolynomialTerm;
+
+import java.util.ArrayList;
 
 /**
  * Represents a pair in the configuration algebra of a recursive adaptive grammar
@@ -85,6 +88,14 @@ public	class		Pair
 		DerivationTerm dp = m_left.getDerivationObject();
 		return new DerivationPairVariable(dp, m_right, id);
 
+	}
+
+	public ArrayList<Integer> findQueryIDs() {
+		ArrayList<Integer> ids = new ArrayList<>();
+		for (IPolynomialTerm pt: this.m_left) {
+			ids.addAll(pt.findQueryIDs());
+		}
+		return ids;
 	}
 
 }

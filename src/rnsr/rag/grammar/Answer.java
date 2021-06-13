@@ -389,4 +389,10 @@ public	class		Answer
 		}
 	}
 
+	public ArrayList<Integer> findQueryIDs() {
+		ArrayList<Integer> ids = new ArrayList<>();
+		for (Polynomial p: this.m_arguments) ids.addAll(p.findQueryIDs());
+		return ids;
+	}
+
 }

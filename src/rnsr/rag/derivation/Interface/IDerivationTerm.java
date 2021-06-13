@@ -2,6 +2,7 @@ package rnsr.rag.derivation.Interface;
 
 import rnsr.rag.derivation.DerivationTerm;
 import rnsr.rag.derivation.Enum.Algebra;
+import rnsr.rag.grammar.ContextMapping;
 import rnsr.rag.grammar.VariableSet;
 
 public interface IDerivationTerm {
@@ -13,6 +14,8 @@ public interface IDerivationTerm {
     IDerivationTerm applyQueryReverse(int queryID, DerivationTerm step);
 
     IDerivationTerm clone();
+
+    IDerivationTerm clone(ContextMapping context);
 
     IDerivationTerm replaceQuery(int queryID, DerivationTerm config);
 

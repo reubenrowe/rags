@@ -12,6 +12,7 @@ import rnsr.rag.parser.Parser;
 import rnsr.rag.util.ConsumeSetting;
 import rnsr.rag.util.UnificationSetting;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
@@ -58,9 +59,9 @@ public	class		Variable
 
 	public Variable clone(ContextMapping context) throws CloneException
 	{
-		if (context.containsKey(this))
+		if (context.containsVariable(this))
 		{
-			return context.get(this);
+			return context.getVariableMapping(this);
 		}
 		else
 		{
@@ -136,7 +137,7 @@ public	class		Variable
 
 					ContextMapping cloneContext2 = new ContextMapping();
 					SententialForm clonedForm2 = clonedForm.cloneObject(cloneContext2);
-					clonedForm2.m_configuration.add(1, new Pair(new Polynomial(cloneContext2.get(this)), cloneContext2.get(originalRHS)));
+					clonedForm2.m_configuration.add(1, new Pair(new Polynomial(cloneContext2.getVariableMapping(this)), cloneContext2.getVariableMapping(originalRHS)));
 					candidates.add(clonedForm2);
 
 				}
@@ -177,6 +178,10 @@ public	class		Variable
 
 	public IDerivationTerm getDerivationObject() {
 		return new DerivationVariable(this);
+	}
+
+	public ArrayList<Integer> findQueryIDs() {
+		return new ArrayList<>();
 	}
 
 	public HashSet<SubQueryResult> resolveInnerQueries(Parser parser) {

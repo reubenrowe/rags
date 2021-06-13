@@ -2,6 +2,7 @@ package rnsr.rag.derivation;
 
 import rnsr.rag.derivation.Enum.Algebra;
 import rnsr.rag.derivation.Interface.IDerivationTerm;
+import rnsr.rag.grammar.ContextMapping;
 import rnsr.rag.grammar.Polynomial;
 import rnsr.rag.grammar.Variable;
 import rnsr.rag.grammar.VariableSet;
@@ -34,6 +35,10 @@ public class DerivationVariable implements IDerivationTerm {
     }
 
     public DerivationVariable clone() {
+        return new DerivationVariable(variable);
+    }
+
+    public DerivationVariable clone(ContextMapping context) {
         return new DerivationVariable(variable);
     }
 

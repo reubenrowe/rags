@@ -223,5 +223,10 @@ public	class		Polynomial
 		for (IPolynomialTerm pt: this) dp.add(pt.getDerivationObject());
 		return dp;
 	}
-	
+
+    public ArrayList<Integer> findQueryIDs() {
+		ArrayList<Integer> ids = new ArrayList<>();
+		for (IPolynomialTerm pt: this) ids.addAll(pt.findQueryIDs());
+		return ids;
+    }
 }

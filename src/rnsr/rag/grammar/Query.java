@@ -77,7 +77,9 @@ public	class		Query
 	 */
 	public Query clone(ContextMapping context) throws CloneException
 	{
-		return new Query(this.m_metaSyntax.clone(context), this.m_syntax.clone(context), id);
+		int clonedID = context.getQueryMapping(this.id);
+		int newID = (clonedID == -1) ? count++ : clonedID;
+		return new Query(this.m_metaSyntax.clone(context), this.m_syntax.clone(context), newID);
 	}
 
 	/**
@@ -130,18 +132,12 @@ public	class		Query
 					Polynomial p1 = sqr1.getResult();
 					Polynomial p2 = sqr2.getResult();
 					Query q = new Query(p1, p2, id);
-					//System.out.println("Doing query: " + q + " - ID: " + q.getId());
 					HashSet<ParseResult> realResults = (HashSet<ParseResult>) parser.parse(q);
 
 					for (ParseResult pr: realResults) {
 						DerivationSequence ds = pr.getDerivationSequence();
 
 						ArrayList<SubQuery> sqList = new ArrayList<>();
-
-						//ArrayList<SubQuery> subs = new ArrayList<>();
-						//subs.addAll(sqr1.getSubQueries());
-						//subs.addAll(sqr2.getSubQueries());
-						//sqList.add(new SubQuery(id, ds, pr.getResult(), subs));
 
 						sqList.addAll(sqr1.getSubQueries());
 						sqList.addAll(sqr2.getSubQueries());
@@ -187,6 +183,16 @@ public	class		Query
 		return new DerivationQuery(m_metaSyntax.getDerivationObject(), m_syntax.getDerivationObject(), id);
 	}
 
+	public ArrayList<Integer> findQueryIDs() {
+		ArrayList<Integer> ids = new ArrayList<>();
+		ids.add(this.id);
+		for (IPolynomialTerm pt1: this.m_metaSyntax) ids.addAll(pt1.findQueryIDs());
+		for (IPolynomialTerm pt2: this.m_syntax) ids.addAll(pt2.findQueryIDs());
+		return ids;
+	}
 
+	public static int generateQueryID() {
+		return count++;
+	}
 
 }

@@ -2,6 +2,7 @@ package rnsr.rag.derivation;
 
 import rnsr.rag.derivation.Enum.Algebra;
 import rnsr.rag.derivation.Interface.IDerivationTerm;
+import rnsr.rag.grammar.ContextMapping;
 import rnsr.rag.grammar.VariableSet;
 
 public class DerivationInverse implements IDerivationTerm {
@@ -38,6 +39,10 @@ public class DerivationInverse implements IDerivationTerm {
 
     public DerivationInverse clone() {
         return new DerivationInverse(contents.clone());
+    }
+
+    public DerivationInverse clone(ContextMapping context) {
+        return new DerivationInverse(contents.clone(context));
     }
 
     public DerivationInverse replaceQuery(int queryID, DerivationTerm config) {

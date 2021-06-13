@@ -10,6 +10,7 @@ import rnsr.rag.grammar.exception.UnificationLambdaException;
 import rnsr.rag.parser.Parser;
 import rnsr.rag.util.UnificationSetting;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
@@ -37,5 +38,7 @@ public interface IPolynomialTerm
 	VariableSet usedVariables();
 
 	IDerivationTerm getDerivationObject();
+
+	ArrayList<Integer> findQueryIDs();
 
 }

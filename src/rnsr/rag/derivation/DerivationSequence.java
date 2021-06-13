@@ -2,6 +2,7 @@ package rnsr.rag.derivation;
 
 import rnsr.rag.derivation.Enum.Algebra;
 import rnsr.rag.derivation.Interface.IDerivationTerm;
+import rnsr.rag.grammar.ContextMapping;
 import rnsr.rag.grammar.InstantiatedRule;
 import rnsr.rag.grammar.VariableSet;
 
@@ -52,6 +53,7 @@ public class DerivationSequence extends ArrayList<DerivationTerm> {
         DerivationQuery parent = (DerivationQuery) head.findQuery(queryID);
 
         DerivationSequence embedded = new DerivationSequence();
+
         for (DerivationTerm dt: invertedSeq)
             embedded.add(new DerivationTerm(new DerivationQuery(parent.getMetaSyntax(), dt, parent.getId())));
 
@@ -63,6 +65,15 @@ public class DerivationSequence extends ArrayList<DerivationTerm> {
 
         for (DerivationTerm dt: finalEmbed) this.add(dt);
 
+    }
+
+    public DerivationSequence replaceQuery(int queryID, DerivationQuery query) {
+        DerivationSequence ds = new DerivationSequence(originalBindings);
+        DerivationTerm term = new DerivationTerm();
+        term.add(query);
+        for (DerivationTerm dt: this)
+            ds.add(dt.replaceQuery(queryID, term));
+        return ds;
     }
 
     public void applyQueryReverse(int queryID, DerivationSequence querySequence, IDerivationTerm result) {
@@ -150,6 +161,12 @@ public class DerivationSequence extends ArrayList<DerivationTerm> {
             DerivationTerm dt2 = dt.removeSurroundedLambdas();
             if (dt2.size() > 0) ds.add(dt.removeSurroundedLambdas());
         }
+        return ds;
+    }
+
+    public DerivationSequence clone(VariableSet vars, ContextMapping context) {
+        DerivationSequence ds = new DerivationSequence(vars);
+        for (DerivationTerm dt: this) ds.add(dt.clone(context));
         return ds;
     }
 
